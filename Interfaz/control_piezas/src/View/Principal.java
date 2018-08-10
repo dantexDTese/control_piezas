@@ -112,7 +112,12 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu6.add(jMenuItem4);
 
-        jMenuItem2.setText("Ver ordenes");
+        jMenuItem2.setText("Administrar ordenes");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu6.add(jMenuItem2);
 
         jMenu4.add(jMenu6);
@@ -147,8 +152,12 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        IntroducirPanle(new OrdenCompra(), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
+        IntroducirPanle(new OrdenCompra(this), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        IntroducirPanle(new AdministrarOrdenes(), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
