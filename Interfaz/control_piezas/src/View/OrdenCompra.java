@@ -10,14 +10,15 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author cesar
+ * @author cesarnhjhhh
  */
 public class OrdenCompra extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form OrdenCompra
      */
-            OrdenesProduccion produccion;
+    OrdenesProduccion produccion;
+    
     public OrdenCompra(JFrame principal) {
         initComponents();
         produccion = new OrdenesProduccion(principal, false);
