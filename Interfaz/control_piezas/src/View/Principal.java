@@ -39,7 +39,6 @@ public class Principal extends javax.swing.JFrame {
             pnNuevo.setSize(d);
             pnNuevo.setLocation(punto.x-pnNuevo.getWidth()/2,
                     punto.y-pnNuevo.getHeight()/2);
-            escritorio.removeAll();
             escritorio.add(pnNuevo);
             escritorio.revalidate();
             escritorio.repaint();
@@ -80,7 +79,7 @@ public class Principal extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
 
-        Escritorio.setBackground(new java.awt.Color(0, 153, 102));
+        Escritorio.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
@@ -125,6 +124,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu7.setText("Seguimiento de produccion");
 
         jMenuItem3.setText("Seguimiento diario");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu7.add(jMenuItem3);
 
         jMenu4.add(jMenu7);
@@ -152,12 +156,20 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        Escritorio.removeAll();
         IntroducirPanle(new OrdenCompra(this), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        IntroducirPanle(new AdministrarOrdenes(), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
+        Escritorio.removeAll();
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        Escritorio.removeAll();
+        IntroducirPanle(new AdministrarOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
+        IntroducirPanle(new SeguimientoProductos(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -139,5 +139,13 @@ id_turno_operador           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_turno                    INT NOT NULL REFERENCES turnos (id_turno),
 id_operador		            INT NOT NULL REFERENCES operadores (id_operador)
 );
+
+
+CREATE TABLE empaques_ordenes_p(
+id_empaques_ordenes_p 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_orden_produccion			INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
+id_empaque					INT NOT NULL REFERENCES empaques (id_empaque),
+cantidad					INTEGER NOT NULL
+);
 /**FIN TABLAS RELACIONALES*/
 
