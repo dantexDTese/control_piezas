@@ -9,8 +9,7 @@ desc_tipo_usuario       VARCHAR(20)
 
 CREATE TABLE clientes(
 id_cliente          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-nombre_cliente      VARCHAR (20) NOT NULL,
-direccion           VARCHAR (20) NOT NULL
+nombre_cliente      VARCHAR (20) NOT NULL
 );
 
 CREATE TABLE materiales(
@@ -63,6 +62,7 @@ desc_turno          VARCHAR (20) NOT NULL
 CREATE TABLE ordenes_compra(
 id_orden_compra     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_cliente          INT NOT NULL REFERENCES clientes(id_cliente),
+desc_orden_compra	VARCHAR (30),
 fecha_peticion      DATETIME NOT NULL,
 fecha_inicio        DATETIME,
 fecha_terminacion   DATETIME

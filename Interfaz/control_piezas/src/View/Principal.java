@@ -5,6 +5,8 @@
  */
 package View;
 
+import Controller.OrdenCompraController;
+import Model.ordenCompraModel;
 import ds.desktop.notify.DesktopNotify;
 import ds.desktop.notify.DesktopNotifyDriver;
 import ds.desktop.notify.NotifyTheme;
@@ -30,7 +32,6 @@ public class Principal extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH); 
         Toolkit t = Toolkit.getDefaultToolkit();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
     }
 
 
@@ -62,8 +63,8 @@ public class Principal extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenu6 = new javax.swing.JMenu();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        subMenuOrdenesProduccion = new javax.swing.JMenu();
+        itemMenuNuevaOrden = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -101,15 +102,15 @@ public class Principal extends javax.swing.JFrame {
 
         jMenu4.setText("Producciòn                             ");
 
-        jMenu6.setText("Ordenes de produccion");
+        subMenuOrdenesProduccion.setText("Ordenes de produccion");
 
-        jMenuItem4.setText("Nueva orden");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        itemMenuNuevaOrden.setText("Nueva orden");
+        itemMenuNuevaOrden.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                itemMenuNuevaOrdenActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem4);
+        subMenuOrdenesProduccion.add(itemMenuNuevaOrden);
 
         jMenuItem2.setText("Administrar ordenes");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -117,9 +118,9 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu6.add(jMenuItem2);
+        subMenuOrdenesProduccion.add(jMenuItem2);
 
-        jMenu4.add(jMenu6);
+        jMenu4.add(subMenuOrdenesProduccion);
 
         jMenu7.setText("Seguimiento de produccion");
 
@@ -155,19 +156,24 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void itemMenuNuevaOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuNuevaOrdenActionPerformed
         Escritorio.removeAll();
-        IntroducirPanle(new OrdenCompra(this), Escritorio,new Point( screenSize.width/2,screenSize.height/2));
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+        ordenCompraModel modelo = new ordenCompraModel();
+        OrdenCompra vista = new OrdenCompra(this);
+        OrdenCompraController control = new OrdenCompraController(vista,modelo);
+        IntroducirPanle(vista, Escritorio,new Point( screenSize.width/2,screenSize.height/2));
+        
+    }//GEN-LAST:event_itemMenuNuevaOrdenActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Escritorio.removeAll();
-        
+        IntroducirPanle(new AdminOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
+        IntroducirPanle(new AdminProduccion(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         Escritorio.removeAll();
-        IntroducirPanle(new AdministrarOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
+        IntroducirPanle(new SeguimientoOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
         IntroducirPanle(new SeguimientoProductos(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
@@ -209,18 +215,18 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Escritorio;
+    private javax.swing.JMenuItem itemMenuNuevaOrden;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenu subMenuOrdenesProduccion;
     // End of variables declaration//GEN-END:variables
 }

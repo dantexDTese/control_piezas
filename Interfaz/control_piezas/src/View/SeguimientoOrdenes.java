@@ -12,12 +12,12 @@ import java.awt.GridLayout;
  *
  * @author cesar
  */
-public class AdministrarOrdenes extends javax.swing.JInternalFrame {
+public class SeguimientoOrdenes extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form AdministrarOrdenes
      */
-    public AdministrarOrdenes() {
+    public SeguimientoOrdenes() {
         initComponents();
          jPanel3.setLayout(new GridLayout(10, 1));
         

@@ -39,17 +39,17 @@
             <Property name="text" type="java.lang.String" value="Producci&#xf2;n                             "/>
           </Properties>
           <SubComponents>
-            <Menu class="javax.swing.JMenu" name="jMenu6">
+            <Menu class="javax.swing.JMenu" name="subMenuOrdenesProduccion">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ordenes de produccion"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+                <MenuItem class="javax.swing.JMenuItem" name="itemMenuNuevaOrden">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Nueva orden"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem4ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuNuevaOrdenActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="jMenuItem2">
