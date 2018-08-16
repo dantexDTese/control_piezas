@@ -5,6 +5,8 @@
  */
 package View;
 
+import javax.swing.JLabel;
+
 /**
  *
  * @author cesar
@@ -14,9 +16,16 @@ public class plantillaOpcionLista extends javax.swing.JPanel {
     /**
      * Creates new form plantillaOpcionLista
      */
-    public plantillaOpcionLista() {
+    public plantillaOpcionLista(String texto) {
         initComponents();
+        lbElemento.setText(texto);
     }
+
+    public JLabel getLbElemento() {
+        return lbElemento;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -27,24 +36,25 @@ public class plantillaOpcionLista extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        lbElemento = new javax.swing.JLabel();
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbElemento.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lbElemento.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+            .addComponent(lbElemento, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+            .addComponent(lbElemento, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lbElemento;
     // End of variables declaration//GEN-END:variables
 }

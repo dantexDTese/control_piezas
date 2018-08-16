@@ -19,11 +19,12 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
     /**
      * Creates new form OrdenCompra
      */
-    OrdenesProduccion produccion;
     
+    private JFrame principal;
     public OrdenCompra(JFrame principal) {
         initComponents();
-        produccion = new OrdenesProduccion(principal, false);
+        this.principal = principal;
+        
     }
 
     /**
@@ -51,11 +52,6 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
 
         addProducto.setText("AGREGAR");
-        addProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addProductoActionPerformed(evt);
-            }
-        });
 
         terminarOrden.setText("TERMINAR");
 
@@ -194,13 +190,10 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    
-    private void addProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductoActionPerformed
-      produccion.setVisible(true);
-    }//GEN-LAST:event_addProductoActionPerformed
-
+    public JFrame getPrincipal() {
+        return principal;
+    }
+ 
     public JButton getAddCliente() {
         return AddCliente;
     }

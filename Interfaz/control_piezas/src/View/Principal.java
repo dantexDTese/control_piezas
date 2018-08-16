@@ -156,6 +156,10 @@ public class Principal extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public JDesktopPane getEscritorio() {
+        return Escritorio;
+    }
+    
     private void itemMenuNuevaOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuNuevaOrdenActionPerformed
         Escritorio.removeAll();
         ordenCompraModel modelo = new ordenCompraModel();

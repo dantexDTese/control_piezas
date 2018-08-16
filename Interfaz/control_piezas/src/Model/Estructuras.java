@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.JComboBox;
 
 /**
@@ -40,5 +41,22 @@ public class Estructuras {
         return selector;
     }
     
+    
+    public static ArrayList obtenerlistaDatos(String query){
+        Connection c = Conexion.getInstance().getConexion();
+        ArrayList lista=new ArrayList();
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    do{
+                        lista.add(rs.getString(1));
+                    }while(rs.next());
+                c.close();
+            } catch (Exception e) {
+                System.err.println("error clase ordenProduccionModel,metodo listaProductos:"+e.getMessage());
+            }
+        return lista;
+    }
     
 }

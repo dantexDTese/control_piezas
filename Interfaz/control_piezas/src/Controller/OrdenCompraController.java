@@ -7,7 +7,9 @@ package Controller;
 
 import Model.Estructuras;
 import Model.ordenCompraModel;
+import Model.ordenProduccionModel;
 import View.OrdenCompra;
+import View.OrdenesProduccion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
@@ -21,9 +23,8 @@ public class OrdenCompraController implements ActionListener{
     
     
     private OrdenCompra vista;
-    
     private ordenCompraModel modelo;
-    
+    private OrdenesProduccion vistaOrdenesProduccion;
     
     public OrdenCompraController(OrdenCompra vista,ordenCompraModel modelo){
         this.vista = vista;
@@ -58,7 +59,10 @@ public class OrdenCompraController implements ActionListener{
     }
     
     private void agregarProducto(){
-        
+           vistaOrdenesProduccion = new OrdenesProduccion(this.vista.getPrincipal(), true);
+           ordenProduccionModel modelo = new ordenProduccionModel();
+           ordenProduccionController controller = new ordenProduccionController(vistaOrdenesProduccion, modelo);
+           vistaOrdenesProduccion.setVisible(true);
     }
     
     
