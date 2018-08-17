@@ -2,6 +2,7 @@
 package View;
 
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -19,9 +20,14 @@ public class OrdenesProduccion extends javax.swing.JDialog {
         initComponents();
     }
 
-    
+    public JButton getAgregarProducto() {
+        return AgregarProducto;
+    }
+
+    public void setAgregarProducto(JButton AgregarProducto) {
+        this.AgregarProducto = AgregarProducto;
+    }
    
-    
     public JPanel getListaProductos() {
         return listaProductos;
     }
@@ -116,7 +122,7 @@ public class OrdenesProduccion extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        AgregarProducto = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         ContenedorLisProductos = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -147,7 +153,7 @@ public class OrdenesProduccion extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jButton1.setText("AGREGAR");
+        AgregarProducto.setText("AGREGAR");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -155,14 +161,14 @@ public class OrdenesProduccion extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(AgregarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(AgregarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -453,13 +459,13 @@ public class OrdenesProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton AgregarProducto;
     private javax.swing.JPanel ContenedorLisProductos;
     private javax.swing.JSpinner cantidadPorTurno;
     private javax.swing.JSpinner cantidadProducir;
     private javax.swing.JSpinner cantidadSolicitada;
     private javax.swing.JPanel contenedorLisOtros;
     private com.toedter.calendar.JDateChooser fechaMontaje;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

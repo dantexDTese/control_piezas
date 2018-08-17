@@ -44,8 +44,3 @@ END //
 DELIMITER ;
 
 
-call agregar_cliente('STOCK',@resultado);
-
-select @resultado;
-
-select * from clientes;

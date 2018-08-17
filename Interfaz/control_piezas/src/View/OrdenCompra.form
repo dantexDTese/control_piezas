@@ -222,17 +222,17 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="tablaProductos">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="4">
-                <Column editable="true" title="NO.PRODUCCION" type="java.lang.String"/>
+              <Table columnCount="7" rowCount="0">
                 <Column editable="true" title="COD. PRODUCTO" type="java.lang.String"/>
                 <Column editable="true" title="MAQUINA" type="java.lang.String"/>
                 <Column editable="true" title="MATERIAL" type="java.lang.String"/>
                 <Column editable="true" title="FECHA MONTAJE" type="java.lang.String"/>
-                <Column editable="true" title="FECHA INICIO" type="java.lang.String"/>
-                <Column editable="true" title="CANTIDAD" type="java.lang.String"/>
+                <Column editable="true" title="CANTIDAD SOLICITADA" type="java.lang.String"/>
+                <Column editable="true" title="CANTIDAD A PRODUCIR" type="java.lang.String"/>
+                <Column editable="true" title="CANTIDAD POR TURNO" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

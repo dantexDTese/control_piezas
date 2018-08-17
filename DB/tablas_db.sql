@@ -30,7 +30,7 @@ desc_empaque       VARCHAR (100) NOT NULL
 
 CREATE TABLE tipos_proceso(
 id_tipo_proceso         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-desc_tipo_proceeso      VARCHAR (50) NOT NULL    
+desc_tipo_proceso      VARCHAR (50) NOT NULL    
 );
 
 CREATE TABLE defectos_producto(
@@ -71,7 +71,7 @@ fecha_terminacion   DATETIME
 CREATE TABLE ordenes_produccion(
 id_orden_produccion     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_compra         INT NOT NULL REFERENCES ordenes_compra(id_orden_compra),
-id_empaque              INT NOT NULL REFERENCES empaques(id_empaque),
+id_empaque              INT  REFERENCES empaques(id_empaque),
 id_producto             INT NOT NULL REFERENCES productos(id_producto),
 cantidad_total          INT NOT NULL,
 cantidad_cliente        INT NOT NULL,

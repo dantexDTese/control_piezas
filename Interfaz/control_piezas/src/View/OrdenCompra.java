@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 
 /**
  *
@@ -49,7 +50,7 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
         selecCliente = new javax.swing.JComboBox<>();
         AddCliente = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaProductos = new javax.swing.JTable();
 
         addProducto.setText("AGREGAR");
 
@@ -123,15 +124,12 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "NO.PRODUCCION", "COD. PRODUCTO", "MAQUINA", "MATERIAL", "FECHA MONTAJE", "FECHA INICIO", "CANTIDAD"
+                "COD. PRODUCTO", "MAQUINA", "MATERIAL", "FECHA MONTAJE", "CANTIDAD SOLICITADA", "CANTIDAD A PRODUCIR", "CANTIDAD POR TURNO"
             }
         ) {
             Class[] types = new Class [] {
@@ -142,7 +140,7 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaProductos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -225,9 +223,11 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
     public void setSelecOrdenCompra(JComboBox<String> selecOrdenCompra) {
         this.selecOrdenCompra = selecOrdenCompra;
     }
-    
-    
 
+    public JTable getTablaProductos() {
+        return tablaProductos;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddCliente;
     private javax.swing.JButton AddOrdenCompra;
@@ -239,9 +239,9 @@ public class OrdenCompra extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<String> selecCliente;
     private javax.swing.JComboBox<String> selecOrdenCompra;
+    private javax.swing.JTable tablaProductos;
     private javax.swing.JButton terminarOrden;
     // End of variables declaration//GEN-END:variables
 }

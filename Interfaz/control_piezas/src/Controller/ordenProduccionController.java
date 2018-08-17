@@ -2,11 +2,14 @@
 package Controller;
 
 import Model.ordenProduccionModel;
+import Model.ordenProducto;
 import View.OrdenesProduccion;
 import View.plantillaOpcionLista;
 import View.plantillaOrdenProduccion;
 import com.toedter.calendar.JDateChooser;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.KeyEvent;
@@ -18,6 +21,8 @@ import java.beans.PropertyChangeListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -31,41 +36,42 @@ public class ordenProduccionController {
     
     OrdenesProduccion vista;
     ordenProduccionModel modelo;
+    OrdenCompraController ordenesCompra;
     
-    public ordenProduccionController(OrdenesProduccion vista,ordenProduccionModel modelo){
-      
-        this.vista = vista;
+    ordenProduccionController(OrdenesProduccion vistaOrdenesProduccion, ordenProduccionModel modelo, OrdenCompraController ordesCompra) {
+        this.vista = vistaOrdenesProduccion;
         this.modelo = modelo;
         llenarListas();
         this.vista.getCantidadSolicitada().addChangeListener( new change());
         this.vista.getCantidadProducir().addChangeListener( new change());
         this.vista.getCantidadPorTurno().addChangeListener( new change());
+        this.ordenesCompra = ordesCompra;
+        
         this.vista.getFechaMontaje().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent evt) {
+            public void propertyChange(PropertyChangeEvent evt) {                
                 validaFecha();
             }
-        });
+        });       
+       
+        this.vista.getAgregarProducto().addActionListener(new action());     
     }
     
     
-    private void validaFecha(){
-        
+    private void validaFecha(){        
         Date fecha = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
-            
-        if(! sdf.format(vista.getFechaMontaje().getDate()).equals(sdf.format(fecha))
-           && vista.getFechaMontaje().getDate().before(fecha)){
-            JOptionPane.showMessageDialog(null,"La fecha no puede ser menor que "
-                    + "la del dia actual");
-            vista.getFechaMontaje().setDate(fecha);
+        
+        if(vista.getFechaMontaje().getDate()!=null){
+            if(! sdf.format(vista.getFechaMontaje().getDate()).equals(sdf.format(fecha))
+               && vista.getFechaMontaje().getDate().before(fecha)){
+                JOptionPane.showMessageDialog(null,"La fecha no puede ser menor que "
+                        + "la del dia actual");
+                vista.getFechaMontaje().setDate(fecha);
+            }
         }
-            
-                
-           
-        
-        
     }
+    
     
     
     
@@ -88,18 +94,46 @@ public class ordenProduccionController {
     }
     
     private JPanel llenaLista(ArrayList lista,JPanel panelContenedor,JTextField cajaTexto){
-        
         GridLayout gridLayout = new GridLayout(lista.size(), 1);
-        panelContenedor.setLayout(gridLayout);
-                
+        panelContenedor.setLayout(gridLayout);               
         for(int i = 0;i<lista.size();i++){
             plantillaOpcionLista opcion = new plantillaOpcionLista(lista.get(i).toString());            
             opcion.addMouseListener(new click(cajaTexto,opcion.getLbElemento().getText()));
             panelContenedor.add(opcion);
         }
-        
         return panelContenedor;
     }
+    
+    private class action implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e){       
+            
+            
+            
+            if(Integer.parseInt(vista.getCantidadProducir().getValue().toString()) >=
+                    Integer.parseInt(vista.getCantidadSolicitada().getValue().toString())){
+            
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");            
+                Date date = vista.getFechaMontaje().getDate();
+                String sDate="";
+                if(date !=null)
+                    sDate = sdf.format(date);
+                ordenProducto producto = new ordenProducto(vista.getProductoSeleccionado().getText(),
+                vista.getMaquinaSeleccionada().getText(),vista.getMaterialSeleccionado().getText(),
+                Integer.parseInt(vista.getCantidadSolicitada().getValue().toString()),
+                Integer.parseInt(vista.getCantidadProducir().getValue().toString()),
+                Integer.parseInt(vista.getCantidadPorTurno().getValue().toString()),
+                sDate);
+                ordenesCompra.agregarProducto(producto);           
+                vista.dispose();
+                
+            }else
+                JOptionPane.showMessageDialog(null, "la cantidad a producir es menor que la solicitada, por favor verifique los campos");
+                
+        }       
+    }
+    
     
     
     
@@ -120,9 +154,6 @@ public class ordenProduccionController {
         }
         
         
-        
-        
-        
         private void validaPositivos(ChangeEvent e){
             JSpinner s =  (JSpinner) e.getSource();
             if(Integer.parseInt(s.getValue().toString()) < 0){
@@ -131,11 +162,7 @@ public class ordenProduccionController {
             }
         }
         
-        
-        
     }
-    
-    
     
     private class click implements MouseListener{
 

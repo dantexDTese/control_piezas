@@ -8,12 +8,16 @@ package Controller;
 import Model.Estructuras;
 import Model.ordenCompraModel;
 import Model.ordenProduccionModel;
+import Model.ordenProducto;
 import View.OrdenCompra;
 import View.OrdenesProduccion;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -25,6 +29,7 @@ public class OrdenCompraController implements ActionListener{
     private OrdenCompra vista;
     private ordenCompraModel modelo;
     private OrdenesProduccion vistaOrdenesProduccion;
+    private ArrayList <ordenProducto> productos;
     
     public OrdenCompraController(OrdenCompra vista,ordenCompraModel modelo){
         this.vista = vista;
@@ -34,11 +39,23 @@ public class OrdenCompraController implements ActionListener{
         this.vista.getAddCliente().addActionListener(this);
         this.vista.getAddOrdenCompra().addActionListener(this);
         this.vista.getAddProducto().addActionListener(this);
+        this.productos = new ArrayList<>();
     }
     
     private void llenarCombos(){
         this.vista.setSelecCliente(Estructuras.llenaCombo(this.vista.getSelecCliente(),ordenCompraModel.QUERY_COMBO_CLIENTE));
     }
+    
+    public void agregarProducto(ordenProducto producto){
+        productos.add(producto);
+        
+        
+        DefaultTableModel model = (DefaultTableModel) vista.getTablaProductos().getModel();
+        model.addRow(new Object[]{producto.getCodProducto(),producto.getDescMaquina(),producto.getDescMateria(),producto.getFecha(),
+        producto.getCantidadSolicitada(),producto.getCantidadProducir(),producto.getCantidadPorTurno()});
+        vista.getTablaProductos().setModel(model);        
+    }
+    
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -54,14 +71,13 @@ public class OrdenCompraController implements ActionListener{
             agregarOrdenCompra(vista.getSelecCliente().getSelectedItem().toString());
         
         else if(e.getSource() == vista.getAddProducto())
-            agregarProducto();
-        
+            agregarProducto();   
     }
     
     private void agregarProducto(){
            vistaOrdenesProduccion = new OrdenesProduccion(this.vista.getPrincipal(), true);
            ordenProduccionModel modelo = new ordenProduccionModel();
-           ordenProduccionController controller = new ordenProduccionController(vistaOrdenesProduccion, modelo);
+           ordenProduccionController controller = new ordenProduccionController(vistaOrdenesProduccion, modelo,this);
            vistaOrdenesProduccion.setVisible(true);
     }
     
