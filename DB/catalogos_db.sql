@@ -33,9 +33,7 @@ INSERT INTO defectos_producto(desc_defecto_producto) VALUES('QUEMADAS');
 INSERT INTO defectos_producto(desc_defecto_producto) VALUES('F.E. CAJA');
 
 
-INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('MONTAJE DE MOLDE');
-INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('DESMONTAJE DE MOLDE');
-INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso1');
+INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('Maquinado');
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso2');
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso3');
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso4');

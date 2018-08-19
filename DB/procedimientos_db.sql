@@ -38,22 +38,38 @@ DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE agregar_ordenes_produccion(IN desc_orden_trabajo VARCHAR(30), IN clave_producto VARCHAR(50),
-IN cantidad_total INT,IN desc_maquina VARCHAR(50),IN desc_material,IN cantidad_cliente INT,IN turnos_necesarios INT,INOUT respuesta VARCHAR(50))
+IN cantidad_total INT,IN desc_maquina VARCHAR(50),IN desc_material VARCHAR(50),IN cantidad_cliente INT,
+IN turnos_necesarios INT,IN fecha_montaje DATETIME,INOUT respuesta VARCHAR(50))
 BEGIN
 	
     DECLARE id_orden_trabajo INT;
     DECLARE id_producto INT;
     DECLARE id_orden_produccion INT;
-    
+    DECLARE id_maquina INT;
+    DECLARE id_material INT;
+
     SELECT @id_orden_trabajo := ordenes_trabajo.id_orden_trabajo
 				FROM ordenes_trabajo WHERE ordenes_trabajo.desc_orden_trabajo = desc_orden_trabajo;
                     
     SELECT @id_producto := ordenes_produccion.id_producto FROM productos WHERE productos.clave_producto = clave_producto;
     
-    INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,cantidad_total,cantidad_cliente,turnos_necesarios,fecha_registro)
-	VALUES(@id_orden_trabajo,@id_producto,cantidad_total,cantidad_cliente,turnos_necesarios,now());       
+    SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
+
+    SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material
+
+    
+    IF fecha_montaje != NULL THEN
+    
+    INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_material,cantidad_total,cantidad_cliente,turnos_necesarios,fecha_registro,fecha_montaje)
+	VALUES(@id_orden_trabajo,@id_producto,@id_material,cantidad_total,cantidad_cliente,turnos_necesarios,now(),fecha_montaje);
+
+    ELSE
+
+    INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_material,cantidad_total,cantidad_cliente,turnos_necesarios,fecha_registro)
+	VALUES(@id_orden_trabajo,@id_producto,@id_material,cantidad_total,cantidad_cliente,turnos_necesarios,now());
+
+    END IF;       
 		
-    SELECT @id_orden_produccion:= id_orden_produccion FROM ordenes_produccion ORDER BY id_orden_produccion DESC LIMIT 1;
     
         
 END //
