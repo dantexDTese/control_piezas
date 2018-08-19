@@ -73,10 +73,6 @@ public class ordenProduccionController {
     }
     
     
-    
-    
-    
-    
     private void llenarListas(){       
         this.vista.setListaProductos(
                 llenaLista(this.modelo.obtenerListaProductos(),
@@ -107,12 +103,12 @@ public class ordenProduccionController {
     private class action implements ActionListener{
 
         @Override
-        public void actionPerformed(ActionEvent e){       
-            
-            
-            
-            if(Integer.parseInt(vista.getCantidadProducir().getValue().toString()) >=
-                    Integer.parseInt(vista.getCantidadSolicitada().getValue().toString())){
+        public void actionPerformed(ActionEvent e){               
+            if(validaCantidades(Integer.parseInt(vista.getCantidadProducir().getValue().toString()),
+               Integer.parseInt(vista.getCantidadSolicitada().getValue().toString()))  &&
+                    modelo.existeEntidad(modelo.EXISTE_PRODUCTO,vista.getProductoSeleccionado().getText())  &&
+                    modelo.existeEntidad(modelo.EXISTE_MATERIAL, vista.getMaterialSeleccionado().getText())  &&
+                    modelo.existeEntidad(modelo.EXISTE_MAQUINA,vista.getMaquinaSeleccionada().getText())){
             
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");            
                 Date date = vista.getFechaMontaje().getDate();
@@ -128,10 +124,27 @@ public class ordenProduccionController {
                 ordenesCompra.agregarProducto(producto);           
                 vista.dispose();
                 
-            }else
-                JOptionPane.showMessageDialog(null, "la cantidad a producir es menor que la solicitada, por favor verifique los campos");
-                
-        }       
+            }
+        }
+    }
+    
+    private boolean validaCantidades(Integer cantidadProducir, Integer cantidadSolicitada){                     
+        if(cantidadSolicitada == 0){
+            JOptionPane.showMessageDialog(null,"La cantidad solicitada no puede ser 0");
+            return false;
+        }else if(cantidadProducir<cantidadSolicitada){
+            JOptionPane.showMessageDialog(null,"La cantidad a producir no puede ser menor que la solicitada");
+            return false;
+        }                
+        return true;
+    }
+    
+    private boolean validaFecha(Date fecha){
+        return true;
+    }
+    
+    private boolean validaCajaTexto(JTextField cajaTexto){
+        return true;
     }
     
     
@@ -145,12 +158,10 @@ public class ordenProduccionController {
             
             if(e.getSource() == vista.getCantidadProducir() || 
                e.getSource() == vista.getCantidadSolicitada() ||
-                e.getSource() == vista.getCantidadPorTurno())
+                e.getSource() == vista.getCantidadPorTurno()){
                 validaPositivos(e);
+            }
            
-            if(e.getSource() == vista.getFechaMontaje())
-                System.err.println("fecha");
-            
         }
         
         
@@ -161,6 +172,7 @@ public class ordenProduccionController {
                 s.setValue(0);
             }
         }
+       
         
     }
     

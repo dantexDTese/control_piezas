@@ -60,6 +60,25 @@ public class Estructuras {
         return lista;
     }
     
+    public static boolean existeEntidad(String query){
+        Connection c = Conexion.getInstance().getConexion();
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    return true;
+            } catch (Exception e) {
+                System.err.println("class:Estructuras,"
+                                + "method: existeEntidad,error:"+e.getMessage());
+            }
+        else{
+            System.err.println("no fue posible establecer una conexion");
+            return false;
+        }
+        return true;
+    }
+    
     
     
     
