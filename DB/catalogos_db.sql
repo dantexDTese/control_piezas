@@ -39,7 +39,8 @@ INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso3');
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso4');
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUES('proceso5');
 
+INSERT INTO estados(desc_estados) VALUES('ABIERTO');
+INSERT INTO estados(desc_estados) VALUES('CERRADO');
+	
 
 
-
-select * from tipos_proceso;

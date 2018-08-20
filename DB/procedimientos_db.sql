@@ -37,9 +37,16 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE agregar_ordenes_produccion(IN desc_orden_trabajo VARCHAR(30), IN clave_producto VARCHAR(50),
-IN cantidad_total INT,IN desc_maquina VARCHAR(50),IN desc_material VARCHAR(50),IN cantidad_cliente INT,
-IN turnos_necesarios INT,IN fecha_montaje DATETIME,INOUT respuesta VARCHAR(50))
+CREATE PROCEDURE agregar_ordenes_produccion(
+IN desc_orden_trabajo VARCHAR(30),
+ IN clave_producto VARCHAR(50),
+IN cantidad_total INT,
+IN desc_maquina VARCHAR(50),
+IN desc_material VARCHAR(50),
+IN cantidad_cliente INT,
+IN turnos_necesarios INT,
+IN fecha_montaje DATETIME,
+IN barras_necesarias INT)
 BEGIN
 	
     DECLARE id_orden_trabajo INT;
@@ -47,32 +54,28 @@ BEGIN
     DECLARE id_orden_produccion INT;
     DECLARE id_maquina INT;
     DECLARE id_material INT;
-
+	DECLARE id_proceso_produccion INT;
+    
     SELECT @id_orden_trabajo := ordenes_trabajo.id_orden_trabajo
 				FROM ordenes_trabajo WHERE ordenes_trabajo.desc_orden_trabajo = desc_orden_trabajo;
                     
-    SELECT @id_producto := ordenes_produccion.id_producto FROM productos WHERE productos.clave_producto = clave_producto;
+    SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = clave_producto;
     
     SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
 
-    SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material
+    SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
 
+	INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_material,id_estado,cantidad_total,cantidad_cliente,barras_necesarias
+    ,turnos_necesarios,fecha_registro,fecha_montaje)
+	VALUES(@id_orden_trabajo,@id_producto,@id_material,1,cantidad_total,cantidad_cliente,barras_necesarias,turnos_necesarios,now(),fecha_montaje);
+	
+    SELECT @id_orden_produccion := ordenes_produccion.id_orden_produccion FROM ordenes_produccion ORDER BY id_orden_produccion DESC LIMIT 1;
     
-    IF fecha_montaje != NULL THEN
+    INSERT INTO procesos_produccion (id_orden_produccion,id_tipo_proceso,id_estado) VALUES(@id_orden_produccion,1,1);
     
-    INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_material,cantidad_total,cantidad_cliente,turnos_necesarios,fecha_registro,fecha_montaje)
-	VALUES(@id_orden_trabajo,@id_producto,@id_material,cantidad_total,cantidad_cliente,turnos_necesarios,now(),fecha_montaje);
-
-    ELSE
-
-    INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_material,cantidad_total,cantidad_cliente,turnos_necesarios,fecha_registro)
-	VALUES(@id_orden_trabajo,@id_producto,@id_material,cantidad_total,cantidad_cliente,turnos_necesarios,now());
-
-    END IF;       
-		
+	SELECT @id_proceso_produccion := procesos_produccion.id_proceso_produccion 	FROM procesos_produccion ORDER BY id_proceso_produccion DESC LIMIT 1;
     
-        
+    INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
+   
 END //
 DELIMITER ;
-
-describe procesos_produccion;

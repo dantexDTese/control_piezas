@@ -13,18 +13,28 @@ public class ordenProducto {
     int cantidadProducir;
     int cantidadPorTurno;
     String fecha;
+    int barrasNecesarias;
     
     
     public ordenProducto(String codProducto, String descMaquina, String descMaterial, 
-            int cantidadSolicitada, int cantidadProducir, int cantidadPorTurno, String fecha) {
+            int cantidadSolicitada, int cantidadProducir, int cantidadPorTurno, String fecha,
+            int barrasNecesarias) {
         this.codProducto = codProducto;
         this.descMaquina = descMaquina;
         this.descMateria = descMaterial;
         this.cantidadSolicitada = cantidadSolicitada;
         this.cantidadProducir = cantidadProducir;
         this.cantidadPorTurno = cantidadPorTurno;
-        this.fecha = fecha;
+        this.fecha = fecha;   
+        this.barrasNecesarias = barrasNecesarias;
     }
+
+    
+
+    public int getBarrasNecesarias() {
+        return barrasNecesarias;
+    }
+    
 
     public String getCodProducto() {
         return codProducto;

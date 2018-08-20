@@ -8,3 +8,10 @@ INSERT INTO materiales(desc_material) VALUES('materiales1');
 SELECT * FROM maquinas;
 SELECT * FROM productos;
 SELECT * FROM materiales;
+
+select * from ordenes_trabajo;
+select * from ordenes_produccion;
+select * from procesos_produccion;
+select * from lotes_produccion;
+
+

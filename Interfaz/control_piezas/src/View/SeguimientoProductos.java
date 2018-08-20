@@ -21,10 +21,7 @@ public class SeguimientoProductos extends javax.swing.JInternalFrame {
     public SeguimientoProductos() {
         initComponents();
         
-        jPanel3.setLayout(new GridLayout(10, 1));
         
-        for(int i = 0;i<10;i++)
-           jPanel3.add(new plantillaOrdenProduccion(),BorderLayout.CENTER);
     }
 
     

@@ -11,6 +11,7 @@ import Model.ordenProduccionModel;
 import Model.ordenProducto;
 import View.OrdenCompra;
 import View.OrdenesProduccion;
+import ds.desktop.notify.DesktopNotify;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -62,21 +63,36 @@ public class OrdenCompraController implements ActionListener{
         
         else if(e.getSource() == vista.getSelecOrdenCompra())
             seleccionarOrden();
+       
         else if(e.getSource() == vista.getTerminarOrden())
             terminarOrden();
         
     }
     
     private void terminarOrden(){
-        
+        String nombreOrdenTrabajo;
            if(productos.size()>0){
-            agregarOrdenCompra(vista.getSelecCliente().getSelectedItem().toString());
+               nombreOrdenTrabajo = vista.getOrdenTrabajo().getText();
+            modelo.insertarOrdenCompra(nombreOrdenTrabajo,vista.getSelecCliente().getSelectedItem().toString());
             DefaultTableModel model = (DefaultTableModel) vista.getTablaProductos().getModel();
-                        
+            
             for(int i = 0;i<productos.size();i++){
-                
+                ordenProducto orden = productos.get(i);
+                modelo.insertarOrdenProducto(orden, nombreOrdenTrabajo);
             }
+            limpiarTabla();
+            DesktopNotify.showDesktopMessage("orden completada","la orden se ha insertado correctamente, "
+                       + "dirijase al apartado de administrar ordenes para realizar cualquier cambio",DesktopNotify.SUCCESS);
         }
+    }
+    
+    private void limpiarTabla(){
+        DefaultTableModel model = (DefaultTableModel) vista.getTablaProductos().getModel();
+            while(model.getRowCount()>0)
+                model.removeRow(0);
+            
+            vista.getOrdenTrabajo().setText("");
+            vista.getSelecOrdenCompra().removeAllItems();
     }
     
     private void seleccionarOrden(){
@@ -92,7 +108,7 @@ public class OrdenCompraController implements ActionListener{
         productos.add(producto);     
         DefaultTableModel model = (DefaultTableModel) vista.getTablaProductos().getModel();
         model.addRow(new Object[]{producto.getCodProducto(),producto.getDescMaquina(),producto.getDescMateria(),producto.getFecha(),
-        producto.getCantidadSolicitada(),producto.getCantidadProducir(),producto.getCantidadPorTurno()});
+        producto.getCantidadSolicitada(),producto.getCantidadProducir(),producto.getCantidadPorTurno(),producto.getBarrasNecesarias()});
         vista.getTablaProductos().setModel(model);        
     }
     

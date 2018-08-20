@@ -37,14 +37,16 @@ public class ordenProduccionController {
     OrdenesProduccion vista;
     ordenProduccionModel modelo;
     OrdenCompraController ordenesCompra;
-    
+    change validacion ;
     ordenProduccionController(OrdenesProduccion vistaOrdenesProduccion, ordenProduccionModel modelo, OrdenCompraController ordesCompra) {
         this.vista = vistaOrdenesProduccion;
         this.modelo = modelo;
         llenarListas();
-        this.vista.getCantidadSolicitada().addChangeListener( new change());
-        this.vista.getCantidadProducir().addChangeListener( new change());
-        this.vista.getCantidadPorTurno().addChangeListener( new change());
+        validacion = new change();
+        this.vista.getCantidadSolicitada().addChangeListener(validacion);
+        this.vista.getCantidadProducir().addChangeListener(validacion);
+        this.vista.getCantidadPorTurno().addChangeListener(validacion);
+        this.vista.getBarrasNecesarias().addChangeListener(validacion);
         this.ordenesCompra = ordesCompra;
         
         this.vista.getFechaMontaje().addPropertyChangeListener(new PropertyChangeListener() {
@@ -60,7 +62,7 @@ public class ordenProduccionController {
     
     private void validaFecha(){        
         Date fecha = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
         
         if(vista.getFechaMontaje().getDate()!=null){
             if(! sdf.format(vista.getFechaMontaje().getDate()).equals(sdf.format(fecha))
@@ -110,20 +112,22 @@ public class ordenProduccionController {
                     modelo.existeEntidad(modelo.EXISTE_MATERIAL, vista.getMaterialSeleccionado().getText())  &&
                     modelo.existeEntidad(modelo.EXISTE_MAQUINA,vista.getMaquinaSeleccionada().getText())){
             
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");            
+                SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");            
                 Date date = vista.getFechaMontaje().getDate();
                 String sDate="";
                 if(date !=null)
                     sDate = sdf.format(date);
+                
                 ordenProducto producto = new ordenProducto(vista.getProductoSeleccionado().getText(),
                 vista.getMaquinaSeleccionada().getText(),vista.getMaterialSeleccionado().getText(),
                 Integer.parseInt(vista.getCantidadSolicitada().getValue().toString()),
                 Integer.parseInt(vista.getCantidadProducir().getValue().toString()),
                 Integer.parseInt(vista.getCantidadPorTurno().getValue().toString()),
-                sDate);
+                sDate,
+                Integer.parseInt(vista.getBarrasNecesarias().getValue().toString()));
+                
                 ordenesCompra.agregarProducto(producto);           
                 vista.dispose();
-                
             }
         }
     }
@@ -148,9 +152,6 @@ public class ordenProduccionController {
     }
     
     
-    
-    
-    
     private class change implements ChangeListener{
 
         @Override
@@ -158,12 +159,12 @@ public class ordenProduccionController {
             
             if(e.getSource() == vista.getCantidadProducir() || 
                e.getSource() == vista.getCantidadSolicitada() ||
-                e.getSource() == vista.getCantidadPorTurno()){
+                e.getSource() == vista.getCantidadPorTurno() ||
+                    e.getSource() == vista.getBarrasNecesarias()){
                 validaPositivos(e);
             }
            
         }
-        
         
         private void validaPositivos(ChangeEvent e){
             JSpinner s =  (JSpinner) e.getSource();

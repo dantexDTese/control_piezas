@@ -1,4 +1,5 @@
 CREATE DATABASE control_piezas;
+
 /** CATALOGOS DE LA BASE DE DATOS CONTROL_PIEZAS (TABLAS FUERTES)*/
 USE control_piezas;
 
@@ -21,7 +22,6 @@ CREATE TABLE productos(
 id_producto        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 clave_producto     VARCHAR (50) NOT NULL    
 );
-
 
 CREATE TABLE empaques(
 id_empaque         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -58,6 +58,9 @@ desc_turno          VARCHAR (20) NOT NULL
 );
 /**FIN DE CATALOGOS CONTROL_PIEZAS*/ 
 
+
+
+
 /** TABLAS DEBILES*/
 CREATE TABLE ordenes_trabajo(
 id_orden_trabajo     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -68,12 +71,14 @@ fecha_inicio        DATETIME,
 fecha_terminacion   DATETIME
 );
 
+
 CREATE TABLE ordenes_produccion(
 id_orden_produccion     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_trabajo        INT NOT NULL REFERENCES ordenes_trabajo(id_orden_trabajo),
 id_empaque              INT  REFERENCES empaques(id_empaque),
 id_producto             INT NOT NULL REFERENCES productos(id_producto),
 id_material             INT NOT NULL REFERENCES materiales(id_material),
+id_estado				INT	NOT NULL REFERENCES estados(id_estado),
 cantidad_total          INT NOT NULL,
 cantidad_cliente        INT NOT NULL,
 barras_necesarias       FLOAT,
@@ -86,19 +91,22 @@ fecha_inicio            DATETIME,
 fecha_fin               DATETIME      
 );
 
+
 CREATE TABLE procesos_produccion(
 id_proceso_produccion       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_produccion         INT NOT NULL REFERENCES ordenes_produccion (id_orden_produccion),
 id_tipo_proceso             INT NOT NULL REFERENCES tipos_proceso(id_tipo_proceso),
+id_estado					INT	NOT NULL REFERENCES estados(id_estado),
 fecha_inicio_proceso        DATETIME,
 fecha_fin_proceso           DATETIME    
 );
 
+
 CREATE TABLE lotes_produccion(
 id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_proceeso_produccion      INT NOT NULL REFERENCES procesos_produccion (id_proceso_produccion),
+id_proceso_produccion      INT NOT NULL REFERENCES procesos_produccion (id_proceso_produccion),
 id_maquina                  INT NOT NULL REFERENCES maquinas (id_maquina),
-desc_lote                   VARCHAR(50) NOT NULL,
+desc_lote                   VARCHAR(50),
 cantidad_operador           INT ,
 cantidad_administrador      INT ,
 scrap_operador              INT ,
@@ -108,15 +116,12 @@ tiempo_muerto               TIME
 );
 /** FIN TABLAS DEBILES 1*/
 
+
+
+
+
+
 /** TABLAS RELACIONALES*/
-CREATE TABLE estados_ordenes_p(
-id_estado_orden_p             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_estado                     INT NOT NULL REFERENCES estados (id_estado),
-id_orden_produccion           INT NOT NULL REFERENCES ordenes_produccion (id_orden_produccion),
-fecha_hora_asignado           DATETIME
-);
-
-
 CREATE TABLE defectos_lotes(
 id_defecto_lote             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_defecto_producto         INT NOT NULL REFERENCES defectos_producto (id_defecto_producto),

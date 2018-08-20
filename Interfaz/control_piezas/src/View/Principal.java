@@ -6,6 +6,10 @@
 package View;
 
 import Controller.OrdenCompraController;
+import Controller.SeguimientoOrdenesController;
+import Controller.SeguimientoProductosController;
+import Model.SeguimientoOrdenesModel;
+import Model.SeguimientoProductosModel;
 import Model.ordenCompraModel;
 import ds.desktop.notify.DesktopNotify;
 import ds.desktop.notify.DesktopNotifyDriver;
@@ -166,19 +170,30 @@ public class Principal extends javax.swing.JFrame {
         OrdenCompra vista = new OrdenCompra(this);
         OrdenCompraController control = new OrdenCompraController(vista,modelo);
         IntroducirPanle(vista, Escritorio,new Point( screenSize.width/2,screenSize.height/2));
-        
     }//GEN-LAST:event_itemMenuNuevaOrdenActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Escritorio.removeAll();
+        
+        
         IntroducirPanle(new AdminOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
         IntroducirPanle(new AdminProduccion(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         Escritorio.removeAll();
-        IntroducirPanle(new SeguimientoOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
-        IntroducirPanle(new SeguimientoProductos(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
+        
+        SeguimientoProductosModel modeloOrdenesProductos = new SeguimientoProductosModel();
+        SeguimientoProductos vistaOrdenesProductos = new SeguimientoProductos();
+        SeguimientoProductosController controllerOrdenesProductos = new SeguimientoProductosController(vistaOrdenesProductos,modeloOrdenesProductos);
+        
+        SeguimientoOrdenesModel modeloOrdenesTrabajo = new SeguimientoOrdenesModel();
+        SeguimientoOrdenes vistaOrdenesTrabajo = new SeguimientoOrdenes();      
+        SeguimientoOrdenesController controlloerOrdenesTrabajo = new SeguimientoOrdenesController(vistaOrdenesTrabajo,modeloOrdenesTrabajo,controllerOrdenesProductos);
+        
+        IntroducirPanle(vistaOrdenesTrabajo, Escritorio,new Point(screenSize.width/7,screenSize.height/2));
+        IntroducirPanle(vistaOrdenesProductos, Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
+        
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**

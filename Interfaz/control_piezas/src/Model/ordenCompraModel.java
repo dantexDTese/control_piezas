@@ -1,6 +1,7 @@
 
 package Model;
 
+import ds.desktop.notify.DesktopNotify;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ public class ordenCompraModel {
         
     }
        
+    
     public void insertarOrdenCompra(String descOrdenCopra,String nomCliente){
         Connection c = Conexion.getInstance().getConexion();
         final String llamadaProcedimiento = "{Call agregar_orden_trabajo (?,?,?)}";
@@ -32,29 +34,34 @@ public class ordenCompraModel {
                 cs.setString(2, nomCliente);
                 cs.registerOutParameter(3, Types.VARCHAR);
                 cs.execute();
-                JOptionPane.showMessageDialog(null, cs.getString(3));                
+                DesktopNotify.showDesktopMessage("orden completada", cs.getString(3),DesktopNotify.SUCCESS,120);
                 c.close();
             } catch (Exception e) {
                 System.err.println("error:"+e.getMessage());
             }        
     }
     
-    public void insertarOrdenProducto(String descOrdenTrabajo,String claveProducto,int cantidadTotal,
-            int cantidadCliente,int turnosNecesarios){
+    public void insertarOrdenProducto(ordenProducto nuevaOrden,String descOrdenTrabajo){
         Connection c = Conexion.getInstance().getConexion();
-        final String llamaProcudimiento = "{Call agregar_ordenes_produccion(?,?,?,?,?,?)}";
+        final String llamaProcudimiento = "{Call agregar_ordenes_produccion(?,?,?,?,?,?,?,?,?)}";
         if(c!=null)
             try {
-                
                 CallableStatement cs = c.prepareCall(llamaProcudimiento);
                 cs.setString(1,descOrdenTrabajo);
-                cs.setString(2, claveProducto);
-                cs.setInt(3, cantidadTotal);
-                cs.setInt(4, cantidadCliente);
-                cs.setInt(5,turnosNecesarios);
-                cs.registerOutParameter(6, Types.VARCHAR);
-                cs.execute();
-                JOptionPane.showMessageDialog(null, cs.getString(6));                
+                cs.setString(2, nuevaOrden.getCodProducto());
+                cs.setInt(3, nuevaOrden.getCantidadProducir());
+                cs.setString(4, nuevaOrden.getDescMaquina());
+                cs.setString(5, nuevaOrden.getDescMateria());
+                cs.setInt(6,nuevaOrden.getCantidadSolicitada());
+                cs.setInt(7,nuevaOrden.getCantidadPorTurno());
+                
+                if(nuevaOrden.getFecha().equals(""))
+                    cs.setDate("fecha_montaje",null);
+                else
+                cs.setString(8,nuevaOrden.getFecha());
+                
+                cs.setInt(9,nuevaOrden.getBarrasNecesarias());
+                cs.execute();               
                 cs.close();
             } catch (Exception e) {
                 System.err.println("error clase: ordenCompraModel, metodo: insertarOrdenProducto ->"+e.getMessage());
@@ -82,8 +89,7 @@ public class ordenCompraModel {
     public JComboBox llenarComboOrdenCompra(JComboBox selector,String nomCliente){
         final String query = String.format("SELECT desc_orden_trabajo FROM ordenes_trabajo " +
         "JOIN clientes ON clientes.id_cliente = ordenes_trabajo.id_cliente WHERE nombre_cliente = '%s'"
-        ,nomCliente);
-        
+        ,nomCliente);  
         selector.removeAllItems();
         selector = Estructuras.llenaCombo(selector, query);
         return selector;
