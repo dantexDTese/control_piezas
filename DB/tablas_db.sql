@@ -3,11 +3,6 @@ CREATE DATABASE control_piezas;
 /** CATALOGOS DE LA BASE DE DATOS CONTROL_PIEZAS (TABLAS FUERTES)*/
 USE control_piezas;
 
-CREATE TABLE tipos_usuario(
-id_tipo_usuario         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-desc_tipo_usuario       VARCHAR(20)
-);
-
 CREATE TABLE clientes(
 id_cliente          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 nombre_cliente      VARCHAR (20) NOT NULL
@@ -57,9 +52,6 @@ id_turno            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_turno          VARCHAR (20) NOT NULL    
 );
 /**FIN DE CATALOGOS CONTROL_PIEZAS*/ 
-
-
-
 
 /** TABLAS DEBILES*/
 CREATE TABLE ordenes_trabajo(
@@ -115,10 +107,6 @@ merma                       FLOAT,
 tiempo_muerto               TIME
 );
 /** FIN TABLAS DEBILES 1*/
-
-
-
-
 
 
 /** TABLAS RELACIONALES*/

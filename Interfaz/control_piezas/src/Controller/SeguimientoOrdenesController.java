@@ -22,16 +22,22 @@ public class SeguimientoOrdenesController implements ActionListener{
     private SeguimientoOrdenesModel modelo;
     private SeguimientoProductosController productosController;
     
-    public SeguimientoOrdenesController(SeguimientoOrdenes vista, SeguimientoOrdenesModel modelo,SeguimientoProductosController productosController) {
+    public SeguimientoOrdenesController(SeguimientoOrdenes vista,
+            SeguimientoOrdenesModel modelo,SeguimientoProductosController productosController) {
+        
         this.vista = vista;
         this.modelo = modelo;
         this.vista.setListaOrdenesTrabajo(llenaLista(this.modelo.obtenerListaOrdenesActivas()
                 ,this.vista.getListaOrdenesTrabajo()));
         this.productosController = productosController;
         
+        
     }
        
+    
+    
      private JPanel llenaLista(ArrayList<OrdenTrabajoActiva> lista,JPanel panelContenedor){
+        
         GridLayout gridLayout = new GridLayout(lista.size(), 1);
         panelContenedor.setLayout(gridLayout);               
         for(int i = 0;i<lista.size();i++){
