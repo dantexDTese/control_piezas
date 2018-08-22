@@ -28,17 +28,5 @@ public class SeguimientoProductosController {
         
         
     }
-    
-    
-    
-    
-    
-    
-
-    
-
-
-
-    
-    
+        
 }
