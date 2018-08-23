@@ -16,8 +16,17 @@ import ds.desktop.notify.DesktopNotifyDriver;
 import ds.desktop.notify.NotifyTheme;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -30,12 +39,38 @@ public class Principal extends javax.swing.JFrame {
 
         
     Dimension screenSize;
+    
     public Principal() {
         initComponents();
         setLocationRelativeTo(null);
         setExtendedState(MAXIMIZED_BOTH); 
         Toolkit t = Toolkit.getDefaultToolkit();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        
+        
+    }
+    
+    private class fondo extends JPanel{
+        
+        private Image imagen;
+
+        private fondo() {
+            
+        }
+        public void paintComponents(Graphics g){
+            super.paintComponents(g);
+            
+            File file = new File("src/img/fondo.png");
+            try {
+                imagen = ImageIO.read(file);
+                g.drawImage(imagen,500,500, null);
+            } catch (IOException ex) {
+                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
     }
 
 
@@ -84,7 +119,7 @@ public class Principal extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
 
-        Escritorio.setBackground(new java.awt.Color(255, 255, 255));
+        Escritorio.setBackground(new java.awt.Color(0, 0, 51));
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
@@ -174,10 +209,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Escritorio.removeAll();
-        
-        
-        IntroducirPanle(new AdminOrdenes(), Escritorio,new Point(screenSize.width/7,screenSize.height/2));
-        IntroducirPanle(new AdminProduccion(), Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
+        IntroducirPanle(new AdminProduccion(), Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
