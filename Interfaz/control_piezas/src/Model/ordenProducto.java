@@ -6,14 +6,14 @@ import java.util.Date;
 
 public class ordenProducto {
 
-    String codProducto;
-    String descMaquina;
-    String descMateria;
-    int cantidadSolicitada;
-    int cantidadProducir;
-    int cantidadPorTurno;
-    String fecha;
-    int barrasNecesarias;
+    private String codProducto;
+    private String descMaquina;
+    private String descMateria;
+    private int cantidadSolicitada;
+    private int cantidadProducir;
+    private int cantidadPorTurno;
+    private String fecha;
+    private int barrasNecesarias;
     
     
     public ordenProducto(String codProducto, String descMaquina, String descMaterial, 

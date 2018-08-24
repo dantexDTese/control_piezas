@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-public class SeguimientoOrdenesController implements ActionListener{
+public class SeguimientoOrdenesController{
 
     
     private SeguimientoOrdenes vista;
@@ -42,18 +42,28 @@ public class SeguimientoOrdenesController implements ActionListener{
         panelContenedor.setLayout(gridLayout);               
         for(int i = 0;i<lista.size();i++){
             PantillaOrdenesCompras opcion = new PantillaOrdenesCompras(lista.get(i));
-            opcion.getVerOrdenesProduccion().addActionListener(this);
-            panelContenedor.add(opcion);
-            
+            opcion.getVerOrdenesProduccion().addActionListener(new Click(opcion));
+            panelContenedor.add(opcion);           
         }
         return panelContenedor;
     }
 
+     private class Click  implements ActionListener{
      
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
+     private PantillaOrdenesCompras opcion;
+     
+     public Click(PantillaOrdenesCompras opcion){
+     
+         this.opcion = opcion;
+     
+     }    
+         
+     @Override
+     public void actionPerformed(ActionEvent e) {
+         
 
+     }
+    
     }
     
 }

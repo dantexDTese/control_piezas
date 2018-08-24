@@ -221,7 +221,9 @@ public class Principal extends javax.swing.JFrame {
         
         SeguimientoOrdenesModel modeloOrdenesTrabajo = new SeguimientoOrdenesModel();
         SeguimientoOrdenes vistaOrdenesTrabajo = new SeguimientoOrdenes();      
-        SeguimientoOrdenesController controlloerOrdenesTrabajo = new SeguimientoOrdenesController(vistaOrdenesTrabajo,modeloOrdenesTrabajo,controllerOrdenesProductos);
+        SeguimientoOrdenesController controlloerOrdenesTrabajo = new SeguimientoOrdenesController(vistaOrdenesTrabajo
+                ,modeloOrdenesTrabajo
+                ,controllerOrdenesProductos);
         
         IntroducirPanle(vistaOrdenesTrabajo, Escritorio,new Point(screenSize.width/7,screenSize.height/2));
         IntroducirPanle(vistaOrdenesProductos, Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
