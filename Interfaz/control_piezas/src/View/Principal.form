@@ -84,6 +84,21 @@
             <Property name="text" type="java.lang.String" value="Almacen                               "/>
           </Properties>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="menuPedidos">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Pedidos"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="itemMenuBitacoraPedidosCliente">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="bitacora de pedidos clientes"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuBitacoraPedidosClienteActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
