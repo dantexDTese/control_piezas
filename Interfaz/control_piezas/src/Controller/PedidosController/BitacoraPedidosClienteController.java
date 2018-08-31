@@ -2,6 +2,7 @@
 package Controller.PedidosController;
 
 import Model.PedidosModel.BitacoraPedidosClienteModel;
+import Model.PedidosModel.nuevoPedidoClienteModel;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.NuevoPedidoCliente;
 import ds.desktop.notify.DesktopNotify;
@@ -25,13 +26,14 @@ public class BitacoraPedidosClienteController implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vista.getBtnNuevaOrden())
             agregaNuevaOrden();
-        
-        
     }
     
     private void agregaNuevaOrden(){
-        NuevoPedidoCliente pedidoNuevo = new NuevoPedidoCliente(vista.getPrincipal(), true);
-        pedidoNuevo.setVisible(true);       
+        nuevoPedidoClienteModel modelNuevoPedido = new nuevoPedidoClienteModel();
+        NuevoPedidoCliente vistaNuevoPedido = new NuevoPedidoCliente(vista.getPrincipal(), true);
+        nuevoPedidoClienteController controllerNuevoPedido = new nuevoPedidoClienteController(vistaNuevoPedido,modelNuevoPedido);
+        
+        vistaNuevoPedido.setVisible(true);       
     }
     
     

@@ -12,8 +12,8 @@ public class Conexion {
     private Connection nuevaConexion;
     private static String driver = "com.mysql.jdbc.Driver";
     private static String user = "root";
-    private static String password = "";
-    private static String dataBaseName = "control_piezas";
+    private static String password = "sasa";
+    private static String dataBaseName = "control_piezas_2";
     private static String url="jdbc:mysql://localhost:3306/"+dataBaseName;
 
     private Conexion() {
