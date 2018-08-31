@@ -6,11 +6,14 @@
 package View;
 
 import Controller.OrdenCompraController;
+import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.SeguimientoOrdenesController;
 import Controller.SeguimientoProductosController;
+import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.SeguimientoOrdenesModel;
 import Model.SeguimientoProductosModel;
 import Model.ordenCompraModel;
+import View.Pedidos.BitacoraPedidosClienteView;
 import ds.desktop.notify.DesktopNotify;
 import ds.desktop.notify.DesktopNotifyDriver;
 import ds.desktop.notify.NotifyTheme;
@@ -108,6 +111,8 @@ public class Principal extends javax.swing.JFrame {
         jMenu7 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
+        menuPedidos = new javax.swing.JMenu();
+        itemMenuBitacoraPedidosCliente = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -178,6 +183,18 @@ public class Principal extends javax.swing.JFrame {
         jMenu5.setText("Almacen                               ");
         jMenuBar2.add(jMenu5);
 
+        menuPedidos.setText("Pedidos");
+
+        itemMenuBitacoraPedidosCliente.setText("bitacora de pedidos clientes");
+        itemMenuBitacoraPedidosCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuBitacoraPedidosClienteActionPerformed(evt);
+            }
+        });
+        menuPedidos.add(itemMenuBitacoraPedidosCliente);
+
+        jMenuBar2.add(menuPedidos);
+
         setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -230,6 +247,14 @@ public class Principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void itemMenuBitacoraPedidosClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuBitacoraPedidosClienteActionPerformed
+        BitacoraPedidosClienteView vista = new BitacoraPedidosClienteView(this);
+        BitacoraPedidosClienteModel model = new BitacoraPedidosClienteModel();
+        BitacoraPedidosClienteController controler = new BitacoraPedidosClienteController(vista,model);
+        Escritorio.removeAll();
+        IntroducirPanle(vista, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_itemMenuBitacoraPedidosClienteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -268,6 +293,7 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Escritorio;
+    private javax.swing.JMenuItem itemMenuBitacoraPedidosCliente;
     private javax.swing.JMenuItem itemMenuNuevaOrden;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
@@ -280,6 +306,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenu menuPedidos;
     private javax.swing.JMenu subMenuOrdenesProduccion;
     // End of variables declaration//GEN-END:variables
 }
