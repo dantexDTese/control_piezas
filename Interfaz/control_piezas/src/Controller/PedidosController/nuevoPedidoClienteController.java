@@ -5,6 +5,7 @@ import Model.Estructuras;
 import Model.PedidosModel.nuevoPedidoClienteModel;
 import Model.productoModel;
 import View.Pedidos.NuevoPedidoCliente;
+import ds.desktop.notify.DesktopNotify;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -21,13 +22,15 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
     private nuevoPedidoClienteModel modelNuevoPedido;
     
     
-    nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido, nuevoPedidoClienteModel modelNuevoPedido) {
+    nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido,
+            nuevoPedidoClienteModel modelNuevoPedido) {
         this.vistaNuevoPedido = vistaNuevoPedido;
         this.modelNuevoPedido = modelNuevoPedido;
         llenarListaClientes();
         llenarListaProductos();
         this.vistaNuevoPedido.getCbxDescCliente().addActionListener(this);
         this.vistaNuevoPedido.getTbListaProductos().addMouseListener(this);
+       this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
     }
     
     private void llenarListaClientes(){
@@ -65,8 +68,19 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == this.vistaNuevoPedido.getCbxDescCliente())
             llenarListaContactos(this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString());
+    
+        
+        else if(e.getSource() == this.vistaNuevoPedido.getBtnGuardar())
+            guardarListaProductos();
     }
     
+    
+    private void guardarListaProductos(){
+        DesktopNotify.showDesktopMessage("Agregado","la orden de compra se ha agregado correctamente",DesktopNotify.SUCCESS);
+        this.vistaNuevoPedido.dispose();
+
+    }
+        
     
 
     @Override
