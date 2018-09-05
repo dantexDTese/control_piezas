@@ -7,13 +7,16 @@ package View;
 
 import Controller.OrdenCompraController;
 import Controller.PedidosController.BitacoraPedidosClienteController;
+import Controller.PedidosController.PlaneacionController;
 import Controller.SeguimientoOrdenesController;
 import Controller.SeguimientoProductosController;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
+import Model.PedidosModel.PlaneacionModel;
 import Model.SeguimientoOrdenesModel;
 import Model.SeguimientoProductosModel;
 import Model.ordenCompraModel;
 import View.Pedidos.BitacoraPedidosClienteView;
+import View.Pedidos.PlaneacionView;
 import ds.desktop.notify.DesktopNotify;
 import ds.desktop.notify.DesktopNotifyDriver;
 import ds.desktop.notify.NotifyTheme;
@@ -113,6 +116,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         menuPedidos = new javax.swing.JMenu();
         itemMenuBitacoraPedidosCliente = new javax.swing.JMenuItem();
+        itemMenuPlaneacion = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -193,6 +197,14 @@ public class Principal extends javax.swing.JFrame {
         });
         menuPedidos.add(itemMenuBitacoraPedidosCliente);
 
+        itemMenuPlaneacion.setText("Planeacion");
+        itemMenuPlaneacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuPlaneacionActionPerformed(evt);
+            }
+        });
+        menuPedidos.add(itemMenuPlaneacion);
+
         jMenuBar2.add(menuPedidos);
 
         setJMenuBar(jMenuBar2);
@@ -255,6 +267,14 @@ public class Principal extends javax.swing.JFrame {
         IntroducirPanle(vista, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_itemMenuBitacoraPedidosClienteActionPerformed
 
+    private void itemMenuPlaneacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuPlaneacionActionPerformed
+        PlaneacionView vista = new PlaneacionView();
+        PlaneacionModel model = new PlaneacionModel();
+        PlaneacionController controller = new PlaneacionController(vista,model);
+        
+        IntroducirPanle(vista, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_itemMenuPlaneacionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -295,6 +315,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JMenuItem itemMenuBitacoraPedidosCliente;
     private javax.swing.JMenuItem itemMenuNuevaOrden;
+    private javax.swing.JMenuItem itemMenuPlaneacion;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
