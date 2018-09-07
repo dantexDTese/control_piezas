@@ -2,7 +2,9 @@
 package Controller.PedidosController;
 
 import Model.Estructuras;
+import Model.OrdenProductoActivo;
 import Model.PedidosModel.nuevoPedidoClienteModel;
+import Model.ordenProducto;
 import Model.productoModel;
 import View.Pedidos.NuevoPedidoCliente;
 import ds.desktop.notify.DesktopNotify;
@@ -76,10 +78,34 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
     
     
     private void guardarListaProductos(){
-        DesktopNotify.showDesktopMessage("Agregado","la orden de compra se ha agregado correctamente",DesktopNotify.SUCCESS);
+        ArrayList<ordenProducto> productos = obtenerListaProductos();
+        
+        int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
+                this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
+                ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
+                ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
+                ,"");
+        
         this.vistaNuevoPedido.dispose();
-
     }
+    
+    private ArrayList obtenerListaProductos(){
+        ArrayList lista = new ArrayList();
+        
+        DefaultTableModel tableModel = (DefaultTableModel) this.vistaNuevoPedido.getTbListaPedido().getModel();
+        
+        for(int i = 0;i<tableModel.getRowCount();i++){
+            ordenProducto producto = new ordenProducto(tableModel.getValueAt(i, 0).toString()
+                    ,Integer.parseInt( tableModel.getValueAt(i, 1).toString()));
+            lista.add(producto);
+        }
+        
+        return lista;
+    }
+    
+    
+    
+    
         
     
 

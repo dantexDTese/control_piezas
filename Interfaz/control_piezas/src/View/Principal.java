@@ -271,7 +271,7 @@ public class Principal extends javax.swing.JFrame {
         PlaneacionView vista = new PlaneacionView();
         PlaneacionModel model = new PlaneacionModel();
         PlaneacionController controller = new PlaneacionController(vista,model);
-        
+        Escritorio.removeAll();
         IntroducirPanle(vista, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_itemMenuPlaneacionActionPerformed
 

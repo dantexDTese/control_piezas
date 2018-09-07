@@ -15,6 +15,11 @@ public class ordenProducto {
     private String fecha;
     private int barrasNecesarias;
     
+    public ordenProducto(String codProducto,int cantidadSolicitada){
+        this.codProducto = codProducto;
+        this.cantidadSolicitada = cantidadSolicitada;
+    }
+    
     
     public ordenProducto(String codProducto, String descMaquina, String descMaterial, 
             int cantidadSolicitada, int cantidadProducir, int cantidadPorTurno, String fecha,

@@ -21,6 +21,7 @@ DELIMITER ;
 
 
 
+
 DELIMITER //
 CREATE PROCEDURE agregar_cliente(IN nombre_cliente VARCHAR(20),INOUT resultado VARCHAR(100))
 BEGIN
