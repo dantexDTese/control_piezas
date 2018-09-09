@@ -12,7 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -80,13 +82,28 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
     private void guardarListaProductos(){
         ArrayList<ordenProducto> productos = obtenerListaProductos();
         
-        int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
-                this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
-                ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
-                ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
-                ,"");
-        
-        this.vistaNuevoPedido.dispose();
+        if(productos.size()>0){
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
+            Date fecha = vistaNuevoPedido.getDcFechaEntrega().getDate();
+
+            int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
+                    this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
+                    ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
+                    ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
+                    ,sdf.format(fecha));
+
+            if(idPedidoAgregado > 0){
+            
+                for(int i = 0;i<productos.size();i++){
+                    ordenProducto producto = productos.get(i);
+                modelNuevoPedido.agregarOrdenProduccion(idPedidoAgregado,
+                        producto.getCodProducto(), producto.getCantidadSolicitada());
+                }
+            
+                
+                this.vistaNuevoPedido.dispose();
+            }
+        }
     }
     
     private ArrayList obtenerListaProductos(){

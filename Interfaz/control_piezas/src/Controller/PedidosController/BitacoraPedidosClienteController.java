@@ -2,15 +2,29 @@
 package Controller.PedidosController;
 
 import Model.PedidosModel.BitacoraPedidosClienteModel;
+import Model.PedidosModel.ParcialidadesPedidosModel;
+import Model.PedidosModel.Pedido;
 import Model.PedidosModel.nuevoPedidoClienteModel;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.NuevoPedidoCliente;
+import View.Pedidos.ParcialidadesPedidos;
 import ds.desktop.notify.DesktopNotify;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import javax.swing.CellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 
-public class BitacoraPedidosClienteController implements ActionListener{
+public class BitacoraPedidosClienteController implements ActionListener, MouseListener{
 
     BitacoraPedidosClienteView vista;
     BitacoraPedidosClienteModel model;
@@ -18,10 +32,41 @@ public class BitacoraPedidosClienteController implements ActionListener{
     public BitacoraPedidosClienteController(BitacoraPedidosClienteView vista, BitacoraPedidosClienteModel model) {
         this.vista = vista;
         this.model = model;       
-        
+        tamanoTabla();
+        llenarListaPedidos();
         vista.getBtnNuevaOrden().addActionListener(this);
+        vista.getTbPedidosClientes().addMouseListener(this);
+        
     }
-
+    
+    private void tamanoTabla(){
+        vista.getTbPedidosClientes().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
+            
+            for(int i = 0;i<listaTamanos.length;i++){
+                TableColumn columna = vista.getTbPedidosClientes().getColumnModel().getColumn(i);
+                columna.setPreferredWidth(listaTamanos[i]);
+            }
+        
+    }
+    
+    private void llenarListaPedidos(){
+        ArrayList<Pedido> pedidos = model.listaPedidos();
+        if(pedidos.size()>0){
+            DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
+        
+            for(int i = 0;i<pedidos.size();i++){
+                Pedido unPedido = pedidos.get(i);
+                
+                modelTabla.addRow(new Object[]{unPedido.getId_pedido(),
+                unPedido.getNo_orden_compra(),unPedido.getFecha_recepcion(),
+                unPedido.getEstado(),unPedido.getFecha_entrega(),unPedido.getClave_producto(),
+                unPedido.getCantidad_cliente(),unPedido.getNombre_cliente(),
+                unPedido.getDesc_contacto(),unPedido.getFecha_confirmacion_entrega()});     
+            }
+        }
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vista.getBtnNuevaOrden())
@@ -34,6 +79,42 @@ public class BitacoraPedidosClienteController implements ActionListener{
         nuevoPedidoClienteController controllerNuevoPedido = new nuevoPedidoClienteController(vistaNuevoPedido,modelNuevoPedido);
         
         vistaNuevoPedido.setVisible(true);       
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getClickCount() == 2){
+            int filaSeleccionada = vista.getTbPedidosClientes().rowAtPoint(e.getPoint());
+            ParcialidadesPedidos vistaParcialidades = new ParcialidadesPedidos(vista.getPrincipal()
+            , true, vista.getTbPedidosClientes().getValueAt(filaSeleccionada,2).toString());
+            
+            ParcialidadesPedidosController controllerParcialiades =
+                    new ParcialidadesPedidosController(vistaParcialidades,new ParcialidadesPedidosModel());
+            
+            vistaParcialidades.setVisible(true);
+            
+            
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        
     }
     
     

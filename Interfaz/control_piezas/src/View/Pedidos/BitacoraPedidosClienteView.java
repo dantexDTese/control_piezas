@@ -172,23 +172,48 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
 
         tbPedidosClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "FECHA RECEPCIÒN", "NO. ORDEN DE COMPRA", "PRODUCTO", "CANTIDAD", "FECHA DE ENTREGA", "CLIENTE", "CONTACTO", "CONFIRMACION DE ENTREGA", "PARCIALIDADES", "SEGUIMIENTO"
+                "NO. ORDEN", "CLAVE ORDEN", "FECHA RECEPCION", "SEGUIMIENTO", "FECHA DE ENTREGA", "PRODUCTO", "CANTIDAD", "CLIENTE", "CONTACTO", "CONFIRMACION ENTREGA"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbPedidosClientes.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tbPedidosClientes);
+        if (tbPedidosClientes.getColumnModel().getColumnCount() > 0) {
+            tbPedidosClientes.getColumnModel().getColumn(0).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(1).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(2).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(3).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(4).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(5).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(6).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(7).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(8).setResizable(false);
+            tbPedidosClientes.getColumnModel().getColumn(9).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1568, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1141, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(

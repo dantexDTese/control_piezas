@@ -121,7 +121,15 @@ scrap_administrador         INT ,
 merma                       FLOAT,
 tiempo_muerto               TIME
 );
+
+CREATE TABLE parcialidades(
+id_parcialidad 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_pedido			INT NOT NULL REFERENCES pedidos (id_pedido),
+fecha_entrega		DATETIME NOT NULL,
+cantidad_entregada	INT NOT NULL
+);
 /** FIN TABLAS DEBILES 1*/
+
 /** TABLAS RELACIONALES*/
 CREATE TABLE defectos_lotes(
 id_defecto_lote             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

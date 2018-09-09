@@ -75,11 +75,11 @@ public class nuevoPedidoClienteModel {
                                 String descContacto,String fechaEntrega){
         
         Connection c = Conexion.getInstance().getConexion();
-        String query = "{Call agregar_pedido (?,?,?,?,?,?,?,?)";
+        String query = "{Call agregar_pedido(?,?,?,?,?,?)}";
         int res=0;
         if(c!=null)
             try {
-                CallableStatement cs = c.prepareCall(descCliente);
+                CallableStatement cs = c.prepareCall(query);
                 cs.setString(1,descOrdenCompra);
                 cs.setString(2,descCliente);
                 cs.setString(3,descContacto);
@@ -89,11 +89,29 @@ public class nuevoPedidoClienteModel {
                 cs.execute();
                 JOptionPane.showMessageDialog(null,cs.getString(5));
                 res = cs.getInt(6);
+                c.close();
             } catch (Exception e) {
                 System.err.println("error clase:NuevoPedidoClienteModel method:agregarPedido :"+e.getMessage());
             }
                 
         return res;
+    }
+    
+    public void agregarOrdenProduccion(int idPedido,String descProducto,int cantidadCliente){
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "{Call agregar_orden_produccion(?,?,?)}";
+        if(c!=null)
+            try {
+                CallableStatement cs = c.prepareCall(query);
+                cs.setInt(1, idPedido);
+                cs.setString(2, descProducto);
+                cs.setInt(3, cantidadCliente);
+                cs.execute();
+                cs.close();               
+            } catch (Exception e) {
+                System.err.println("error clase: nuevoPedidoClienteModel,"
+                        + " method: agregarOrdenProduccion:"+e.getMessage());
+            }
     }
     
 }
