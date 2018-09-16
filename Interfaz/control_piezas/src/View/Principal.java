@@ -268,7 +268,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_itemMenuBitacoraPedidosClienteActionPerformed
 
     private void itemMenuPlaneacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuPlaneacionActionPerformed
-        PlaneacionView vista = new PlaneacionView();
+        PlaneacionView vista = new PlaneacionView(this);
         PlaneacionModel model = new PlaneacionModel();
         PlaneacionController controller = new PlaneacionController(vista,model);
         Escritorio.removeAll();

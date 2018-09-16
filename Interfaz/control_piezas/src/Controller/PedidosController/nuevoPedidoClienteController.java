@@ -24,10 +24,10 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
 
     private NuevoPedidoCliente vistaNuevoPedido;
     private nuevoPedidoClienteModel modelNuevoPedido;
-    
+    private BitacoraPedidosClienteController bitacora;
     
     nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido,
-            nuevoPedidoClienteModel modelNuevoPedido) {
+            nuevoPedidoClienteModel modelNuevoPedido,BitacoraPedidosClienteController bitacora) {
         this.vistaNuevoPedido = vistaNuevoPedido;
         this.modelNuevoPedido = modelNuevoPedido;
         llenarListaClientes();

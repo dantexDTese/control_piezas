@@ -29,6 +29,7 @@ public class ParcialidadesPedidosModel {
                         parcialidades.add(new Parcialidad(noOrden, rs.getString(1),rs.getInt(2)));
                     } while (rs.next());
                 
+                c.close();
             } catch (Exception e) {
                 System.err.println("error: Class ParcialiadesPedidosModel,"
                         + "Method: listaParcialiades"+e.getMessage());
@@ -36,4 +37,19 @@ public class ParcialidadesPedidosModel {
         
         return parcialidades;
     }
+    
+    private int obtenerCantidadTotal(){
+        Connection c = Conexion.getInstance().getConexion();
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery("SELECT ");
+                        
+            } catch (Exception e) {
+            }
+        
+        return 0;
+    }
+    
+    
 }

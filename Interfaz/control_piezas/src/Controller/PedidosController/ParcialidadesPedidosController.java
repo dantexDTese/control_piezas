@@ -5,8 +5,11 @@
  */
 package Controller.PedidosController;
 
+import Model.PedidosModel.Parcialidad;
 import Model.PedidosModel.ParcialidadesPedidosModel;
 import View.Pedidos.ParcialidadesPedidos;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
 
 
 public class ParcialidadesPedidosController {
@@ -19,13 +22,43 @@ public class ParcialidadesPedidosController {
      
         this.vistaParcialidades = vistaParcialidades;
         this.parcialidadesPedidosModel = parcialidadesPedidosModel;
-                
+        this.vistaParcialidades.getLbClaveOrdenCompra().setText(this.vistaParcialidades.getNoOrden());
+        this.vistaParcialidades.getLbProducto().setText(vistaParcialidades.getProducto());
+        this.vistaParcialidades.getLbCantidadTotal().setText(""+vistaParcialidades.getCantidad());
+        llenarTabla();
+        obtenerValorRestante();
     }
     
     
     
+    private void obtenerValorRestante(){
+        
+        DefaultTableModel modelTabla = (DefaultTableModel) this.vistaParcialidades.getJtParcialidadesPedidos().getModel();
+        int suma=0;
+        
+        
+        for(int i = 0;i<modelTabla.getRowCount();i++)
+          suma+= Integer.parseInt(modelTabla.getValueAt(i,1).toString());
+        
+        vistaParcialidades.getLbCantidadRestante().setText(""+(vistaParcialidades.getCantidad()-suma));
+        
+        
+    }
     
-    
+    private void llenarTabla(){
+        ArrayList<Parcialidad> parcialidades = parcialidadesPedidosModel.
+                            listaParcialidades(vistaParcialidades.getNoOrden());
+            
+        DefaultTableModel model = (DefaultTableModel) vistaParcialidades.getJtParcialidadesPedidos().getModel();
+        
+        if(parcialidades.size()>0){
+            for(int i = 0;i<parcialidades.size();i++){
+                model.addRow(new Object[]{parcialidades.get(i).getFecha_entrega(),
+                                parcialidades.get(i).getCantidad()});
+            }
+        }
+          
+    }
     
     
     

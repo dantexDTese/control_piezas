@@ -5,6 +5,9 @@
  */
 package View.Pedidos;
 
+import javax.swing.JLabel;
+import javax.swing.JTable;
+
 /**
  *
  * @author cesar
@@ -15,16 +18,76 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
      * Creates new form ParcialidadesPedidos
      */
     
-    String noOrden;
+    private String noOrden;
+    private String producto;
+    private int cantidad;
     
-    
-    public ParcialidadesPedidos(java.awt.Frame parent, boolean modal,String noOrden) {
+    public ParcialidadesPedidos(java.awt.Frame parent, boolean modal,String noOrden,String producto,
+            int cantidad) {
         super(parent, modal);
         initComponents();
         
         this.noOrden = noOrden;
+        this.producto = producto;
+        this.cantidad = cantidad;
         
     }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+    
+    
+   
+    public void setLbCantidadRestante(JLabel lbCantidadRestante) {
+        this.lbCantidadRestante = lbCantidadRestante;
+    }
+
+    public void setLbCantidadTotal(JLabel lbCantidadTotal) {
+        this.lbCantidadTotal = lbCantidadTotal;
+    }
+
+    public void setLbClaveOrdenCompra(JLabel lbClaveOrdenCompra) {
+        this.lbClaveOrdenCompra = lbClaveOrdenCompra;
+    }
+
+    public void setLbProducto(JLabel lbProducto) {
+        this.lbProducto = lbProducto;
+    }
+    
+    
+
+    public String getNoOrden() {
+        return noOrden;
+    }
+
+    public JTable getJtParcialidadesPedidos() {
+        return jtParcialidadesPedidos;
+    }
+
+    public JLabel getLbCantidadRestante() {
+        return lbCantidadRestante;
+    }
+
+    public JLabel getLbCantidadTotal() {
+        return lbCantidadTotal;
+    }
+
+    public JLabel getLbClaveOrdenCompra() {
+        return lbClaveOrdenCompra;
+    }
+
+    public JLabel getLbProducto() {
+        return lbProducto;
+    }
+    
+    
+    
+    
     
     
 
@@ -39,16 +102,21 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jtParcialidadesPedidos = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        lbClaveOrdenCompra = new javax.swing.JLabel();
+        lbCantidadTotal = new javax.swing.JLabel();
+        lbCantidadRestante = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lbProducto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jtParcialidadesPedidos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -71,8 +139,8 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        jtParcialidadesPedidos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jtParcialidadesPedidos);
 
         jLabel1.setText("Parcialidades ");
 
@@ -80,9 +148,11 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
 
         jLabel2.setText("CANTIDAD TOTAL:");
 
-        jLabel3.setText("NO.PEDIDO:");
+        jLabel3.setText("CLAVE ORDEN COMPRA:");
 
         jLabel4.setText("CANTIDAD RESTANTE:");
+
+        jLabel5.setText("PRODUCTO: ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -91,24 +161,41 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addGap(143, 143, 143))))
+                        .addComponent(lbCantidadTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lbClaveOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel5)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lbProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbCantidadRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lbClaveOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel5)
+                        .addComponent(lbProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(lbCantidadRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbCantidadTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -187,7 +274,7 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ParcialidadesPedidos dialog = new ParcialidadesPedidos(new javax.swing.JFrame(), true ,null);
+                ParcialidadesPedidos dialog = new ParcialidadesPedidos(new javax.swing.JFrame(), true ,null,null,0);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -204,9 +291,14 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jtParcialidadesPedidos;
+    private javax.swing.JLabel lbCantidadRestante;
+    private javax.swing.JLabel lbCantidadTotal;
+    private javax.swing.JLabel lbClaveOrdenCompra;
+    private javax.swing.JLabel lbProducto;
     // End of variables declaration//GEN-END:variables
 }

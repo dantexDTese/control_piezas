@@ -20,8 +20,10 @@ BEGIN
             VALUES (now(),desc_orden_compra,@id_contacto,1,fecha_entrega);
             
             SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;
+
+			
 				
-            INSERT INTO ordenes_trabajo(id_pedido) VALUES(@id_pedido);
+            INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,1);
 			
             SET resultado = 'SE HA AGREGADO CORRECTAMENTE EL PEDIDO';					
 			SET r_id_pedido = @id_pedido;
@@ -43,9 +45,13 @@ IN id_pedido		 		INT,
 IN desc_producto			VARCHAR(50),
 IN cantidad_cliente			INT
 )
+
 BEGIN
 	DECLARE id_producto INT;
     DECLARE id_orden_trabajo INT;
+    DECLARE id_orden_p INT;
+    DECLARE id_estado INT;  
+	DECLARE id_tipo_proceso INT;
     
 	IF EXISTS(SELECT * FROM ordenes_trabajo WHERE ordenes_trabajo.id_pedido = id_pedido)
     THEN
@@ -53,20 +59,24 @@ BEGIN
 		SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;
 		
         IF @id_producto IS NOT NULL THEN		
-			INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
+			
+            INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,1,cantidad_cliente,now());        
+			
+			SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
+            
+            SELECT @id_estado := estados.id_estado FROM estados WHERE estados.desc_estados = 'PLANEACION';
+            
+            SELECT @id_tipo_proceso := tipos_proceso.id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'MAQUINADO';
+            
+			INSERT INTO procesos_produccion(id_orden_produccion,id_tipo_proceso,id_estado) 
+            VALUES(@id_orden_p,@id_tipo_proceso,@id_estado);
+            
         END IF;
 	
 	END IF;	
 END //
 DELIMITER ;
 
-SELECT * FROM PRODUCTOS;
-SELECT * FROM ordenes_produccion;
-SELECT * FROM pedidos;
-SELECT * FROM ordenes_trabajo;
-select * from clientes;
-SELECT  id_pedido FROM pedidos ORDER BY id_pedido DESC LIMIT 1;
-CALL agregar_pedido('1x2x3456791','PLASTONIUM','Jazmin Maldonado',now(),@respuesta,@r_id_pedido);
-CALL agregar_orden_produccion(1,'6613-8',4000);
-select @respuesta;
+
+            

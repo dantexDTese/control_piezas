@@ -16,6 +16,13 @@ public class Pedido {
     private String estado;
     
 
+    public Pedido(){
+        
+    }
+    
+    
+    
+    
     public Pedido(int id_pedido,
             String no_orden_compra,
             String fecha_entrega,
@@ -36,6 +43,11 @@ public class Pedido {
         this.clave_producto = clave_producto;
         this.cantidad_cliente = cantidad_cliente;
         this.estado = estado;
+    }
+
+    Pedido(String no_orden_compra, String fecha_recepcion) {
+        this.no_orden_compra = no_orden_compra;
+        this.fecha_recepcion = fecha_recepcion;
     }
 
     public String getEstado() {

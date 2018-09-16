@@ -12,8 +12,14 @@ import ds.desktop.notify.DesktopNotify;
 import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import javax.swing.CellEditor;
 import javax.swing.JComboBox;
@@ -26,8 +32,8 @@ import javax.swing.table.TableColumn;
 
 public class BitacoraPedidosClienteController implements ActionListener, MouseListener{
 
-    BitacoraPedidosClienteView vista;
-    BitacoraPedidosClienteModel model;
+    private BitacoraPedidosClienteView vista;
+    private BitacoraPedidosClienteModel model;
     
     public BitacoraPedidosClienteController(BitacoraPedidosClienteView vista, BitacoraPedidosClienteModel model) {
         this.vista = vista;
@@ -40,6 +46,7 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
     }
     
     private void tamanoTabla(){
+        
         vista.getTbPedidosClientes().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
             
@@ -50,7 +57,9 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
         
     }
     
-    private void llenarListaPedidos(){
+    public void llenarListaPedidos(){
+        limpiarTaba();
+       
         ArrayList<Pedido> pedidos = model.listaPedidos();
         if(pedidos.size()>0){
             DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
@@ -67,6 +76,13 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
         }
     }
     
+    private void limpiarTaba(){
+        
+        DefaultTableModel modelT = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
+        while(modelT.getRowCount()>0)
+            modelT.removeRow(0);
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == vista.getBtnNuevaOrden())
@@ -76,22 +92,34 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
     private void agregaNuevaOrden(){
         nuevoPedidoClienteModel modelNuevoPedido = new nuevoPedidoClienteModel();
         NuevoPedidoCliente vistaNuevoPedido = new NuevoPedidoCliente(vista.getPrincipal(), true);
-        nuevoPedidoClienteController controllerNuevoPedido = new nuevoPedidoClienteController(vistaNuevoPedido,modelNuevoPedido);
-        
+        nuevoPedidoClienteController controllerNuevoPedido = new nuevoPedidoClienteController(vistaNuevoPedido,modelNuevoPedido,this);
         vistaNuevoPedido.setVisible(true);       
-    }
+        vistaNuevoPedido.addWindowListener(new WindowAdapter() {
 
-    @Override
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e); 
+                llenarListaPedidos();
+            }
+            
+        });
+        
+    }
+    
+        @Override
     public void mouseClicked(MouseEvent e) {
         if(e.getClickCount() == 2){
             int filaSeleccionada = vista.getTbPedidosClientes().rowAtPoint(e.getPoint());
             ParcialidadesPedidos vistaParcialidades = new ParcialidadesPedidos(vista.getPrincipal()
-            , true, vista.getTbPedidosClientes().getValueAt(filaSeleccionada,2).toString());
+            , true, vista.getTbPedidosClientes().getValueAt(filaSeleccionada,1).toString(),
+            vista.getTbPedidosClientes().getValueAt(filaSeleccionada,5).toString(),
+            Integer.parseInt(vista.getTbPedidosClientes().getValueAt(filaSeleccionada,6).toString()));
             
             ParcialidadesPedidosController controllerParcialiades =
                     new ParcialidadesPedidosController(vistaParcialidades,new ParcialidadesPedidosModel());
             
             vistaParcialidades.setVisible(true);
+            
             
             
         }

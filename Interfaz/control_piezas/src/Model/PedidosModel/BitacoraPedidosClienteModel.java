@@ -25,7 +25,6 @@ public class BitacoraPedidosClienteModel {
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
         String query = "SELECT * FROM bitacoraPedidos";
-        
         if(c!=null)
             try {
                 Statement st = c.createStatement();
@@ -40,7 +39,7 @@ public class BitacoraPedidosClienteModel {
                     }while(rs.next());
             } catch (Exception e) {
                 System.err.println("error: class: nuevoPedidoClientes,"
-                        + "method:listaPedidos");
+                        + "method:listaPedidos"+e.getMessage());
             }
             
         return pedidos;

@@ -20,16 +20,22 @@ pd.id_contacto = cn.id_contacto JOIN clientes cl ON cl.id_cliente = cn.id_client
 JOIN ordenes_produccion op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
 estados es ON pd.id_estado = es.id_estado;
 
-
-select * from bitacoraPedidos;
-select * from pedidos;
-
-
-select * from estados;
-select * from parcialidades;
-
-insert into estados(desc_estados) VALUES('ABIERTO');
+CREATE VIEW OrdenesPendientes
+AS
+select no_orden_compra,fecha_recepcion from bitacoraPedidos AS bp 
+JOIN ordenes_trabajo AS ot ON bp.id_pedido = ot.id_pedido JOIN ordenes_produccion AS op
+ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
+op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
+pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
 
 
-SELECT pr.fecha_entrega,pr.cantidad_entregada FROM bitacoraPedidos bp JOIN parcialidades pr ON bp.id_pedido = pr.id_pedido
-WHERE bp.no_orden_compra;
+
+CREATE VIEW productosEnEspera
+AS
+select bp.no_orden_compra,op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente from bitacoraPedidos AS bp 
+JOIN ordenes_trabajo AS ot ON bp.id_pedido = ot.id_pedido JOIN ordenes_produccion AS op
+ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
+op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
+pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_producto
+WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
+

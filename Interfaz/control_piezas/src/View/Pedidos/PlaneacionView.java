@@ -5,6 +5,10 @@
  */
 package View.Pedidos;
 
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JTable;
+
 /**
  *
  * @author cesar
@@ -14,9 +18,35 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
     /**
      * Creates new form PlaneacionView
      */
-    public PlaneacionView() {
+    
+    JFrame princpial;
+    
+    public PlaneacionView(JFrame principal) {
         initComponents();
+        this.princpial = principal;
     }
+
+    public JFrame getPrincpial() {
+        return princpial;
+    }
+    
+    
+
+    
+   
+    public JComboBox<String> getCbxListaMaquinas() {
+        return cbxListaMaquinas;
+    }
+
+    public JTable getTbLIstaPedidosMaquina() {
+        return tbLIstaPedidosMaquina;
+    }
+
+    public JTable getTbListaPedidosPendientes() {
+        return tbListaPedidosPendientes;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,13 +60,13 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbxListaMaquinas = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbLIstaPedidosMaquina = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tbListaPedidosPendientes = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -44,22 +74,21 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         jLabel1.setText("MAQUINA:");
 
-        jComboBox1.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxListaMaquinas.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbLIstaPedidosMaquina.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "NO. PARTE", "QTY", "ORDEN PRODUCCION", "PIEZAS POR TURNO", "MATERIAL", "WORKER", "OPERACION", "NO. ORDEN COMPRA"
+                "NO. ORDEN COMPRA", "ORDEN PRODUCCION", "NO. PARTE", "PIEZAS POR TURNO", "MATERIAL", "WORKER", "QTY", "OPERACION"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -70,8 +99,18 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        tbLIstaPedidosMaquina.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tbLIstaPedidosMaquina);
+        if (tbLIstaPedidosMaquina.getColumnModel().getColumnCount() > 0) {
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(0).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(1).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(2).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(3).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(4).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(5).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(6).setResizable(false);
+            tbLIstaPedidosMaquina.getColumnModel().getColumn(7).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -81,7 +120,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
                 .addGap(32, 32, 32)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbxListaMaquinas, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
@@ -94,7 +133,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbxListaMaquinas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                 .addContainerGap())
@@ -115,18 +154,28 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tbListaPedidosPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Orden compra", "fecha entrada"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbListaPedidosPendientes.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tbListaPedidosPendientes);
+        if (tbListaPedidosPendientes.getColumnModel().getColumnCount() > 0) {
+            tbListaPedidosPendientes.getColumnModel().getColumn(0).setResizable(false);
+            tbListaPedidosPendientes.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         jLabel2.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         jLabel2.setText("ORDENES PENDIENTES.");
@@ -196,7 +245,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cbxListaMaquinas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -205,7 +254,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable tbLIstaPedidosMaquina;
+    private javax.swing.JTable tbListaPedidosPendientes;
     // End of variables declaration//GEN-END:variables
 }

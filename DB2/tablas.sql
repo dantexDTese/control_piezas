@@ -77,6 +77,7 @@ fecha_confirmacion_entrega 	DATE
 CREATE TABLE ordenes_trabajo(
 id_orden_trabajo     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_pedido			INT NOT NULL REFERENCES pedidos(id_pedido),
+id_estado			INT NOT NULL REFERENCES estados(id_estado),
 fecha_inicio        DATETIME,
 fecha_terminacion   DATETIME
 );
@@ -100,6 +101,8 @@ fecha_inicio            DATETIME,
 fecha_fin               DATETIME      
 );
 
+
+
 CREATE TABLE procesos_produccion(
 id_proceso_produccion       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_produccion         INT NOT NULL REFERENCES ordenes_produccion (id_orden_produccion),
@@ -108,6 +111,8 @@ id_estado					INT	NOT NULL REFERENCES estados(id_estado),
 fecha_inicio_proceso        DATETIME,
 fecha_fin_proceso           DATETIME    
 );
+
+select * from procesos_produccion;
 
 CREATE TABLE lotes_produccion(
 id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
