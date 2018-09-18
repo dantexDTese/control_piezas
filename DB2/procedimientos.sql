@@ -38,14 +38,12 @@ END //
 DELIMITER ;
 
 
-
 DELIMITER //
 CREATE PROCEDURE agregar_orden_produccion(
 IN id_pedido		 		INT,
 IN desc_producto			VARCHAR(50),
 IN cantidad_cliente			INT
 )
-
 BEGIN
 	DECLARE id_producto INT;
     DECLARE id_orden_trabajo INT;
@@ -79,4 +77,48 @@ END //
 DELIMITER ;
 
 
-            
+DELIMITER //
+CREATE PROCEDURE agregar_orden_maquina(
+id_orden_produccion		INT,
+nuevo_worker			FLOAT,
+nueva_cantidad_total	INT,
+desc_maquina			VARCHAR(100),
+desc_material			VARCHAR(100)
+)
+BEGIN
+	DECLARE id_material INT;
+    DECLARE id_maquina INT;
+    DECLARE id_proceso_produccion INT;
+    DECLARE id_nuevo_estado INT;
+    
+
+	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion)
+    THEN
+		
+        SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
+        SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
+		SELECT @id_nuevo_estado := estados.id_estado FROM estados WHERE estados.desc_estado = 'PRODUCCION';
+        
+        UPDATE ordenes_produccion SET id_material = @id_material, worker = nuevo_worker,cantidad_total = nueva_cantidad_total
+        WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion;
+        
+		UPDATE procesos_produccion SET id_estado = @id_nuevo_estado WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
+			
+        SELECT @id_proceso_produccion := id_proceso_produccion FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
+		
+        INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
+        
+    END IF;
+
+
+END //
+DELIMITER ;            
+
+describe lotes_produccion;
+select * from maquinas;
+select * from materiales;
+select * from ordenes_produccion;
+select * from procesos_produccion;
+select * from lotes_produccion;
+SELECT * FROM ESTADOS;
+

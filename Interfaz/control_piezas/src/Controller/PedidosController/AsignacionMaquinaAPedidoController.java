@@ -36,12 +36,19 @@ public class AsignacionMaquinaAPedidoController {
         pendientes = this.model.listaProductosPendientes(ordenCOmpra);
         llenarProductos();
         llenarMaquinas();
+        llenarMateriales();
     }
     
     private void llenarMaquinas(){
         ArrayList<String> maquinas = model.listaMaquinas();
         for(int i = 0;i<maquinas.size();i++)
             vista.getCbxMaquina().addItem(maquinas.get(i).toString());
+    }
+    
+    private void llenarMateriales(){
+        ArrayList<String> materiales = model.listaMateriales();
+        for(int i = 0;i<materiales.size();i++)
+            vista.getCbxMateriales().addItem(materiales.get(i));
     }
     
     private void llenarProductos(){

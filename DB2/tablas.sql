@@ -2,7 +2,6 @@ CREATE DATABASE control_piezas_2;
 
 USE control_piezas_2;
 
-
 /** CATALOGOS DE LA BASE DE DATOS CONTROL_PIEZAS (TABLAS FUERTES)*/
 CREATE TABLE materiales(
 id_material          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -53,14 +52,11 @@ id_cliente          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 nombre_cliente      VARCHAR (20) NOT NULL
 );
 
-
-
 CREATE TABLE contactos(
 id_contacto 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_cliente 		INT NOT NULL REFERENCES clientes(id_cliente),
 desc_contacto	VARCHAR(50) NOT NULL
 );
-
 /**FIN DE CATALOGOS CONTROL_PIEZAS*/ 
 
 /** TABLAS DEBILES*/
@@ -82,7 +78,6 @@ fecha_inicio        DATETIME,
 fecha_terminacion   DATETIME
 );
 
-
 CREATE TABLE ordenes_produccion(
 id_orden_produccion     INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_trabajo        INT NOT NULL REFERENCES ordenes_trabajo(id_orden_trabajo),
@@ -90,6 +85,7 @@ id_producto             INT NOT NULL REFERENCES productos(id_producto),
 id_material             INT REFERENCES materiales(id_material),
 id_estado				INT	NOT NULL REFERENCES estados(id_estado),
 cantidad_cliente        INT NOT NULL,
+worker					FLOAT,
 cantidad_total          INT ,
 barras_necesarias       FLOAT,
 turnos_necesarios       INT,
@@ -101,8 +97,6 @@ fecha_inicio            DATETIME,
 fecha_fin               DATETIME      
 );
 
-
-
 CREATE TABLE procesos_produccion(
 id_proceso_produccion       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_produccion         INT NOT NULL REFERENCES ordenes_produccion (id_orden_produccion),
@@ -111,8 +105,6 @@ id_estado					INT	NOT NULL REFERENCES estados(id_estado),
 fecha_inicio_proceso        DATETIME,
 fecha_fin_proceso           DATETIME    
 );
-
-select * from procesos_produccion;
 
 CREATE TABLE lotes_produccion(
 id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,

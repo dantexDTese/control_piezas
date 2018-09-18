@@ -1,6 +1,4 @@
-
 USE control_piezas_2;
-
 
 CREATE VIEW bitacoraPedidos 
 AS
@@ -27,7 +25,6 @@ JOIN ordenes_trabajo AS ot ON bp.id_pedido = ot.id_pedido JOIN ordenes_produccio
 ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
-
 
 
 CREATE VIEW productosEnEspera

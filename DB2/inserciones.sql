@@ -13,13 +13,14 @@ insert into productos(clave_producto) values('331A2452P7');
 
 insert into estados(desc_estados) VALUES('ABIERTO');
 insert into estados(desc_estados) VALUES('PLANEACION');
+INSERT INTO estados(desc_estados) VALUES('PRODUCCION');
 
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUE('MAQUINADO');
 
 INSERT INTO maquinas(desc_maquina) VALUES('maquina1');
 
-select * from procesos_produccion;
-select * from ordenes_produccion;
+
+INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
 
 

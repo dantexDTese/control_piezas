@@ -47,6 +47,12 @@ public class AsignacionMaquinaAPedidoModel {
         
     }
     
+    public ArrayList<String> listaMateriales(){
+        return Estructuras.obtenerlistaDatos("SELECT desc_material FROM materiales");       
+    }
+    
+    
+    
     
 
 
