@@ -25,3 +25,4 @@ pr.id_producto = op.id_producto;
             
 SELECT desc_material FROM materiales;
 
+drop database control_piezas_2;

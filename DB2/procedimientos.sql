@@ -76,6 +76,7 @@ BEGIN
 END //
 DELIMITER ;
 
+CALL agregar_orden_maquina(1,123,123,'maquina1','MATERIAL 1');
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
@@ -97,14 +98,23 @@ BEGIN
 		
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
-		SELECT @id_nuevo_estado := estados.id_estado FROM estados WHERE estados.desc_estado = 'PRODUCCION';
+		SELECT @id_nuevo_estado := estados.id_estado FROM estados WHERE estados.desc_estados = 'PRODUCCION';
         
-        UPDATE ordenes_produccion SET id_material = @id_material, worker = nuevo_worker,cantidad_total = nueva_cantidad_total
+        UPDATE ordenes_produccion 
+        SET 
+        ordenes_produccion.id_material = @id_material,
+        ordenes_produccion.worker = nuevo_worker,
+        ordenes_produccion.cantidad_total = nueva_cantidad_total
         WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion;
-        
-		UPDATE procesos_produccion SET id_estado = @id_nuevo_estado WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
 			
-        SELECT @id_proceso_produccion := id_proceso_produccion FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
+		SET SQL_SAFE_UPDATES=0;		
+		UPDATE procesos_produccion 
+        SET 
+        procesos_produccion.id_estado = @id_nuevo_estado 
+        WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
+		SET SQL_SAFE_UPDATES=1;
+        
+        SELECT @id_proceso_produccion := procesos_produccion.id_proceso_produccion FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
 		
         INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
         
