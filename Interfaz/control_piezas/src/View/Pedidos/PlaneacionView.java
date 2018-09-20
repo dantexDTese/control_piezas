@@ -38,9 +38,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         return cbxListaMaquinas;
     }
 
-    public JTable getTbLIstaPedidosMaquina() {
-        return tbLIstaPedidosMaquina;
-    }
+    
 
     public JTable getTbListaPedidosPendientes() {
         return tbListaPedidosPendientes;

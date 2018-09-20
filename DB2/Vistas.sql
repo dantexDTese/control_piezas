@@ -26,7 +26,6 @@ ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
 
-
 CREATE VIEW productosEnEspera
 AS
 select bp.no_orden_compra,op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente from bitacoraPedidos AS bp 
@@ -35,4 +34,16 @@ ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_producto
 WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
+
+CREATE VIEW procedimiento_total
+AS
+select pd.no_orden_compra,op.id_orden_produccion,op.cantidad_total,op.worker,
+mt.desc_material,pr.clave_producto,tp.desc_tipo_proceso 
+from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido JOIN
+ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN materiales AS mt ON
+mt.id_material = op.id_material JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
+procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion JOIN tipos_proceso
+AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = 
+pp.id_proceso_produccion JOIN maquinas AS mq ON mq.id_maquina = lp.id_maquina;
+
 

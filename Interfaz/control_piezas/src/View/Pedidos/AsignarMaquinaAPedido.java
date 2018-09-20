@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 
 /**
  *
@@ -55,7 +56,7 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         dcrFechaInicioProduccion = new com.toedter.calendar.JDateChooser();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtWorker = new javax.swing.JTextField();
         sprPiezasTurno = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
@@ -190,7 +191,7 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                         .addComponent(jLabel12)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
+                        .addComponent(txtWorker)
                         .addGap(29, 29, 29))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -199,9 +200,9 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jLabel12)))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel10)))
@@ -209,7 +210,7 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(dcrFechaInicioProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                        .addComponent(jTextField1))
+                        .addComponent(txtWorker))
                     .addComponent(sprPiezasTurno, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -259,6 +260,12 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public JTextField getTxtWorker() {
+        return txtWorker;
+    }
+
+    
+    
     public JComboBox<String> getCbxMateriales() {
         return cbxMateriales;
     }
@@ -368,11 +375,11 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbCantidadCliente;
     private javax.swing.JLabel lbNoOrdenProduccion;
     private javax.swing.JLabel lbOrdenCompra;
     private javax.swing.JSpinner sprCantidadProducir;
     private javax.swing.JSpinner sprPiezasTurno;
+    private javax.swing.JTextField txtWorker;
     // End of variables declaration//GEN-END:variables
 }

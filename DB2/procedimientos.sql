@@ -76,59 +76,69 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL agregar_orden_maquina(1,123,123,'maquina1','MATERIAL 1');
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
-id_orden_produccion		INT,
-nuevo_worker			FLOAT,
-nueva_cantidad_total	INT,
-desc_maquina			VARCHAR(100),
-desc_material			VARCHAR(100)
+IN id_orden_produccion		INT,
+IN desc_producto		    VARCHAR(50),
+IN nuevo_worker				FLOAT,
+IN nueva_cantidad_total		INT,
+IN desc_maquina				VARCHAR(50),
+IN desc_material			VARCHAR(100),
+INOUT resultado				VARCHAR(100)
 )
 BEGIN
 	DECLARE id_material INT;
     DECLARE id_maquina INT;
     DECLARE id_proceso_produccion INT;
     DECLARE id_nuevo_estado INT;
+    DECLARE id_producto INT;
     
-
 	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion)
     THEN
 		
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
 		SELECT @id_nuevo_estado := estados.id_estado FROM estados WHERE estados.desc_estados = 'PRODUCCION';
-        
+		SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
+            
         UPDATE ordenes_produccion 
         SET 
         ordenes_produccion.id_material = @id_material,
         ordenes_produccion.worker = nuevo_worker,
         ordenes_produccion.cantidad_total = nueva_cantidad_total
-        WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion;
+        WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion AND ordenes_produccion.id_producto = @id_producto;
 			
-		SET SQL_SAFE_UPDATES=0;		
+		SET SQL_SAFE_UPDATES=0;		      
 		UPDATE procesos_produccion 
         SET 
         procesos_produccion.id_estado = @id_nuevo_estado 
         WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
 		SET SQL_SAFE_UPDATES=1;
-        
-        SELECT @id_proceso_produccion := procesos_produccion.id_proceso_produccion FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
+			
+        select @id_proceso_produccion := procesos_produccion.id_proceso_produccion 
+        FROM procesos_produccion JOIN ordenes_produccion ON 
+		procesos_produccion.id_orden_produccion = ordenes_produccion.id_orden_produccion 
+		WHERE ordenes_produccion.id_producto =@id_producto AND procesos_produccion.id_orden_produccion = id_orden_produccion;
+    
+        SELECT  procesos_produccion.id_proceso_produccion 
+        FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
 		
         INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
         
+        SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
+    
+    ELSE
+    
+		SET resultado = 'NO FUE POSIBLE COMPLETAR LA OPERACION';					
+        
     END IF;
-
 
 END //
 DELIMITER ;            
 
-describe lotes_produccion;
-select * from maquinas;
-select * from materiales;
-select * from ordenes_produccion;
+
 select * from procesos_produccion;
+select * from ordenes_produccion;
 select * from lotes_produccion;
-SELECT * FROM ESTADOS;
 
