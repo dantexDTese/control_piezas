@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -77,6 +78,13 @@ public class Estructuras {
             return false;
         }
         return true;
+    }
+    
+    public static DefaultTableModel limpiarTabla(DefaultTableModel model){
+        while(model.getRowCount()>0)
+            model.removeRow(0);
+    
+         return model;
     }
     
     

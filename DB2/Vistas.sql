@@ -38,7 +38,7 @@ WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.cla
 CREATE VIEW procedimiento_total
 AS
 select pd.no_orden_compra,op.id_orden_produccion,op.cantidad_total,op.worker,
-mt.desc_material,pr.clave_producto,tp.desc_tipo_proceso 
+mt.desc_material,pr.clave_producto,tp.desc_tipo_proceso,mq.desc_maquina 
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido JOIN
 ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN materiales AS mt ON
 mt.id_material = op.id_material JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN

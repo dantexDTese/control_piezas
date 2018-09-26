@@ -36,8 +36,14 @@ id_maquina          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_maquina        VARCHAR (50) NOT NULL    
 );
 
+CREATE TABLE tipos_estado(
+id_tipo_estado 				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_tipo_estado		VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE estados(
 id_estado           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_tipo_estado		INT NOT NULL REFERENCES tipos_estado (id_tipo_estado),
 desc_estados        VARCHAR (50) NOT NULL
 );
 
@@ -110,6 +116,7 @@ id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_proceso_produccion      INT NOT NULL REFERENCES procesos_produccion (id_proceso_produccion),
 id_maquina                  INT NOT NULL REFERENCES maquinas (id_maquina),
 desc_lote                   VARCHAR(50),
+fecha_trabajo				DATETIME,
 cantidad_operador           INT ,
 cantidad_administrador      INT ,
 scrap_operador              INT ,

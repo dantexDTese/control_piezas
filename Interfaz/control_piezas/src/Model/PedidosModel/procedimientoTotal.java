@@ -12,8 +12,14 @@ public class procedimientoTotal {
    private String claveProducto;
    private String descTipoProceso;
 
-    public procedimientoTotal(String noOrdenCompra, int idOrdenProduccion, 
-            int cantidadTotal, float worker, String descMaterial, String claveProducto, String descTipoProceso) {
+    public procedimientoTotal(
+            String noOrdenCompra
+            ,int idOrdenProduccion, 
+            int cantidadTotal,
+            float worker,
+            String descMaterial,
+            String claveProducto,
+            String descTipoProceso) {
         this.noOrdenCompra = noOrdenCompra;
         this.idOrdenProduccion = idOrdenProduccion;
         this.cantidadTotal = cantidadTotal;

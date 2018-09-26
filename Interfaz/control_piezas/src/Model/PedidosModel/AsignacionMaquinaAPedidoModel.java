@@ -78,30 +78,4 @@ public class AsignacionMaquinaAPedidoModel {
         
     }
 
-    public ArrayList<procedimientoTotal> listaTareasMaquina(String nombreMaquina) {
-        ArrayList<procedimientoTotal> listaTareas = new ArrayList<>();
-        Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT * FROM procedimiento_total";
-        if(c!=null)
-            try {
-                Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                
-                if(rs.first())
-                    do{
-                      listaTareas.add(new procedimientoTotal(rs.getString(1),
-                              rs.getInt(rs.getInt(2)), rs.getInt(3),rs.getFloat(4),rs.getString(5),rs.getString(6),rs.getString(7)));
-                    }while (rs.next());
-                
-            } catch (Exception e) {
-                System.err.print("error: class AsignacionMaquinaAPedidoModel, method:listaTareasMaquina"+e.getMessage());
-            }
-        
-        return listaTareas;        
-    }
-    
-      
-    
-    
-
 }

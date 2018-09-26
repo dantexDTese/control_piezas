@@ -39,6 +39,14 @@
             <Property name="text" type="java.lang.String" value="Producci&#xf2;n                             "/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemBitacoraOrdenesTrabajo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Bitacora de ordenes de trabajo"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemBitacoraOrdenesTrabajoActionPerformed"/>
+              </Events>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="subMenuOrdenesProduccion">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Ordenes de produccion"/>
@@ -83,6 +91,24 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Almacen                               "/>
           </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemMateriaPrima">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="MATERIA PRIMA"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemMateriaPrimaActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemProductoTerminado">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="PRODUCTO TERMINADO"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemProductoTerminadoActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="menuPedidos">
           <Properties>
@@ -103,6 +129,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuPlaneacionActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="itemMenuControlEntregaMP">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Control de entrega de MP"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuControlEntregaMPActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
