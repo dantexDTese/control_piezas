@@ -1,3 +1,5 @@
+use control_piezas_2;
+
 DELIMITER //
 CREATE PROCEDURE agregar_pedido(
 IN desc_orden_compra	VARCHAR(50),
@@ -10,14 +12,20 @@ INOUT r_id_pedido		INT
 BEGIN
 	DECLARE id_contacto INT;
     DECLARE id_pedido INT;
+    DECLARE id_estado INT;
     IF NOT EXISTS (SELECT * FROM pedidos WHERE no_orden_compra = desc_orden_compra)
     THEN
 		SELECT @id_contacto := contactos.id_contacto FROM contactos JOIN clientes ON contactos.id_cliente = clientes.id_cliente
         WHERE clientes.nombre_cliente = desc_cliente AND contactos.desc_contacto = desc_contacto;
         
         IF @id_contacto IS NOT NULL THEN
+			
+            SELECT @id_estado := es.id_estado FROM estados AS es JOIN tipos_estado AS tes ON es.id_tipo_estado = tes.id_tipo_estado
+            WHERE tes.desc_tipo_estado = 'PEDIDOS' AND es.desc_estados = 'ABIERTO';
+            
+        
 			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_contacto,id_estado,fecha_entrega) 
-            VALUES (now(),desc_orden_compra,@id_contacto,1,fecha_entrega);
+            VALUES (now(),desc_orden_compra,@id_contacto,@id_estado,fecha_entrega);
             
             SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;
 
@@ -58,12 +66,14 @@ BEGIN
 		
         IF @id_producto IS NOT NULL THEN		
 			
+            
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,1,cantidad_cliente,now());        
 			
 			SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
             
-            SELECT @id_estado := estados.id_estado FROM estados WHERE estados.desc_estados = 'PLANEACION';
+            SELECT @id_estado := es.id_estado FROM estados AS es JOIN tipos_estado AS tes ON es.id_tipo_estado = tes.id_tipo_estado
+            WHERE tes.desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND es.desc_estados = 'PLANEACION';
             
             SELECT @id_tipo_proceso := tipos_proceso.id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'MAQUINADO';
             
@@ -136,9 +146,3 @@ BEGIN
 
 END //
 DELIMITER ;            
-
-
-select * from procesos_produccion;
-select * from ordenes_produccion;
-select * from lotes_produccion;
-
