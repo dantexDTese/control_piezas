@@ -47,3 +47,43 @@ AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso JOIN lotes_produccion AS lp ON 
 pp.id_proceso_produccion JOIN maquinas AS mq ON mq.id_maquina = lp.id_maquina;
 
 
+CREATE VIEW todos_los_estados
+AS
+SELECT es.id_estado,desc_tipo_estado,desc_estados 
+FROM tipos_estado AS tp JOIN estados as es on tp.id_tipo_estado = es.id_tipo_estado;
+
+
+CREATE VIEW procesando_producto
+AS
+SELECT 
+op.id_orden_produccion,
+op.cantidad_total,
+pr.clave_producto,
+mq.desc_maquina,
+tes.desc_tipo_estado,
+tes.desc_estados,
+tp.desc_tipo_proceso,
+lp.cantidad_administrador,
+mt.desc_material,
+lp.fecha_trabajo
+ FROM ordenes_produccion AS op JOIN productos AS pr ON op.id_producto = pr.id_producto
+JOIN procesos_produccion AS pp ON op.id_orden_produccion = pp.id_orden_produccion
+JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = pp.id_proceso_produccion
+JOIN maquinas AS mq ON mq.id_maquina = lp.id_maquina 
+JOIN todos_los_estados AS tes ON tes.id_estado = pp.id_estado
+JOIN tipos_proceso AS tp ON tp.id_tipo_proceso = pp.id_tipo_proceso
+JOIN materiales AS mt ON mt.id_material = op.id_material
+WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
+
+
+select * from procesos_produccion;
+select * from lotes_produccion;
+
+SELECT * FROM procesando_producto;
+
+SELECT * FROM procesando_producto WHERE desc_maquina = 'maquina2';
+
+
+
+
+select * from lotes_produccion;

@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -41,6 +43,12 @@ public class AsignacionMaquinaAPedidoController {
                 vista.getCbxMaquina().getSelectedItem().toString(),
                 vista.getCbxMateriales().getSelectedItem().toString()
                 ));
+                
+                try {
+                    vista.dispose();
+                } catch (Throwable ex) {
+                    Logger.getLogger(AsignacionMaquinaAPedidoController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     };

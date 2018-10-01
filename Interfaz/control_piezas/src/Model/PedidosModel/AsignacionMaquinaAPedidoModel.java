@@ -35,10 +35,14 @@ public class AsignacionMaquinaAPedidoModel {
             try {
                 
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM productosEnEspera WHERE no_orden_compra = '"+noOrden+"'");
+                ResultSet rs = st.executeQuery("SELECT * FROM productosEnEspera "
+                        + "WHERE no_orden_compra = '"+noOrden+"'");
                 if(rs.first())
                     do {                        
-                        listaProductos.add(new ProductosPendientes(rs.getString(1),rs.getInt(2), rs.getString(3), rs.getInt(4)));
+                        listaProductos.add(new ProductosPendientes(rs.getString(1),
+                                rs.getInt(2), rs.getString(3), rs.getInt(4)));
+                    
+                        
                     } while (rs.next());
                 
             } catch (Exception e) {

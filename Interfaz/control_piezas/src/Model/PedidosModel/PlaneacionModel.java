@@ -29,7 +29,7 @@ public class PlaneacionModel {
                         Pedido pedido = new Pedido(rs.getString(1),rs.getString(2));
                         pedidos.add(pedido);
                     } while (rs.next());
-                
+               c.close(); 
             } catch (Exception e) {
                 System.err.println("error: class: PlaneacionModel, Method:listaPedidosPendientes"+e.getMessage());
             }
@@ -52,12 +52,51 @@ public class PlaneacionModel {
                                 rs.getFloat(4),rs.getString(5),rs.getString(6),
                                 rs.getString(7)));                       
                     } while (rs.next());
-                
+               c.close();
             } catch (Exception e) {
                 System.err.println("error: class: PlaneacionModel, method:listaProcedimentosMaquina "+e.getMessage());
             }
         
         return lista;
+    }
+    
+    public ProcesoPrincipal obtenerProcesoPrincipal(String descMaquina){
+        ProcesoPrincipal principal = null;
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "SELECT * FROM procesando_producto WHERE desc_maquina = '"+descMaquina+"'"
+                + " GROUP BY id_orden_produccion;";
+                
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    principal = new ProcesoPrincipal(rs.getInt(2),rs.getString(3),
+                            rs.getString(7),rs.getString(9));
+                c.close();
+            } catch (Exception e) {
+                System.err.println("error: class: PlaneacionModel method: obtenerProcesosPrincipal");
+            }
+        return principal;
+    }
+    
+    public ArrayList<lotesProduccion> listaLotesProduccion(String descMaquina){
+        Connection c = Conexion.getInstance().getConexion();
+        ArrayList<lotesProduccion> listaLotes = new ArrayList<>();
+        String query = "SELECT * FROM procesando_producto WHERE desc_maquina = '"+descMaquina+"';";
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    do {                        
+                        listaLotes.add(new lotesProduccion(rs.getInt(8),rs.getString(10)));
+                    } while (rs.next());
+                c.close();
+            } catch (Exception e) {
+                System.err.println("error: PlaneacionModel, method:listaLotesProduccion "+e.getMessage());
+            }
+        return listaLotes;
     }
     
     

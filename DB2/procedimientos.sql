@@ -20,8 +20,7 @@ BEGIN
         
         IF @id_contacto IS NOT NULL THEN
 			
-            SELECT @id_estado := es.id_estado FROM estados AS es JOIN tipos_estado AS tes ON es.id_tipo_estado = tes.id_tipo_estado
-            WHERE tes.desc_tipo_estado = 'PEDIDOS' AND es.desc_estados = 'ABIERTO';
+            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'PEDIDOS' AND desc_estados = 'ABIERTO';
             
         
 			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_contacto,id_estado,fecha_entrega) 
@@ -29,9 +28,11 @@ BEGIN
             
             SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;
 
-			
+			SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
+            WHERE desc_tipo_estado = 'ORDENES DE TRABAJO' AND desc_estados = 'ABIERTO';
+            	
 				
-            INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,1);
+            INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,@id_estado);
 			
             SET resultado = 'SE HA AGREGADO CORRECTAMENTE EL PEDIDO';					
 			SET r_id_pedido = @id_pedido;
@@ -66,14 +67,17 @@ BEGIN
 		
         IF @id_producto IS NOT NULL THEN		
 			
+            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
+            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estados = 'ABIERTO';
+            
             
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
-            VALUES(@id_orden_trabajo,@id_producto,1,cantidad_cliente,now());        
+            VALUES(@id_orden_trabajo,@id_producto,@id_estado,cantidad_cliente,now());        
 			
 			SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
             
-            SELECT @id_estado := es.id_estado FROM estados AS es JOIN tipos_estado AS tes ON es.id_tipo_estado = tes.id_tipo_estado
-            WHERE tes.desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND es.desc_estados = 'PLANEACION';
+            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
+            WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PLANEACION';
             
             SELECT @id_tipo_proceso := tipos_proceso.id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'MAQUINADO';
             
@@ -90,7 +94,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
 IN id_orden_produccion		INT,
-IN desc_producto		    VARCHAR(50),
+IN desc_producto			    VARCHAR(50),
 IN nuevo_worker				FLOAT,
 IN nueva_cantidad_total		INT,
 IN desc_maquina				VARCHAR(50),
@@ -109,7 +113,13 @@ BEGIN
 		
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
-		SELECT @id_nuevo_estado := estados.id_estado FROM estados WHERE estados.desc_estados = 'PRODUCCION';
+        
+        /*procesos para seleccionar el estado*/
+		SELECT @id_nuevo_estado := todos_los_estados.id_estado 
+        FROM todos_los_estados WHERE  desc_tipo_estado = 'PROCESOS DE PRODUCCION'
+        AND desc_estados = 'EN ESPERA';
+        /*fin seleccion estado*/
+        
 		SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
             
         UPDATE ordenes_produccion 
@@ -131,9 +141,6 @@ BEGIN
 		procesos_produccion.id_orden_produccion = ordenes_produccion.id_orden_produccion 
 		WHERE ordenes_produccion.id_producto =@id_producto AND procesos_produccion.id_orden_produccion = id_orden_produccion;
     
-        SELECT  procesos_produccion.id_proceso_produccion 
-        FROM procesos_produccion WHERE id_orden_produccion = id_orden_produccion;    
-		
         INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
         
         SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					

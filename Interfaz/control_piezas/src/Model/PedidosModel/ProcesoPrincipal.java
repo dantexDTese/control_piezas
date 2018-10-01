@@ -4,32 +4,44 @@ package Model.PedidosModel;
 
 public class ProcesoPrincipal {
     
-    private String claveProducto;
+    
+    private final int cantidadTotal;
+    private final String claveProducto;
+    private final String descProcesoActual;
+    private final String descMaterial;
     private int cantidadProcesada;
-    private int cantidadTotal;
-    private int cantidadRestante;
-
-    public ProcesoPrincipal(String claveProducto, int cantidadProcesada, int cantidadTotal, int cantidadRestante) {
-        this.claveProducto = claveProducto;
-        this.cantidadProcesada = cantidadProcesada;
+    public ProcesoPrincipal(int cantidadTotal, String claveProducto, String descProcesoActual, String descMaterial) {
         this.cantidadTotal = cantidadTotal;
-        this.cantidadRestante = cantidadRestante;
-    }
-
-    public String getClaveProducto() {
-        return claveProducto;
+        this.claveProducto = claveProducto;
+        this.descProcesoActual = descProcesoActual;
+        this.descMaterial = descMaterial;
+        cantidadProcesada=0;
     }
 
     public int getCantidadProcesada() {
         return cantidadProcesada;
     }
 
+    public void setCantidadProcesada(int cantidadProcesada) {
+        this.cantidadProcesada = cantidadProcesada;
+    }
+    
+    
+
     public int getCantidadTotal() {
         return cantidadTotal;
     }
 
-    public int getCantidadRestante() {
-        return cantidadRestante;
+    public String getClaveProducto() {
+        return claveProducto;
     }
 
+    public String getDescProcesoActual() {
+        return descProcesoActual;
+    }
+
+    public String getDescMaterial() {
+        return descMaterial;
+    }
+    
 }

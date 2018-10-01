@@ -43,3 +43,14 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina1');
 INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
+
+
+SET SQL_SAFE_UPDATES=0;		      
+UPDATE procesos_produccion 
+SET 
+procesos_produccion.id_estado = 9
+WHERE procesos_produccion.id_orden_produccion = 2;
+SET SQL_SAFE_UPDATES=1;
+
+
+

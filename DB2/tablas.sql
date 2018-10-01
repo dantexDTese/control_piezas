@@ -3,8 +3,6 @@ DROP DATABASE IF EXISTS control_piezas_2;
 
 CREATE DATABASE control_piezas_2;    
 
-
-
 USE control_piezas_2;
 /** CATALOGOS DE LA BASE DE DATOS CONTROL_PIEZAS (TABLAS FUERTES)*/
 CREATE TABLE materiales(
