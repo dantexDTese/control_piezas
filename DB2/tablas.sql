@@ -102,7 +102,8 @@ fecha_registro          DATETIME NOT NULL,
 fecha_montaje           DATETIME,
 fecha_desmontaje        DATETIME,
 fecha_inicio            DATETIME,
-fecha_fin               DATETIME      
+fecha_fin               DATETIME,
+observaciones			VARCHAR(250)      
 );
 
 CREATE TABLE procesos_produccion(

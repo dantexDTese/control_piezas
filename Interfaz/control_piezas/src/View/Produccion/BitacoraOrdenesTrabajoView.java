@@ -6,6 +6,11 @@
 package View.Produccion;
 
 import View.Principal;
+import com.toedter.calendar.JYearChooser;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -18,6 +23,38 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
      */
     public BitacoraOrdenesTrabajoView(Principal aThis) {
         initComponents();
+    }
+
+    public JTextArea getAtxtObservacion() {
+        return atxtObservacion;
+    }
+
+    public JButton getBtnAdelante() {
+        return btnAdelante;
+    }
+
+    public JButton getBtnAtras() {
+        return btnAtras;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
+    }
+
+    public JButton getBtnGuardarObservacion() {
+        return btnGuardarObservacion;
+    }
+
+    public JLabel getLbAnio() {
+        return lbAnio;
+    }
+
+    public JTable getTbOrdenesTrabajo() {
+        return tbOrdenesTrabajo;
+    }
+
+    public JYearChooser getYcrAnio() {
+        return ycrAnio;
     }
     
     
@@ -41,7 +78,7 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         lbAnio = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jtOrdenesTrabajo = new javax.swing.JTable();
+        tbOrdenesTrabajo = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         atxtObservacion = new javax.swing.JTextArea();
@@ -72,7 +109,7 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 153))); // NOI18N
 
-        jtOrdenesTrabajo.setModel(new javax.swing.table.DefaultTableModel(
+        tbOrdenesTrabajo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null},
@@ -98,16 +135,16 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtOrdenesTrabajo.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jtOrdenesTrabajo);
-        if (jtOrdenesTrabajo.getColumnModel().getColumnCount() > 0) {
-            jtOrdenesTrabajo.getColumnModel().getColumn(0).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(1).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(2).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(3).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(4).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(5).setResizable(false);
-            jtOrdenesTrabajo.getColumnModel().getColumn(7).setResizable(false);
+        tbOrdenesTrabajo.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(tbOrdenesTrabajo);
+        if (tbOrdenesTrabajo.getColumnModel().getColumnCount() > 0) {
+            tbOrdenesTrabajo.getColumnModel().getColumn(0).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(1).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(2).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(3).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(4).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(5).setResizable(false);
+            tbOrdenesTrabajo.getColumnModel().getColumn(7).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -277,8 +314,8 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jtOrdenesTrabajo;
     private javax.swing.JLabel lbAnio;
+    private javax.swing.JTable tbOrdenesTrabajo;
     private com.toedter.calendar.JYearChooser ycrAnio;
     // End of variables declaration//GEN-END:variables
 }

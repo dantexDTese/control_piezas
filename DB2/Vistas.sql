@@ -76,14 +76,14 @@ JOIN materiales AS mt ON mt.id_material = op.id_material
 WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
 
 
-select * from procesos_produccion;
-select * from lotes_produccion;
+CREATE VIEW bitacora_ordenes_trabajo
+AS
+select op.id_orden_produccion,op.fecha_registro,op.cantidad_cliente,op.fecha_inicio,op.fecha_fin,
+pd.id_pedido,pd.fecha_entrega,st.desc_estados,op.observaciones
+from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido
+JOIN ordenes_produccion AS op ON op.id_orden_trabajo = ot.id_orden_trabajo
+JOIN productos AS pr ON pr.id_producto = op.id_producto
+JOIN estados AS st ON st.id_estado = op.id_estado;
 
-SELECT * FROM procesando_producto;
 
-SELECT * FROM procesando_producto WHERE desc_maquina = 'maquina2';
-
-
-
-
-select * from lotes_produccion;
+select * from bitacora_ordenes_trabajo;
