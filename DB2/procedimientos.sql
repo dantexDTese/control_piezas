@@ -153,3 +153,26 @@ BEGIN
 
 END //
 DELIMITER ;            
+
+DELIMITER //
+CREATE PROCEDURE guardar_observacion(
+IN observacion VARCHAR(250),
+IN orden_produccion INT,
+INOUT respuesta VARCHAR(150)
+)
+BEGIN
+	
+    IF EXISTS (SELECT * FROM ordenes_produccion WHERE ordenes_produccion.id_orden_produccion = orden_produccion)
+    THEN
+		
+        UPDATE ordenes_produccion SET observaciones = observacion WHERE ordenes_produccion.id_orden_produccion = orden_produccion;
+           
+        SET respuesta = 'OBSERVACION AGREGADA';
+			                
+	ELSE SET respuesta = 'NO FUE POSIBLE ENCONTRAR ESTA ORDEN DE TRABAJO';
+		
+		
+    END IF;
+    
+END //
+DELIMITER ;

@@ -1,7 +1,5 @@
 USE control_piezas_2;
 
-
-
 INSERT INTO clientes(nombre_cliente) VALUES('PLASTONIUM');
 INSERT INTO clientes(nombre_cliente) VALUES('EATON');
 INSERT INTO clientes(nombre_cliente) VALUES('ARROW HART');
@@ -19,9 +17,6 @@ INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE TRABAJO');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PROCESOS DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('LOTES DE PRODUCCION');
-
-
-SELECT * FROM TIPOS_ESTADO;
 
 
 insert into estados(id_tipo_estado,desc_estados) VALUES(1,'ABIERTO');
@@ -44,13 +39,4 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
-
-SET SQL_SAFE_UPDATES=0;		      
-UPDATE procesos_produccion 
-SET 
-procesos_produccion.id_estado = 9
-WHERE procesos_produccion.id_orden_produccion = 2;
-SET SQL_SAFE_UPDATES=1;
-
-
-
+SELECT * FROM bitacora_ordenes_trabajo WHERE YEAR(fecha_registro) = 2018

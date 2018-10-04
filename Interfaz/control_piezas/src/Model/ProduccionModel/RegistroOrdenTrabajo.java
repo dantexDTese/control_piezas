@@ -6,6 +6,7 @@ public class RegistroOrdenTrabajo {
 
     private final int noOrdenProduccion;
     private final String fechaRegistro;
+    private final String claveProducto;
     private final int cantidadCliente;
     private final String fechaInicio;
     private final String fechaFin;
@@ -14,7 +15,8 @@ public class RegistroOrdenTrabajo {
     private final String descEstados;
     private final String observaciones;
 
-    public RegistroOrdenTrabajo(int noOrdenProduccion, String fechaRegistro, int cantidadCliente, String fechaInicio, String fechaFin, int noPedido, String fechaEntrega, String descEstados, String observaciones) {
+    public RegistroOrdenTrabajo(int noOrdenProduccion, String fechaRegistro,String claveProducto,
+            int cantidadCliente, String fechaInicio, String fechaFin, int noPedido, String fechaEntrega, String descEstados, String observaciones) {
         this.noOrdenProduccion = noOrdenProduccion;
         this.fechaRegistro = fechaRegistro;
         this.cantidadCliente = cantidadCliente;
@@ -24,8 +26,15 @@ public class RegistroOrdenTrabajo {
         this.fechaEntrega = fechaEntrega;
         this.descEstados = descEstados;
         this.observaciones = observaciones;
+        this.claveProducto = claveProducto;
     }
 
+    public String getClaveProducto() {
+        return claveProducto;
+    }
+
+    
+    
     public int getNoOrdenProduccion() {
         return noOrdenProduccion;
     }

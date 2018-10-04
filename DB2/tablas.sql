@@ -98,11 +98,11 @@ cantidad_total          INT ,
 barras_necesarias       FLOAT,
 turnos_necesarios       INT,
 turnos_reales           INT,
-fecha_registro          DATETIME NOT NULL,
-fecha_montaje           DATETIME,
-fecha_desmontaje        DATETIME,
-fecha_inicio            DATETIME,
-fecha_fin               DATETIME,
+fecha_registro          DATE NOT NULL,
+fecha_montaje           DATE,
+fecha_desmontaje        DATE,
+fecha_inicio            DATE,
+fecha_fin               DATE,
 observaciones			VARCHAR(250)      
 );
 

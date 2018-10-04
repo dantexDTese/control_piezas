@@ -60,9 +60,6 @@ public class PlaneacionController  {
                         obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());
                             
                     }
-                
-                    
-                
                 });
                 
             }      
@@ -72,19 +69,27 @@ public class PlaneacionController  {
     private final ItemListener maquinaSeleccionada = new ItemListener() {
         @Override
         public void itemStateChanged(ItemEvent e) {
-            llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
-            obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());            
+            if(vista.getCbxListaMaquinas().getSelectedItem() != null) {
+                if (!"".equals(vista.getCbxListaMaquinas().getSelectedItem().toString())) {
+                llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+                obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());            
+                }
+            }
         }
     };
     
     public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
         this.vista = vista;
         this.model = model;
-        tamanoTabla();
+        
         llenarListaMaquinas();
         llenarListaPedidosPendientes();
-        if(vista.getCbxListaMaquinas() != null)
-        llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+        if(this.vista.getCbxListaMaquinas() != null) {
+            if (!"".equals(this.vista.getCbxListaMaquinas().getSelectedItem().toString())) {
+                llenarTablaMaquinas(this.vista.getCbxListaMaquinas().getSelectedItem().toString());
+                
+            }
+        }
         
         this.vista.getTbListaPedidosPendientes().addMouseListener(moueAdapter);
         this.vista.getCbxListaMaquinas().addItemListener(maquinaSeleccionada);
@@ -133,24 +138,12 @@ public class PlaneacionController  {
         }
     }
      
-    private void tamanoTabla(){
-        
-        vista.getTbLIstaPedidosMaquina().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-            Integer[] listaTamanos = {140,140,140,130,130,110,120,140};
-            
-            for(int i = 0;i<listaTamanos.length;i++){
-                TableColumn columna = vista.getTbLIstaPedidosMaquina().getColumnModel().getColumn(i);
-                columna.setPreferredWidth(listaTamanos[i]);
-            }
-        
-    }
+    
     
     private void llenarListaMaquinas(){
         ArrayList<String> maquinas = model.listaMaquinas();            
-        if(maquinas.size()>0){
-            
+        if(maquinas.size()>0){   
             vista.getCbxListaMaquinas().removeAllItems();
-            
             for(int i = 0;i<maquinas.size();i++)
                 vista.getCbxListaMaquinas().addItem(maquinas.get(i));        
         }
