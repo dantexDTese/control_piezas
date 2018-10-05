@@ -7,26 +7,29 @@ package View;
 
 import Controller.AlmacenController.MateriaPrimaController;
 import Controller.AlmacenController.ProductoTerminadoController;
-import Controller.EntregarMaterialController.controlEntregasController;
+import Controller.RequisicionesController.controlEntregasController;
 import Controller.OrdenCompraController;
 import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
 import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
+import Controller.RequisicionesController.AgregarRequisicinesController;
 import Controller.SeguimientoOrdenesController;
 import Controller.SeguimientoProductosController;
 import Model.AlmacenModel.MateriaPrimaModel;
 import Model.AlmacenModel.ProductoTerminadoModel;
-import Model.EntregasMaterialModel.controlEntregasModel;
+import Model.RequisicionesModel.controlEntregasModel;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
+import Model.RequisicionesModel.AgregarRequisicionesModel;
 import Model.SeguimientoOrdenesModel;
 import Model.SeguimientoProductosModel;
 import Model.ordenCompraModel;
-import View.EntregasMaterialView.ControlEntregasView;
+import View.Requisiciones.ControlEntregasView;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.PlaneacionView;
 import View.Produccion.BitacoraOrdenesTrabajoView;
+import View.Requisiciones.AgregarRequisiciones;
 import View.almacenView.MateriaPrimaView;
 import View.almacenView.ProductoTerminadoView;
 import ds.desktop.notify.DesktopNotify;
@@ -115,6 +118,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenu6 = new javax.swing.JMenu();
+        jMenu8 = new javax.swing.JMenu();
+        jMenu9 = new javax.swing.JMenu();
         Escritorio = new javax.swing.JDesktopPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
@@ -132,7 +138,10 @@ public class Principal extends javax.swing.JFrame {
         menuPedidos = new javax.swing.JMenu();
         itemMenuBitacoraPedidosCliente = new javax.swing.JMenuItem();
         itemMenuPlaneacion = new javax.swing.JMenuItem();
-        itemMenuControlEntregaMP = new javax.swing.JMenuItem();
+        jMenu10 = new javax.swing.JMenu();
+        menuItemNuevasRequisiciones = new javax.swing.JMenuItem();
+        menuItemControlEntregaMP = new javax.swing.JMenuItem();
+        menuItemAdminRequisiciones = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -140,11 +149,17 @@ public class Principal extends javax.swing.JFrame {
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
 
+        jMenu6.setText("jMenu6");
+
+        jMenu8.setText("jMenu8");
+
+        jMenu9.setText("jMenu9");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
 
-        Escritorio.setBackground(new java.awt.Color(0, 0, 51));
+        Escritorio.setBackground(new java.awt.Color(86, 9, 12));
 
         javax.swing.GroupLayout EscritorioLayout = new javax.swing.GroupLayout(Escritorio);
         Escritorio.setLayout(EscritorioLayout);
@@ -228,7 +243,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar2.add(jMenu5);
 
-        menuPedidos.setText("Pedidos");
+        menuPedidos.setText("Pedidos                        ");
 
         itemMenuBitacoraPedidosCliente.setText("bitacora de pedidos clientes");
         itemMenuBitacoraPedidosCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -246,15 +261,30 @@ public class Principal extends javax.swing.JFrame {
         });
         menuPedidos.add(itemMenuPlaneacion);
 
-        itemMenuControlEntregaMP.setText("Control de entrega de MP");
-        itemMenuControlEntregaMP.addActionListener(new java.awt.event.ActionListener() {
+        jMenuBar2.add(menuPedidos);
+
+        jMenu10.setText("Requisicion de materiales            ");
+
+        menuItemNuevasRequisiciones.setText("Nuevas requisiciones");
+        menuItemNuevasRequisiciones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuControlEntregaMPActionPerformed(evt);
+                menuItemNuevasRequisicionesActionPerformed(evt);
             }
         });
-        menuPedidos.add(itemMenuControlEntregaMP);
+        jMenu10.add(menuItemNuevasRequisiciones);
 
-        jMenuBar2.add(menuPedidos);
+        menuItemControlEntregaMP.setText("Control de entrega de MP");
+        menuItemControlEntregaMP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemControlEntregaMPActionPerformed(evt);
+            }
+        });
+        jMenu10.add(menuItemControlEntregaMP);
+
+        menuItemAdminRequisiciones.setText("Admin. Requisiciones");
+        jMenu10.add(menuItemAdminRequisiciones);
+
+        jMenuBar2.add(jMenu10);
 
         setJMenuBar(jMenuBar2);
 
@@ -324,14 +354,6 @@ public class Principal extends javax.swing.JFrame {
         IntroducirPanle(vista, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_itemMenuPlaneacionActionPerformed
 
-    private void itemMenuControlEntregaMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuControlEntregaMPActionPerformed
-        ControlEntregasView entragasView = new ControlEntregasView(this);
-        controlEntregasModel entregasModel = new controlEntregasModel();
-        controlEntregasController entregasController = new controlEntregasController(entragasView,entregasModel);
-        Escritorio.removeAll();
-        IntroducirPanle(entragasView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
-    }//GEN-LAST:event_itemMenuControlEntregaMPActionPerformed
-
     private void menuItemBitacoraOrdenesTrabajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemBitacoraOrdenesTrabajoActionPerformed
         BitacoraOrdenesTrabajoView bitacoraTrabajosView = new BitacoraOrdenesTrabajoView(this);
         BitacoraOrdenesTrabajoModel bitacoratrabajosModel = new BitacoraOrdenesTrabajoModel();
@@ -356,6 +378,21 @@ public class Principal extends javax.swing.JFrame {
         Escritorio.removeAll();
         IntroducirPanle(pTerminadoView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_menuItemProductoTerminadoActionPerformed
+
+    private void menuItemNuevasRequisicionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNuevasRequisicionesActionPerformed
+        AgregarRequisiciones AgregarRequisicionView = new AgregarRequisiciones(this);
+        AgregarRequisicinesController controller = new AgregarRequisicinesController(AgregarRequisicionView,new AgregarRequisicionesModel());
+        Escritorio.removeAll();
+        IntroducirPanle(AgregarRequisicionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemNuevasRequisicionesActionPerformed
+
+    private void menuItemControlEntregaMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemControlEntregaMPActionPerformed
+        ControlEntregasView controlEntrasView = new ControlEntregasView(this);
+        controlEntregasController entregasController = new controlEntregasController(controlEntrasView,new controlEntregasModel());
+        Escritorio.removeAll();
+        IntroducirPanle(controlEntrasView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+            
+    }//GEN-LAST:event_menuItemControlEntregaMPActionPerformed
 
     /**
      * @param args the command line arguments
@@ -396,22 +433,28 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JMenuItem itemMenuBitacoraPedidosCliente;
-    private javax.swing.JMenuItem itemMenuControlEntregaMP;
     private javax.swing.JMenuItem itemMenuNuevaOrden;
     private javax.swing.JMenuItem itemMenuPlaneacion;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu10;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
     private javax.swing.JMenu jMenu7;
+    private javax.swing.JMenu jMenu8;
+    private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem menuItemAdminRequisiciones;
     private javax.swing.JMenuItem menuItemBitacoraOrdenesTrabajo;
+    private javax.swing.JMenuItem menuItemControlEntregaMP;
     private javax.swing.JMenuItem menuItemMateriaPrima;
+    private javax.swing.JMenuItem menuItemNuevasRequisiciones;
     private javax.swing.JMenuItem menuItemProductoTerminado;
     private javax.swing.JMenu menuPedidos;
     private javax.swing.JMenu subMenuOrdenesProduccion;

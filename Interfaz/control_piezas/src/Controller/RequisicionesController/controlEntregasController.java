@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controller.EntregarMaterialController;
+package Controller.RequisicionesController;
 
-import Model.EntregasMaterialModel.controlEntregasModel;
-import View.EntregasMaterialView.ControlEntregasView;
+import Model.RequisicionesModel.controlEntregasModel;
+import View.Requisiciones.ControlEntregasView;
 
 /**
  *
