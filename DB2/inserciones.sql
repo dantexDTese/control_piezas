@@ -11,13 +11,11 @@ insert into productos(clave_producto) values('6613-8');
 insert into productos(clave_producto) values('81432-8');	
 insert into productos(clave_producto) values('331A2452P7');	
 
-
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PEDIDOS');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE TRABAJO');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PROCESOS DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('LOTES DE PRODUCCION');
-
 
 insert into estados(id_tipo_estado,desc_estados) VALUES(1,'ABIERTO');
 insert into estados(id_tipo_estado,desc_estados) VALUES(1,'CERRADO');

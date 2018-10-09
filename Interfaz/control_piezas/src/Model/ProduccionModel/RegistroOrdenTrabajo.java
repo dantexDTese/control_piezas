@@ -1,6 +1,4 @@
-
 package Model.ProduccionModel;
-
 
 public class RegistroOrdenTrabajo {
 
@@ -70,9 +68,5 @@ public class RegistroOrdenTrabajo {
     public String getObservaciones() {
         return observaciones;
     }
-    
-    
-
-    
     
 }

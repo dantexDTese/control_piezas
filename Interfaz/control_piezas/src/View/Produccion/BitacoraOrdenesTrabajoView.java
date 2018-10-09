@@ -93,12 +93,17 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         lbNoOrdenTrabajo = new javax.swing.JLabel();
 
+        jPanel1.setBackground(new java.awt.Color(15, 144, 138));
+
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 102))); // NOI18N
+        jPanel2.setOpaque(false);
 
         jLabel2.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("BITACORA DE ORDENES DE TRABAJO, AÑO");
 
         lbAnio.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        lbAnio.setForeground(new java.awt.Color(255, 255, 255));
         lbAnio.setText("2012");
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -154,6 +159,7 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 153))); // NOI18N
+        jPanel3.setOpaque(false);
 
         tbOrdenesTrabajo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -208,15 +214,17 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(0, 0, 153))); // NOI18N
+        jPanel4.setOpaque(false);
 
         atxtObservacion.setColumns(20);
         atxtObservacion.setRows(5);
         jScrollPane2.setViewportView(atxtObservacion);
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Modificar observacion:");
 
-        btnGuardarObservacion.setText("Guardar");
+        btnGuardarObservacion.setText("MODIFICAR");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -225,10 +233,11 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnGuardarObservacion, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
                         .addComponent(jLabel1)
-                        .addGap(0, 79, Short.MAX_VALUE))
-                    .addComponent(btnGuardarObservacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -244,8 +253,11 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel5.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel5.setOpaque(false);
 
         jLabel3.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("OBSERVACIONES GUARDADA.");
 
         txtaObservacionGuardada.setBackground(new java.awt.Color(234, 234, 234));
@@ -255,11 +267,12 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         jScrollPane3.setViewportView(txtaObservacionGuardada);
 
         jLabel5.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("NO. ORDEN DE TRABAJO:");
 
         lbNoOrdenTrabajo.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         lbNoOrdenTrabajo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbNoOrdenTrabajo.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        lbNoOrdenTrabajo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
