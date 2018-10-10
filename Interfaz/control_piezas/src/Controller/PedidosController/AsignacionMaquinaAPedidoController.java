@@ -38,7 +38,7 @@ public class AsignacionMaquinaAPedidoController {
                 model.agregarOrdenMaquina(new ordenPlaneada(
                 Integer.parseInt(vista.getLbNoOrdenProduccion().getText()),
                 vista.getCbxProducto().getSelectedItem().toString(),
-                Float.parseFloat(vista.getTxtWorker().getText()),
+                Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()),
                 Integer.parseInt(vista.getSprCantidadProducir().getValue().toString()),
                 vista.getCbxMaquina().getSelectedItem().toString(),
                 vista.getCbxMateriales().getSelectedItem().toString()
@@ -94,9 +94,5 @@ public class AsignacionMaquinaAPedidoController {
         
         return null;
     }
-    
-    
-    
-    
     
 }
