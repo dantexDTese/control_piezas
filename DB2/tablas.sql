@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS control_piezas_2;        
+ DROP DATABASE IF EXISTS control_piezas_2;        
 
 CREATE DATABASE control_piezas_2;    
 

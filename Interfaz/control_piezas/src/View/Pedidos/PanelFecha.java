@@ -11,11 +11,11 @@ package View.Pedidos;
  */
 public class PanelFecha extends javax.swing.JPanel {
 
-    /**
-     * Creates new form PanelFecha
-     */
-    public PanelFecha() {
+    
+
+    public PanelFecha(int i) {
         initComponents();
+        lbFecha.setText(i+"");
     }
 
     /**
@@ -31,9 +31,6 @@ public class PanelFecha extends javax.swing.JPanel {
         lbFecha = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
-        setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        lbCantidad.setText("CANTIDAD");
 
         lbFecha.setText("FECHA");
 
@@ -43,11 +40,11 @@ public class PanelFecha extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbFecha)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbCantidad)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lbFecha)
+                        .addGap(0, 23, Short.MAX_VALUE))
+                    .addComponent(lbCantidad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -55,8 +52,8 @@ public class PanelFecha extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(lbFecha)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbCantidad)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lbCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 18, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 

@@ -1,17 +1,23 @@
 
 package Controller.PedidosController;
 
+import Model.Estructuras;
 import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
+import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
 import Model.PedidosModel.ordenPlaneada;
 import Model.PedidosModel.procedimientoTotal;
 import View.Pedidos.AsignarMaquinaAPedido;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -24,7 +30,7 @@ public class AsignacionMaquinaAPedidoController {
     private final ActionListener productosListener = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            pendiente = obtenerPendiente(vista.getCbxProducto().getSelectedItem().toString());
+            //pendiente = obtenerPendiente(vista.getCbxProducto().getSelectedItem().toString());
             vista.getLbNoOrdenProduccion().setText(pendiente.getNoOrdenProduccion()+"");
             vista.getLbCantidadCliente().setText(pendiente.getCantidadCliente()+"");
             vista.getSprCantidadProducir().setValue(pendiente.getCantidadCliente());
@@ -52,26 +58,53 @@ public class AsignacionMaquinaAPedidoController {
             }
         }
     };
+        
+    private String ordenTrabajo;
     
-    public AsignacionMaquinaAPedidoController(AsignarMaquinaAPedido vista,AsignacionMaquinaAPedidoModel model,
-            String ordenCOmpra){
+    public AsignacionMaquinaAPedidoController(AsignarMaquinaAPedido vista,AsignacionMaquinaAPedidoModel model){
      
         this.vista = vista;
         this.model = model;
-        this.vista.getLbOrdenCompra().setText(ordenCOmpra);
-        pendientes = this.model.listaProductosPendientes(ordenCOmpra);
-        llenarProductos();
+        //this.vista.getLbOrdenCompra().setText(ordenCOmpra);
+       // llenarProductos();
         llenarMaquinas();
         llenarMateriales();
-        this.vista.getBtnGuardar().addActionListener(guardarCambiosOrden);
+        
+        this.vista.getJtOrdenesPendientes().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e); 
+                   seleccionarOrdenTrabajo(e.getPoint());
+            }
+        });
+        
+        this.vista.getBtnGuardar().addActionListener(guardarCambiosOrden);        
+
+        agregarPedidosPendientes();
+    }
+    
+    private void seleccionarOrdenTrabajo(Point pFila){
+        int fila = vista.getJtOrdenesPendientes().rowAtPoint(pFila);
+        ordenTrabajo = vista.getJtOrdenesPendientes().getValueAt(fila,0)+"";
+        pendientes = this.model.listaProductosPendientes(ordenTrabajo);
         
     }
     
-        
+    
+    private void agregarPedidosPendientes(){        
+        ArrayList<Pedido> listaPendientes = model.listaPedidosPendientes();
+        JOptionPane.showMessageDialog(null,listaPendientes.size());
+        DefaultTableModel modelT = (DefaultTableModel) vista.getJtOrdenesPendientes().getModel();
+        Estructuras.limpiarTabla(modelT);
+        for(int i = 0;i<listaPendientes.size();i++){
+            modelT.addRow(new Object[]{listaPendientes.get(i).getNo_orden_compra(),listaPendientes.get(i).getFecha_recepcion()});
+        }
+    }
+    
     private void llenarMaquinas(){
         ArrayList<String> maquinas = model.listaMaquinas();
         for(int i = 0;i<maquinas.size();i++)
-            vista.getCbxMaquina().addItem(maquinas.get(i).toString());
+            vista.getCbxMaquina().addItem(maquinas.get(i));
     }
     
     private void llenarMateriales(){
@@ -80,6 +113,7 @@ public class AsignacionMaquinaAPedidoController {
             vista.getCbxMateriales().addItem(materiales.get(i));
     }
     
+    /*
     private void llenarProductos(){
         for(int i = 0;i<pendientes.size();i++)
             vista.getCbxProducto().addItem(pendientes.get(i).getClaveProducto());
@@ -93,6 +127,6 @@ public class AsignacionMaquinaAPedidoController {
                 return pendientes.get(i);
         
         return null;
-    }
+    }*/
     
 }

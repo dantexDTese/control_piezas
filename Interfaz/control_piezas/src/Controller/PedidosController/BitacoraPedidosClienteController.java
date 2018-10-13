@@ -30,6 +30,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 
+/**
+ * todo bien
+ */
+
 public class BitacoraPedidosClienteController implements ActionListener, MouseListener{
 
     private BitacoraPedidosClienteView vista;
@@ -46,7 +50,7 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
     }
     
     private void tamanoTabla(){
-        
+        //pasar a estructuras
         vista.getTbPedidosClientes().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
             
@@ -77,7 +81,7 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
     }
     
     private void limpiarTaba(){
-        
+        //pasar a estructuras
         DefaultTableModel modelT = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
         while(modelT.getRowCount()>0)
             modelT.removeRow(0);

@@ -94,7 +94,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
 IN id_orden_produccion		INT,
-IN desc_producto			    VARCHAR(50),
+IN desc_producto			VARCHAR(50),
 IN nuevo_worker				FLOAT,
 IN nueva_cantidad_total		INT,
 IN desc_maquina				VARCHAR(50),

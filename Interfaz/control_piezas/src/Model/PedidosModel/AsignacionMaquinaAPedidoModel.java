@@ -14,18 +14,35 @@ import javax.swing.JOptionPane;
 
 public class AsignacionMaquinaAPedidoModel {
 
-
-
-
-
     public AsignacionMaquinaAPedidoModel() {
-            
-
+     
     }
     
     public ArrayList<String> listaMaquinas(){
         return Estructuras.obtenerlistaDatos("SELECT desc_maquina FROM maquinas");
     }
+    
+    public ArrayList<Pedido> listaPedidosPendientes(){
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+        Connection c = Conexion.getInstance().getConexion();
+        
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM OrdenesPendientes");
+                if(rs.first())
+                    do {                        
+                        Pedido pedido = new Pedido(rs.getString(1),rs.getString(2));
+                        pedidos.add(pedido);
+                    } while (rs.next());
+               c.close(); 
+            } catch (Exception e) {
+                System.err.println("error: class: PlaneacionModel, Method:listaPedidosPendientes"+e.getMessage());
+            }
+        
+        return pedidos;
+    }
+    
     
     public ArrayList<ProductosPendientes> listaProductosPendientes(String noOrden){
         ArrayList<ProductosPendientes> listaProductos = new ArrayList<>();
@@ -49,14 +66,13 @@ public class AsignacionMaquinaAPedidoModel {
                 System.err.println("mensaje: class:AsignacionMaquinaAPedido"
                         + "Method:listaProductosPendientes"+e.getMessage());
             }
-        
-        return listaProductos;
-        
+        return listaProductos;        
     }
     
     public ArrayList<String> listaMateriales(){
         return Estructuras.obtenerlistaDatos("SELECT desc_material FROM materiales");
     }
+    
     
     public void agregarOrdenMaquina(ordenPlaneada ordenModificada){
         Connection c = Conexion.getInstance().getConexion();
@@ -71,7 +87,6 @@ public class AsignacionMaquinaAPedidoModel {
                 cs.setString(5,ordenModificada.getDesc_maquina());
                 cs.setString(6,ordenModificada.getDesc_material());
                 cs.registerOutParameter(7,Types.VARCHAR);
-                
                 cs.execute();
                 JOptionPane.showMessageDialog(null, cs.getString(7));
                 

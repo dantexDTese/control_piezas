@@ -16,27 +16,6 @@ public class PlaneacionModel {
         return Estructuras.obtenerlistaDatos("SELECT desc_maquina FROM maquinas");
     }
     
-    public ArrayList<Pedido> listaPedidosPendientes(){
-        ArrayList<Pedido> pedidos = new ArrayList<>();
-        Connection c = Conexion.getInstance().getConexion();
-        
-        if(c!=null)
-            try {
-                Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM OrdenesPendientes");
-                if(rs.first())
-                    do {                        
-                        Pedido pedido = new Pedido(rs.getString(1),rs.getString(2));
-                        pedidos.add(pedido);
-                    } while (rs.next());
-               c.close(); 
-            } catch (Exception e) {
-                System.err.println("error: class: PlaneacionModel, Method:listaPedidosPendientes"+e.getMessage());
-            }
-        
-        return pedidos;
-    }
-      
     public ArrayList<procedimientoTotal> listaProcedimientoMaquina(String nombreMaquina){
         Connection c = Conexion.getInstance().getConexion();
         ArrayList<procedimientoTotal> lista = new ArrayList<>();

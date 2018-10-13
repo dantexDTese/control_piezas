@@ -174,13 +174,13 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="8" rowCount="0">
+                        <Column editable="false" title="NO. PARTE" type="java.lang.String"/>
+                        <Column editable="false" title="QTY" type="java.lang.Integer"/>
                         <Column editable="false" title="NO. ORDEN COMPRA" type="java.lang.Object"/>
                         <Column editable="false" title="ORDEN PRODUCCION" type="java.lang.String"/>
-                        <Column editable="false" title="NO. PARTE" type="java.lang.String"/>
-                        <Column editable="false" title="PIEZAS POR TURNO" type="java.lang.Integer"/>
+                        <Column editable="false" title="PIECES BY SHIFT" type="java.lang.Integer"/>
                         <Column editable="false" title="MATERIAL" type="java.lang.String"/>
                         <Column editable="false" title="WORKER" type="java.lang.Float"/>
-                        <Column editable="false" title="QTY" type="java.lang.Integer"/>
                         <Column editable="false" title="OPERACION" type="java.lang.String"/>
                       </Table>
                     </Property>
@@ -537,15 +537,13 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jYearChooser2" min="-2" pref="77" max="-2" attributes="0"/>
+                              <Component id="jycAnioCalendario" min="-2" pref="77" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jMonthChooser2" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton3" min="-2" pref="96" max="-2" attributes="0"/>
+                              <Component id="jmtMesCalendario" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
-                              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnAgregarOrdenesPendientes" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jScrollPane4" alignment="0" max="32767" attributes="0"/>
                       </Group>
@@ -557,12 +555,9 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton3" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jYearChooser2" min="-2" max="-2" attributes="0"/>
-                          <Component id="jMonthChooser2" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAgregarOrdenesPendientes" min="-2" max="-2" attributes="0"/>
+                          <Component id="jycAnioCalendario" min="-2" max="-2" attributes="0"/>
+                          <Component id="jmtMesCalendario" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -574,7 +569,7 @@
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JButton" name="jButton2">
+            <Component class="javax.swing.JButton" name="btnAgregarOrdenesPendientes">
               <Properties>
                 <Property name="text" type="java.lang.String" value="AGREGAR ORDENES PENDIENTES"/>
               </Properties>
@@ -590,7 +585,7 @@
                 <Property name="text" type="java.lang.String" value="A&#xd1;O"/>
               </Properties>
             </Component>
-            <Component class="com.toedter.calendar.JYearChooser" name="jYearChooser2">
+            <Component class="com.toedter.calendar.JYearChooser" name="jycAnioCalendario">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
               <Properties>
@@ -603,12 +598,7 @@
                 <Property name="text" type="java.lang.String" value="MES:"/>
               </Properties>
             </Component>
-            <Component class="com.toedter.calendar.JMonthChooser" name="jMonthChooser2">
-            </Component>
-            <Component class="javax.swing.JButton" name="jButton3">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="BUSCAR"/>
-              </Properties>
+            <Component class="com.toedter.calendar.JMonthChooser" name="jmtMesCalendario">
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane4">
               <AuxValues>
@@ -620,8 +610,7 @@
                 <Component class="javax.swing.JTable" name="jtCalendario">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="8" rowCount="0">
-                        <Column editable="false" title="No.Orden" type="java.lang.Object"/>
+                      <Table columnCount="7" rowCount="0">
                         <Column editable="false" title="DOMINGO" type="java.lang.Object"/>
                         <Column editable="false" title="LUNES" type="java.lang.Object"/>
                         <Column editable="false" title="MARTES" type="java.lang.Object"/>
@@ -633,11 +622,6 @@
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
-                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
-                          <Title/>
-                          <Editor/>
-                          <Renderer/>
-                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>
