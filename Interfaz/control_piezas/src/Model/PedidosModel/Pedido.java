@@ -4,91 +4,81 @@ package Model.PedidosModel;
 
 public class Pedido {
 
-    private int id_pedido;
-    private String no_orden_compra;
-    private String fecha_entrega;
-    private String fecha_confirmacion_entrega;
-    private String fecha_recepcion;
-    private String desc_contacto;
-    private String nombre_cliente;
-    private String clave_producto;
-    private int cantidad_cliente;
+    private int noOrdenTrabajo;
+    private String noOrdenCompra;
+    private String fechaEntrega;
+    private String fechaConfirmacionEntrega;
+    private String fechaRecepcion;
+    private String descContacto;
+    private String nombreCliente;
+    private String claveProducto;
+    private int cantidadCliente;
     private String estado;
     
 
     public Pedido(){
         
     }
-    
-    
-    
-    
-    public Pedido(int id_pedido,
-            String no_orden_compra,
-            String fecha_entrega,
-            String fecha_confirmacion_entrega,
-            String fecha_recepcion,
-            String estado,
-            String desc_contacto,
-            String nombre_cliente,
-            int cantidad_cliente,
-            String clave_producto) {
-        this.id_pedido = id_pedido;
-        this.no_orden_compra = no_orden_compra;
-        this.fecha_entrega = fecha_entrega;
-        this.fecha_confirmacion_entrega = fecha_confirmacion_entrega;
-        this.fecha_recepcion = fecha_recepcion;
-        this.desc_contacto = desc_contacto;
-        this.nombre_cliente = nombre_cliente;
-        this.clave_producto = clave_producto;
-        this.cantidad_cliente = cantidad_cliente;
+
+    public Pedido(int noOrdenTrabajo, String noOrdenCompra, String fechaEntrega, String fechaConfirmacionEntrega, String fechaRecepcion, String descContacto, String nombreCliente, String claveProducto, int cantidadCliente, String estado) {
+        this.noOrdenTrabajo = noOrdenTrabajo;
+        this.noOrdenCompra = noOrdenCompra;
+        this.fechaEntrega = fechaEntrega;
+        this.fechaConfirmacionEntrega = fechaConfirmacionEntrega;
+        this.fechaRecepcion = fechaRecepcion;
+        this.descContacto = descContacto;
+        this.nombreCliente = nombreCliente;
+        this.claveProducto = claveProducto;
+        this.cantidadCliente = cantidadCliente;
         this.estado = estado;
     }
-
-    Pedido(String no_orden_compra, String fecha_recepcion) {
-        this.no_orden_compra = no_orden_compra;
-        this.fecha_recepcion = fecha_recepcion;
+    
+    
+    Pedido(String noOrdenCompra,int noOrdenTrabajo, String fechaRecepcion) {
+        this.noOrdenCompra = noOrdenCompra;
+        this.fechaRecepcion = fechaRecepcion;
+        this.noOrdenTrabajo = noOrdenTrabajo;
     }
 
     public String getEstado() {
         return estado;
     }
+
+    public int getNoOrdenTrabajo() {
+        return noOrdenTrabajo;
+    }
+
+    public String getNoOrdenCompra() {
+        return noOrdenCompra;
+    }
+
+    public String getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public String getFechaConfirmacionEntrega() {
+        return fechaConfirmacionEntrega;
+    }
+
+    public String getFechaRecepcion() {
+        return fechaRecepcion;
+    }
+
+    public String getDescContacto() {
+        return descContacto;
+    }
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public String getClaveProducto() {
+        return claveProducto;
+    }
+
+    public int getCantidadCliente() {
+        return cantidadCliente;
+    }
     
-    public int getId_pedido() {
-        return id_pedido;
-    }
-
-    public String getNo_orden_compra() {
-        return no_orden_compra;
-    }
-
-    public String getFecha_entrega() {
-        return fecha_entrega;
-    }
-
-    public String getFecha_confirmacion_entrega() {
-        return fecha_confirmacion_entrega;
-    }
-
-    public String getFecha_recepcion() {
-        return fecha_recepcion;
-    }
-
-    public String getDesc_contacto() {
-        return desc_contacto;
-    }
-
-    public String getNombre_cliente() {
-        return nombre_cliente;
-    }
-
-    public String getClave_producto() {
-        return clave_producto;
-    }
-
-    public int getCantidad_cliente() {
-        return cantidad_cliente;
-    }
-
     
 }

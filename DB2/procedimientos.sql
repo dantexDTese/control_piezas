@@ -68,8 +68,7 @@ BEGIN
         IF @id_producto IS NOT NULL THEN		
 			
             SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estados = 'ABIERTO';
-            
+            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estados = 'ABIERTO';           
             
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,@id_estado,cantidad_cliente,now());        

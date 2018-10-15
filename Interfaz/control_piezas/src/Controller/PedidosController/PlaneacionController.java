@@ -54,20 +54,22 @@ public class PlaneacionController  {
     };
     private final PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {llenarTabla();};
     private AsignarMaquinaAPedido vistaMaquinaPedido;
+    
     public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
         
         this.vista = vista;
         this.model = model;
-        llenarListaMaquinas();
-        if(this.vista.getCbxListaMaquinas() != null) {
+        //llenarListaMaquinas();
+        
+        /*if(this.vista.getCbxListaMaquinas() != null) {
             if (!"".equals(this.vista.getCbxListaMaquinas().getSelectedItem().toString())) {
                 llenarTablaMaquinas(this.vista.getCbxListaMaquinas().getSelectedItem().toString());                
             }
-        }
+        }*/
            
         this.vista.getCbxListaMaquinas().addItemListener(maquinaSeleccionada);
         this.vista.getJtCalendario().setDefaultRenderer(Object.class,new FechaCalendario());              
-        obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());        
+        //obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());        
         this.vista.getJycAnioCalendario().addPropertyChangeListener(listenerFechas);
         this.vista.getJmtMesCalendario().addPropertyChangeListener(listenerFechas);   
         this.vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});

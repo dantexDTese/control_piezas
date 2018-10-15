@@ -29,10 +29,10 @@ public class AsignacionMaquinaAPedidoModel {
         if(c!=null)
             try {
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM OrdenesPendientes");
+                ResultSet rs = st.executeQuery("SELECT * FROM PedidosPendientes");
                 if(rs.first())
                     do {                        
-                        Pedido pedido = new Pedido(rs.getString(1),rs.getString(2));
+                        Pedido pedido = new Pedido(rs.getString(1),rs.getInt(2),rs.getString(3));
                         pedidos.add(pedido);
                     } while (rs.next());
                c.close(); 
@@ -44,22 +44,19 @@ public class AsignacionMaquinaAPedidoModel {
     }
     
     
-    public ArrayList<ProductosPendientes> listaProductosPendientes(String noOrden){
+    public ArrayList<ProductosPendientes> listaProductosPendientes(String noOrdenTrabajo){
         ArrayList<ProductosPendientes> listaProductos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
         
         if(c!=null)
-            try {
-                
+            try {       
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery("SELECT * FROM productosEnEspera "
-                        + "WHERE no_orden_compra = '"+noOrden+"'");
+                        + "WHERE id_orden_trabajo = '"+noOrdenTrabajo+"'");
                 if(rs.first())
                     do {                        
                         listaProductos.add(new ProductosPendientes(rs.getString(1),
-                                rs.getInt(2), rs.getString(3), rs.getInt(4)));
-                    
-                        
+                                rs.getInt(2), rs.getString(3), rs.getInt(4)));                        
                     } while (rs.next());
                 
             } catch (Exception e) {

@@ -63,21 +63,18 @@ public class BitacoraPedidosClienteController implements ActionListener, MouseLi
     
     public void llenarListaPedidos(){
         limpiarTaba();
-       
         ArrayList<Pedido> pedidos = model.listaPedidos();
         if(pedidos.size()>0){
-            DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
-        
+            DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();        
             for(int i = 0;i<pedidos.size();i++){
                 Pedido unPedido = pedidos.get(i);
-                
-                modelTabla.addRow(new Object[]{unPedido.getId_pedido(),
-                unPedido.getNo_orden_compra(),unPedido.getFecha_recepcion(),
-                unPedido.getEstado(),unPedido.getFecha_entrega(),unPedido.getClave_producto(),
-                unPedido.getCantidad_cliente(),unPedido.getNombre_cliente(),
-                unPedido.getDesc_contacto(),unPedido.getFecha_confirmacion_entrega()});     
+                modelTabla.addRow(new Object[]{unPedido.getNoOrdenTrabajo(),
+                unPedido.getNoOrdenCompra(),unPedido.getFechaRecepcion(),
+                unPedido.getEstado(),unPedido.getFechaEntrega(),unPedido.getClaveProducto(),
+                unPedido.getCantidadCliente(),unPedido.getNombreCliente(),
+                unPedido.getDescContacto(),unPedido.getFechaConfirmacionEntrega()});     
             }
-        }
+        }        
     }
     
     private void limpiarTaba(){

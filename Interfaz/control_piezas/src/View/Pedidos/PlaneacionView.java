@@ -84,9 +84,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         return txtBuscarOrden;
     }
 
-    public JTable getJtCalendario() {
-        return jtCalendario;
-    }   
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -126,8 +124,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         jycAnioCalendario = new com.toedter.calendar.JYearChooser();
         jLabel6 = new javax.swing.JLabel();
         jmtMesCalendario = new com.toedter.calendar.JMonthChooser();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jtCalendario = new javax.swing.JTable();
+        jpCalendario = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
@@ -221,7 +218,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(23, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jMonthChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -385,42 +382,26 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("MES:");
 
-        jtCalendario.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jtCalendario.getTableHeader().setReorderingAllowed(false);
-        jScrollPane4.setViewportView(jtCalendario);
-        if (jtCalendario.getColumnModel().getColumnCount() > 0) {
-            jtCalendario.getColumnModel().getColumn(0).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(1).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(2).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(3).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(4).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(5).setResizable(false);
-            jtCalendario.getColumnModel().getColumn(6).setResizable(false);
-        }
+        javax.swing.GroupLayout jpCalendarioLayout = new javax.swing.GroupLayout(jpCalendario);
+        jpCalendario.setLayout(jpCalendarioLayout);
+        jpCalendarioLayout.setHorizontalGroup(
+            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jpCalendarioLayout.setVerticalGroup(
+            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
+                    .addComponent(jpCalendario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jycAnioCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -429,8 +410,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jmtMesCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAgregarOrdenesPendientes))
-                    .addComponent(jScrollPane4))
+                        .addComponent(btnAgregarOrdenesPendientes)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -442,9 +422,9 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
                     .addComponent(jmtMesCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jpCalendario, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -512,10 +492,9 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private com.toedter.calendar.JYearChooser jYearChooser1;
     private com.toedter.calendar.JMonthChooser jmtMesCalendario;
-    private javax.swing.JTable jtCalendario;
+    private javax.swing.JPanel jpCalendario;
     private com.toedter.calendar.JYearChooser jycAnioCalendario;
     private javax.swing.JLabel lbCantidadProcesada;
     private javax.swing.JLabel lbCantidadRestante;
