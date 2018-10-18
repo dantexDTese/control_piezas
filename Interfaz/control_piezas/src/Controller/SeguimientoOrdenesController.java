@@ -29,8 +29,7 @@ public class SeguimientoOrdenesController{
         this.modelo = modelo;
         this.vista.setListaOrdenesTrabajo(llenaLista(this.modelo.obtenerListaOrdenesActivas()
                 ,this.vista.getListaOrdenesTrabajo()));
-        this.productosController = productosController;
-        
+        this.productosController = productosController;        
         
     }
        

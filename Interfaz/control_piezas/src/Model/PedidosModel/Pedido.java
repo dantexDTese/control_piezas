@@ -13,12 +13,15 @@ public class Pedido {
     private String nombreCliente;
     private String claveProducto;
     private int cantidadCliente;
+    
     private String estado;
     
 
     public Pedido(){
         
     }
+    
+    
 
     public Pedido(int noOrdenTrabajo, String noOrdenCompra, String fechaEntrega, String fechaConfirmacionEntrega, String fechaRecepcion, String descContacto, String nombreCliente, String claveProducto, int cantidadCliente, String estado) {
         this.noOrdenTrabajo = noOrdenTrabajo;

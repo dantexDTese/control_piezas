@@ -14,7 +14,7 @@ select * from procesos_produccion;
 select * from tipos_proceso;
 select * from lotes_produccion;
 drop database control_piezas_2;
-
+select * from todos_los_estados;
 
 INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(1,1);
 INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(1,1);

@@ -2,60 +2,33 @@
 package Model.PedidosModel;
 
 
-public class procedimientoTotal {
+public class procedimientoTotal extends ProductosPendientes{
 
-   private String noOrdenCompra;
-   private int idOrdenProduccion;
-   private int cantidadTotal;
-   private float worker;
-   private String descMaterial;
-   private String claveProducto;
-   private String descTipoProceso;
+    private final  String procesoActual;
+    private final  int noOrdenTrabajo;
 
     public procedimientoTotal(
-            String noOrdenCompra
-            ,int idOrdenProduccion, 
-            int cantidadTotal,
-            float worker,
-            String descMaterial,
+            int noOrdenTrabajo, 
             String claveProducto,
-            String descTipoProceso) {
-        this.noOrdenCompra = noOrdenCompra;
-        this.idOrdenProduccion = idOrdenProduccion;
-        this.cantidadTotal = cantidadTotal;
-        this.worker = worker;
-        this.descMaterial = descMaterial;
-        this.claveProducto = claveProducto;
-        this.descTipoProceso = descTipoProceso;
+            int qty, 
+            String noOrdenCompra,
+            int noOrdenProduccion,
+            int piecesByShift,
+            String material
+            , float worker,String procesoActual) {
+        super(claveProducto, qty, noOrdenCompra, noOrdenProduccion, piecesByShift, material, worker);
+        this.procesoActual = procesoActual;
+        this.noOrdenTrabajo = noOrdenTrabajo;
     }
 
-    public String getNoOrdenCompra() {
-        return noOrdenCompra;
-    }
-
-    public int getIdOrdenProduccion() {
-        return idOrdenProduccion;
-    }
-
-    public int getCantidadTotal() {
-        return cantidadTotal;
-    }
-
-    public float getWorker() {
-        return worker;
-    }
-
-    public String getDescMaterial() {
-        return descMaterial;
-    }
-
-    public String getClaveProducto() {
-        return claveProducto;
-    }
-
-    public String getDescTipoProceso() {
-        return descTipoProceso;
-    }
     
-        
+
+    public String getProcesoActual() {
+        return procesoActual;
+    }
+
+    public int getNoOrdenTrabajo() {
+        return noOrdenTrabajo;
+    }
+
 }

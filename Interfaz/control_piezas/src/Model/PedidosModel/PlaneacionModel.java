@@ -22,14 +22,14 @@ public class PlaneacionModel {
         String query="SELECT * FROM procedimiento_total WHERE desc_maquina = '"+nombreMaquina+"'";
         if(c!=null)
             try {
+                
                Statement st = c.createStatement();
                ResultSet rs = st.executeQuery(query);
                if(rs.first())
                     do {                        
                         lista.add(new procedimientoTotal(
-                                rs.getString(1),rs.getInt(2),rs.getInt(3),
-                                rs.getFloat(4),rs.getString(5),rs.getString(6),
-                                rs.getString(7)));                       
+                                rs.getInt(1),rs.getString(2), rs.getInt(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7),rs.getFloat(8),
+                        rs.getString(9)));
                     } while (rs.next());
                c.close();
             } catch (Exception e) {

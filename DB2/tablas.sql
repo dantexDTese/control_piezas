@@ -1,4 +1,4 @@
- DROP DATABASE IF EXISTS control_piezas_2;        
+DROP DATABASE IF EXISTS control_piezas_2;        
 
 CREATE DATABASE control_piezas_2;    
 
@@ -95,6 +95,7 @@ cantidad_cliente        INT NOT NULL,
 worker					FLOAT,
 cantidad_total          INT ,
 barras_necesarias       FLOAT,
+piezas_por_turno		INT,
 turnos_necesarios       INT,
 turnos_reales           INT,
 fecha_registro          DATE NOT NULL,

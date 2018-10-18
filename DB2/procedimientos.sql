@@ -89,6 +89,9 @@ BEGIN
 END //
 DELIMITER ;
 
+USE control_piezas_2;
+
+
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
@@ -98,6 +101,9 @@ IN nuevo_worker				FLOAT,
 IN nueva_cantidad_total		INT,
 IN desc_maquina				VARCHAR(50),
 IN desc_material			VARCHAR(100),
+IN fecha_montaje_molde		DATE,
+IN fecha_inicio_produccion	DATE,
+IN nuevo_piezas_por_turno	INT,
 INOUT resultado				VARCHAR(100)
 )
 BEGIN
@@ -112,6 +118,7 @@ BEGIN
 		
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
+        SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
         
         /*procesos para seleccionar el estado*/
 		SELECT @id_nuevo_estado := todos_los_estados.id_estado 
@@ -119,13 +126,14 @@ BEGIN
         AND desc_estados = 'EN ESPERA';
         /*fin seleccion estado*/
         
-		SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
-            
         UPDATE ordenes_produccion 
         SET 
         ordenes_produccion.id_material = @id_material,
         ordenes_produccion.worker = nuevo_worker,
-        ordenes_produccion.cantidad_total = nueva_cantidad_total
+        ordenes_produccion.cantidad_total = nueva_cantidad_total,
+        ordenes_produccion.fecha_montaje = fecha_montaje_molde,
+        ordenes_produccion.fecha_inicio = fecha_inicio_produccion,
+        ordenes_produccion.piezas_por_turno = nuevo_piezas_por_turno
         WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion AND ordenes_produccion.id_producto = @id_producto;
 			
 		SET SQL_SAFE_UPDATES=0;		      
@@ -153,6 +161,9 @@ BEGIN
 END //
 DELIMITER ;            
 
+
+
+
 DELIMITER //
 CREATE PROCEDURE guardar_observacion(
 IN observacion VARCHAR(250),
@@ -165,7 +176,7 @@ BEGIN
     THEN
 		
         UPDATE ordenes_produccion SET observaciones = observacion WHERE ordenes_produccion.id_orden_produccion = orden_produccion;
-           
+			
         SET respuesta = 'OBSERVACION AGREGADA';
 			                
 	ELSE SET respuesta = 'NO FUE POSIBLE ENCONTRAR ESTA ORDEN DE TRABAJO';
@@ -175,3 +186,10 @@ BEGIN
     
 END //
 DELIMITER ;
+
+
+select * from ordenes_produccion;
+select * from lotes_produccion;
+select * from ordenes_trabajo;
+select * from maquinas_operadores;
+select * from procedimiento_total;

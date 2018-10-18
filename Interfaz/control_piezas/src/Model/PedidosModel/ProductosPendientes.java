@@ -7,7 +7,7 @@ public class ProductosPendientes {
     private final String noOrdenCompra;
     private final int noOrdenProduccion;
     private final String claveProducto;
-    private final int cantidadCliente;
+    private  int cantidadCliente;
     private int qty;
     private int piecesByShift;
     private String maquina;
@@ -22,6 +22,19 @@ public class ProductosPendientes {
         this.claveProducto = claveProducto;
         this.cantidadCliente = cantidadCliente;
     }
+
+  
+    public ProductosPendientes(String claveProducto,int qty,String noOrdenCompra, int noOrdenProduccion,int piecesByShift,
+     String material,float worker) {
+         this.noOrdenCompra = noOrdenCompra;
+        this.noOrdenProduccion = noOrdenProduccion;
+        this.claveProducto = claveProducto;
+        this.qty = qty;
+        this.material = material;
+        this.worker = worker;
+        this.piecesByShift = piecesByShift;
+    }
+    
         
     public String getNoOrdenCompra() {
         return noOrdenCompra;

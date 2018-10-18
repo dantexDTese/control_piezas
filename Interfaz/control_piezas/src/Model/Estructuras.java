@@ -5,12 +5,17 @@
  */
 package Model;
 
+import Controller.PedidosController.CalendarioController;
+import Model.PedidosModel.CalendarioModel;
+import View.Pedidos.Calendario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -43,6 +48,15 @@ public class Estructuras {
         return selector;
     }
     
+    public static void obtenerCalendario(JPanel contenedor){    
+        Calendario calendarioView = new Calendario();
+        CalendarioController calendarioController = new CalendarioController(calendarioView, new CalendarioModel());        
+         calendarioView.setSize(contenedor.getWidth(),contenedor.getHeight());
+         calendarioView.setLocation(0,0);
+         contenedor.add(calendarioView);
+         contenedor.revalidate();
+         contenedor.repaint();         
+    }
     
     public static ArrayList obtenerlistaDatos(String query){
         Connection c = Conexion.getInstance().getConexion();

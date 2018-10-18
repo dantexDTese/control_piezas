@@ -41,10 +41,20 @@ pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_
 WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
 
 /*ya*/
+
 CREATE VIEW procedimiento_total
 AS
-select ot.id_orden_trabajo,op.id_orden_produccion,op.cantidad_total,op.worker,
-mt.desc_material,pr.clave_producto,tp.desc_tipo_proceso,mq.desc_maquina 
+SELECT 
+ot.id_orden_trabajo,
+pr.clave_producto,
+op.cantidad_total,
+pd.no_orden_compra,
+op.id_orden_produccion,
+op.piezas_por_turno,
+mt.desc_material,
+op.worker,
+tp.desc_tipo_proceso,
+mq.desc_maquina 
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido JOIN
 ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN materiales AS mt ON
 mt.id_material = op.id_material JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
@@ -93,4 +103,3 @@ JOIN estados AS st ON st.id_estado = op.id_estado;
 
 
 
-select * from todos_los_estados;	

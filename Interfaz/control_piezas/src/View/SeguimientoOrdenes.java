@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 
 public class SeguimientoOrdenes extends javax.swing.JInternalFrame {
 
-
     public SeguimientoOrdenes() {
         initComponents();   
         
@@ -18,9 +17,7 @@ public class SeguimientoOrdenes extends javax.swing.JInternalFrame {
 
     public void setListaOrdenesTrabajo(JPanel listaOrdenesTrabajo) {
         this.listaOrdenesTrabajo = listaOrdenesTrabajo;
-    }
-    
-    
+    }    
 
     public JPanel getListaOrdenesTrabajo() {
         return listaOrdenesTrabajo;

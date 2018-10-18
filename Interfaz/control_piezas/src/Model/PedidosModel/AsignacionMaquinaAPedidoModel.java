@@ -71,27 +71,33 @@ public class AsignacionMaquinaAPedidoModel {
     }
     
     
-    public void agregarOrdenMaquina(ordenPlaneada ordenModificada){
+
+    public String agregarProductoPendiente(ProductosPendientes pendiente) {
         Connection c = Conexion.getInstance().getConexion();
-        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?)}";
+        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?,?,?,?)}";
+        String res=null;
         if(c!=null)
             try {
-                CallableStatement cs = c.prepareCall(query);
-                cs.setInt(1,ordenModificada.getNoOrdenProduccion());
-                cs.setString(2,ordenModificada.getDescProducto());
-                cs.setFloat(3,ordenModificada.getNuevo_worker());
-                cs.setInt(4,ordenModificada.getNueva_cantidad_total());
-                cs.setString(5,ordenModificada.getDesc_maquina());
-                cs.setString(6,ordenModificada.getDesc_material());
-                cs.registerOutParameter(7,Types.VARCHAR);
-                cs.execute();
-                JOptionPane.showMessageDialog(null, cs.getString(7));
+                JOptionPane.showMessageDialog(null, pendiente.getPiecesByShift());
                 
+                CallableStatement cs = c.prepareCall(query);
+                cs.setInt(1, pendiente.getNoOrdenProduccion());
+                cs.setString(2,pendiente.getClaveProducto());
+                cs.setFloat(3,pendiente.getWorker());
+                cs.setInt(4,pendiente.getQty());
+                cs.setString(5,pendiente.getMaquina());
+                cs.setString(6, pendiente.getMaterial());
+                cs.setString(7, pendiente.getFechaMontaje());
+                cs.setString(8, pendiente.getFechaInicio());
+                cs.setInt(9, pendiente.getPiecesByShift());
+                cs.registerOutParameter(10, Types.VARCHAR);
+                cs.execute();
+                res = cs.getString(10);
+                c.close();
             } catch (Exception e) {
-                System.err.println("error : class: AsignacionMaquinaAPedidoModel, Method: agregarOrdenMaquina "
-                +e.getMessage());                
+                System.err.println("error: class: AsignacionMaquinaAPedidoModel metohd:agregarProductoPendiente "+e.getMessage() );
             }
-        
+        return res;
     }
 
 }
