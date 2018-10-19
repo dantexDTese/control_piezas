@@ -31,7 +31,11 @@ public class CalendarioController {
      this.vista.getJmtMesCalendario().addPropertyChangeListener(listenerFechas);  
     }
         
-    private final PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {llenarTabla();};    
+    private final PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {
+    
+        llenarTabla();
+        
+    };    
     
     private void agregarCalendario(PanelFecha [] fechas){                
         DefaultTableModel model = (DefaultTableModel) vista.getJtCalendario().getModel();
@@ -58,7 +62,6 @@ public class CalendarioController {
                 diaSemana = 0;
                 fechas = new PanelFecha[7];
             }else diaSemana++;
-
         }
         if(fechas[0] != null)
             agregarCalendario(fechas);
