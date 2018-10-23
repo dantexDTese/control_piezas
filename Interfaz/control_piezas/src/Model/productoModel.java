@@ -6,7 +6,7 @@
 package Model;
 
 
-public class productoModel {
+public class productoModel  {
 
     
    private String claveProducto;

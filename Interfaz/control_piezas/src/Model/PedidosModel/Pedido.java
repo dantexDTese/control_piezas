@@ -13,7 +13,6 @@ public class Pedido {
     private String nombreCliente;
     private String claveProducto;
     private int cantidadCliente;
-    
     private String estado;
     
 
@@ -21,6 +20,12 @@ public class Pedido {
         
     }
     
+    
+
+    public Pedido(int noOrdenTrabajo, String estado) {
+        this.noOrdenTrabajo = noOrdenTrabajo;
+        this.estado = estado;
+    }
     
 
     public Pedido(int noOrdenTrabajo, String noOrdenCompra, String fechaEntrega, String fechaConfirmacionEntrega, String fechaRecepcion, String descContacto, String nombreCliente, String claveProducto, int cantidadCliente, String estado) {

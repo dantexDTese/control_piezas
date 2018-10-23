@@ -5,12 +5,13 @@
  */
 package View;
 
+import View.Produccion.AdminProduccion;
 import Controller.AlmacenController.MateriaPrimaController;
 import Controller.AlmacenController.ProductoTerminadoController;
 import Controller.RequisicionesController.controlEntregasController;
-import Controller.OrdenCompraController;
 import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
+import Controller.ProduccionController.AdminProduccionController;
 import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
 import Controller.RequisicionesController.AgregarRequisicinesController;
 import Controller.SeguimientoOrdenesController;
@@ -20,11 +21,11 @@ import Model.AlmacenModel.ProductoTerminadoModel;
 import Model.RequisicionesModel.controlEntregasModel;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
+import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
 import Model.RequisicionesModel.AgregarRequisicionesModel;
 import Model.SeguimientoOrdenesModel;
 import Model.SeguimientoProductosModel;
-import Model.ordenCompraModel;
 import View.Requisiciones.ControlEntregasView;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.PlaneacionView;
@@ -32,23 +33,16 @@ import View.Produccion.BitacoraOrdenesTrabajoView;
 import View.Requisiciones.AgregarRequisiciones;
 import View.almacenView.MateriaPrimaView;
 import View.almacenView.ProductoTerminadoView;
-import ds.desktop.notify.DesktopNotify;
-import ds.desktop.notify.DesktopNotifyDriver;
-import ds.desktop.notify.NotifyTheme;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -128,8 +122,6 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuItemBitacoraOrdenesTrabajo = new javax.swing.JMenuItem();
-        subMenuOrdenesProduccion = new javax.swing.JMenu();
-        itemMenuNuevaOrden = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -190,25 +182,13 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu4.add(menuItemBitacoraOrdenesTrabajo);
 
-        subMenuOrdenesProduccion.setText("Ordenes de produccion");
-
-        itemMenuNuevaOrden.setText("Nueva orden");
-        itemMenuNuevaOrden.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuNuevaOrdenActionPerformed(evt);
-            }
-        });
-        subMenuOrdenesProduccion.add(itemMenuNuevaOrden);
-
         jMenuItem2.setText("Administrar ordenes");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        subMenuOrdenesProduccion.add(jMenuItem2);
-
-        jMenu4.add(subMenuOrdenesProduccion);
+        jMenu4.add(jMenuItem2);
 
         jMenu7.setText("Seguimiento de produccion");
 
@@ -308,17 +288,13 @@ public class Principal extends javax.swing.JFrame {
         return Escritorio;
     }
     
-    private void itemMenuNuevaOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuNuevaOrdenActionPerformed
-        Escritorio.removeAll();
-        ordenCompraModel modelo = new ordenCompraModel();
-        OrdenCompra vista = new OrdenCompra(this);
-        OrdenCompraController control = new OrdenCompraController(vista,modelo);
-        IntroducirPanle(vista, Escritorio,new Point( screenSize.width/2,screenSize.height/2));
-    }//GEN-LAST:event_itemMenuNuevaOrdenActionPerformed
-
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Escritorio.removeAll();
-        IntroducirPanle(new AdminProduccion(), Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+        AdminProduccion adminProduccionView = new AdminProduccion();
+        AdminProduccionController adminProduccionController = new AdminProduccionController(adminProduccionView,
+        new AdminProduccionModel());
+        
+        IntroducirPanle(adminProduccionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -434,7 +410,6 @@ public class Principal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JMenuItem itemMenuBitacoraPedidosCliente;
-    private javax.swing.JMenuItem itemMenuNuevaOrden;
     private javax.swing.JMenuItem itemMenuPlaneacion;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
@@ -458,6 +433,5 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemNuevasRequisiciones;
     private javax.swing.JMenuItem menuItemProductoTerminado;
     private javax.swing.JMenu menuPedidos;
-    private javax.swing.JMenu subMenuOrdenesProduccion;
     // End of variables declaration//GEN-END:variables
 }

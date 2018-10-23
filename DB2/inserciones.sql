@@ -37,4 +37,4 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
-SELECT * FROM bitacora_ordenes_trabajo WHERE YEAR(fecha_registro) = 2018
+		

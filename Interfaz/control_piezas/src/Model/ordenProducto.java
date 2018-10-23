@@ -4,7 +4,7 @@ package Model;
 import java.util.Date;
 
 
-public class ordenProducto {
+public class ordenProducto  {
 
     private String codProducto;
     private String descMaquina;

@@ -4,7 +4,7 @@ package Model.PedidosModel;
 
 public class ProductosPendientes {
 
-    private final String noOrdenCompra;
+    private String noOrdenCompra;
     private final int noOrdenProduccion;
     private final String claveProducto;
     private  int cantidadCliente;
@@ -15,6 +15,13 @@ public class ProductosPendientes {
     private float worker;
     private String fechaMontaje;
     private String fechaInicio;
+
+    public ProductosPendientes(int noOrdenProduccion, String claveProducto) {
+        this.noOrdenProduccion = noOrdenProduccion;
+        this.claveProducto = claveProducto;
+    }
+    
+    
 
     public ProductosPendientes(String noOrdenCompra, int noOrdenProduccion, String claveProducto, int cantidadCliente) {
         this.noOrdenCompra = noOrdenCompra;

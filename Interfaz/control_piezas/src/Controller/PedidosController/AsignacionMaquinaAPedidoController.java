@@ -226,15 +226,9 @@ public class AsignacionMaquinaAPedidoController {
             if(pendientes != null){
                 for(int i = 0;i<pendientes.size();i++)
                     if(model.agregarProductoPendiente(pendientes.get(i))==null)
-                        break;
-                
+                        break;                
               llenarTablaPedidosPendientes();  
-              Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbProductosAgregados().getModel());
-              
-                
-                DesktopNotify.showDesktopMessage("---PLANEACION COMPLETA----",
-                        "La orden se ha agregado correctamente a la bitacora de planeacion\t\t\n",
-                        DesktopNotify.SUCCESS,null,null, 9000);
+              Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbProductosAgregados().getModel());                             
             }
                     
             else
