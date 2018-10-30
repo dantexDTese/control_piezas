@@ -1,3 +1,4 @@
+
 USE control_piezas_2;
 
 
@@ -20,20 +21,27 @@ pd.id_contacto = cn.id_contacto JOIN clientes cl ON cl.id_cliente = cn.id_client
 JOIN ordenes_produccion op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
 estados es ON pd.id_estado = es.id_estado;
 
-
 /*ya*/
 CREATE VIEW PedidosPendientes
 AS
-select no_orden_compra,ot.id_orden_trabajo,fecha_recepcion from bitacoraPedidos AS bp 
-JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo JOIN ordenes_produccion AS op
-ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
+select 
+no_orden_compra,
+ot.id_orden_trabajo,
+fecha_recepcion 
+from bitacoraPedidos AS bp JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo 
+JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
 
 
 CREATE VIEW productosEnEspera
 AS
-select bp.id_orden_trabajo,op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente from bitacoraPedidos AS bp 
+select 
+bp.id_orden_trabajo,
+op.id_orden_produccion,
+pr.clave_producto,
+op.cantidad_cliente
+ from bitacoraPedidos AS bp 
 JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo JOIN ordenes_produccion AS op
 ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
@@ -55,12 +63,14 @@ mt.desc_material,
 op.worker,
 tp.desc_tipo_proceso,
 mq.desc_maquina 
-from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido JOIN
-ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN materiales AS mt ON
-mt.id_material = op.id_material JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
-procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion JOIN tipos_proceso
-AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = 
-pp.id_proceso_produccion JOIN maquinas AS mq ON mq.id_maquina = lp.id_maquina;
+from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido 
+JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo 
+JOIN requisiciones_ordenes AS ro ON op.id_orden_produccion = ro.id_orden_produccion 
+JOIN materiales AS mt ON mt.id_material = ro.id_material 
+JOIN productos AS pr ON pr.id_producto = op.id_producto 
+JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion 
+JOIN tipos_proceso AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso 
+JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
 
 /*ya*/
 CREATE VIEW todos_los_estados
@@ -85,17 +95,27 @@ lp.fecha_trabajo
 FROM ordenes_produccion AS op JOIN productos AS pr ON op.id_producto = pr.id_producto
 JOIN procesos_produccion AS pp ON op.id_orden_produccion = pp.id_orden_produccion
 JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = pp.id_proceso_produccion
-JOIN maquinas AS mq ON mq.id_maquina = lp.id_maquina 
+JOIN requisiciones_ordenes AS ro ON ro.id_orden_produccion = op.id_orden_produccion
+JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina 
 JOIN todos_los_estados AS tes ON tes.id_estado = pp.id_estado
 JOIN tipos_proceso AS tp ON tp.id_tipo_proceso = pp.id_tipo_proceso
-JOIN materiales AS mt ON mt.id_material = op.id_material
+JOIN materiales AS mt ON mt.id_material = ro.id_material
 WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
 
 
 CREATE VIEW bitacora_ordenes_trabajo
 AS
-select op.id_orden_produccion,op.fecha_registro,pr.clave_producto,op.cantidad_cliente,op.fecha_inicio,op.fecha_fin,
-pd.id_pedido,pd.fecha_entrega,st.desc_estados,op.observaciones
+select 
+op.id_orden_produccion,
+op.fecha_registro,
+pr.clave_producto,
+op.cantidad_cliente,
+op.fecha_inicio,
+op.fecha_fin,
+pd.id_pedido,
+pd.fecha_entrega,
+st.desc_estados,
+op.observaciones
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido
 JOIN ordenes_produccion AS op ON op.id_orden_trabajo = ot.id_orden_trabajo
 JOIN productos AS pr ON pr.id_producto = op.id_producto
@@ -112,14 +132,15 @@ bp.no_orden_compra,
 bp.fecha_entrega AS fecha_entrega_pedido,
 bp.fecha_confirmacion_entrega AS fecha_confirmacion_entrega_pedido,
 bp.fecha_recepcion AS fecha_recepcion_pedido,
-bp.desc_contacto,bp.nombre_cliente,
-bp.cantidad_cliente,
-bp.clave_producto,
+bp.desc_contacto,
+bp.nombre_cliente,
+op.cantidad_cliente,
+pt.clave_producto,
 pt.cantidad_total,
 pt.id_orden_produccion,
 pt.desc_material,
 pt.desc_maquina,
-op.barras_necesarias,
+ro.barras_necesarias,
 op.piezas_por_turno,
 op.turnos_necesarios,
 op.fecha_registro AS fecha_registro_op,
@@ -128,12 +149,13 @@ op.fecha_inicio AS fecha_inicio_op,
 op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
 FROM bitacorapedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
-JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion;
-
+JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
+JOIN requisiciones_ordenes AS ro ON op.id_orden_produccion = ro.id_orden_produccion
+GROUP BY pt.id_orden_produccion;
 
 select * from ordenes_produccion;
+select * from procesos_produccion;
+select * from requisiciones;
+select * from requisiciones_ordenes;
 
-
-select * from ver_ordenes_produccion;
-select * from productos;
 

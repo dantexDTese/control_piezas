@@ -37,4 +37,5 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
-		
+
+

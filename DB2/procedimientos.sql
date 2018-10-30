@@ -89,8 +89,6 @@ BEGIN
 END //
 DELIMITER ;
 
-USE control_piezas_2;
-
 
 
 DELIMITER //
@@ -104,18 +102,21 @@ IN desc_material			VARCHAR(100),
 IN fecha_montaje_molde		DATE,
 IN fecha_inicio_produccion	DATE,
 IN nuevo_piezas_por_turno	INT,
+IN n_orden					INT,
 INOUT resultado				VARCHAR(100)
 )
 BEGIN
+
 	DECLARE id_material INT;
     DECLARE id_maquina INT;
     DECLARE id_proceso_produccion INT;
     DECLARE id_nuevo_estado INT;
     DECLARE id_producto INT;
+    DECLARE cantidad_por_lote_planeado INT;
     
 	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion)
     THEN
-		
+		        
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
         SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
@@ -125,30 +126,27 @@ BEGIN
         FROM todos_los_estados WHERE  desc_tipo_estado = 'PROCESOS DE PRODUCCION'
         AND desc_estados = 'EN ESPERA';
         /*fin seleccion estado*/
-        
-        UPDATE ordenes_produccion 
-        SET 
-        ordenes_produccion.id_material = @id_material,
-        ordenes_produccion.worker = nuevo_worker,
-        ordenes_produccion.cantidad_total = nueva_cantidad_total,
-        ordenes_produccion.fecha_montaje = fecha_montaje_molde,
-        ordenes_produccion.fecha_inicio = fecha_inicio_produccion,
-        ordenes_produccion.piezas_por_turno = nuevo_piezas_por_turno
-        WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion AND ordenes_produccion.id_producto = @id_producto;
 			
+		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,
+					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
+        
 		SET SQL_SAFE_UPDATES=0;		      
 		UPDATE procesos_produccion 
         SET 
-        procesos_produccion.id_estado = @id_nuevo_estado 
+        procesos_produccion.id_maquina = @id_maquina,
+        procesos_produccion.id_estado = @id_nuevo_estado
         WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
 		SET SQL_SAFE_UPDATES=1;
-			
-        select @id_proceso_produccion := procesos_produccion.id_proceso_produccion 
-        FROM procesos_produccion JOIN ordenes_produccion ON 
-		procesos_produccion.id_orden_produccion = ordenes_produccion.id_orden_produccion 
-		WHERE ordenes_produccion.id_producto =@id_producto AND procesos_produccion.id_orden_produccion = id_orden_produccion;
-    
-        INSERT INTO lotes_produccion(id_proceso_produccion,id_maquina) VALUES(@id_proceso_produccion,@id_maquina);
+		
+		CALL agregar_lotes_planeados(id_orden_produccion,
+        nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker);
+        
+        
+        IF n_orden = 1 THEN
+			INSERT INTO requisiciones(fecha_peticion) VALUES(NOW());
+        END IF;
+                
+        CALL agregar_requisicion_orden(@id_material,id_orden_produccion);
         
         SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
     
@@ -162,6 +160,88 @@ END //
 DELIMITER ;            
 
 
+
+DELIMITER //
+CREATE PROCEDURE agregar_requisicion_orden(
+IN id_material			INT,
+IN id_orden_produccion	INT
+)
+BEGIN 
+	DECLARE id_requisicion INT;    
+    SELECT @id_requisicion := count(*) FROM requisiciones;    
+
+    IF @id_requisicion IS NOT NULL THEN
+		INSERT INTO requisiciones_ordenes(id_orden_produccion,id_requisicion,id_material) 
+		VALUES(id_orden_produccion,@id_requisicion,id_material);    
+    END IF;
+    
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE actualizar_orden_produccion(
+IN nuevo_worker 			FLOAT,
+IN nueva_cantidad_total		INT,
+IN fecha_montaje_molde		DATE,
+IN fecha_inicio_produccion	DATE,
+IN nuevo_piezas_por_turno	INT,
+IN id_orden_produccion		INT,
+IN id_producto				INT
+)
+BEGIN
+    UPDATE ordenes_produccion 
+    SET 
+    /*ordenes_produccion.id_material = @id_material, /*cambiar*/
+    ordenes_produccion.worker = nuevo_worker,
+    ordenes_produccion.cantidad_total = nueva_cantidad_total,
+    ordenes_produccion.fecha_montaje = fecha_montaje_molde,
+    ordenes_produccion.fecha_inicio = fecha_inicio_produccion,
+    ordenes_produccion.piezas_por_turno = nuevo_piezas_por_turno
+    WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion AND ordenes_produccion.id_producto = @id_producto;								
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_lotes_planeados(
+IN id_orden_produccion INT,
+IN nueva_cantidad_total INT,
+IN nuevo_piezas_por_turno INT,
+IN fecha_inicio_produccion DATE,
+IN nuevo_worker FLOAT
+)
+BEGIN
+	DECLARE iterador INT;
+    
+	IF fecha_inicio_produccion IS NOT NULL THEN      
+		IF nuevo_worker >= 1 THEN        
+			SET nuevo_piezas_por_turno = nuevo_piezas_por_turno * 2;        
+        END IF;        
+        SET iterador = 1;                        
+     my_loop: LOOP
+     
+        IF nueva_cantidad_total = 0 THEN
+			LEAVE my_loop;
+		END IF;
+		
+			IF nueva_cantidad_total >= nuevo_piezas_por_turno THEN
+				SET nueva_cantidad_total = nueva_cantidad_total - nuevo_piezas_por_turno;  
+            ELSE
+				SET nuevo_piezas_por_turno = nueva_cantidad_total;
+                SET nueva_cantidad_total = 0;
+            END IF;
+								
+			INSERT INTO lotes_planeados(id_orden_produccion,cantidad_planeada,fecha_planeada)
+			VALUES(id_orden_produccion,nuevo_piezas_por_turno,ADDDATE(fecha_inicio_produccion,INTERVAL iterador DAY));        		            
+        
+        SET iterador = iterador + 1;        			
+        
+      END LOOP my_loop;
+      
+    END IF;
+    
+END //
+DELIMITER ;
 
 
 DELIMITER //
@@ -187,9 +267,25 @@ BEGIN
 END //
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE obtener_orden_planeada(
+IN fecha DATE,
+IN d_maquina VARCHAR(50),
+INOUT no_orden INT,
+INOUT cantidad INT
+)
+BEGIN
+	DECLARE orden INT;
+    DECLARE cant  INT;
+    
+    SELECT @orden := op.id_orden_produccion,@cant := lpn.cantidad_planeada FROM lotes_planeados AS lpn JOIN
+    ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
+    JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
+	JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina    
+    WHERE fecha_planeada = fecha AND mq.desc_maquina = d_maquina;
 
-select * from ordenes_produccion;
-select * from lotes_produccion;
-select * from ordenes_trabajo;
-select * from maquinas_operadores;
-select * from procedimiento_total;
+    SET no_orden = @orden;
+    SET cantidad = @cant;
+
+END //
+DELIMITER ;

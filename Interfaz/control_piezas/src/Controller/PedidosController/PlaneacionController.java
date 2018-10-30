@@ -58,8 +58,8 @@ public class PlaneacionController  {
         
         
         this.vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});               
-        this.vista.getJpCalendar().setSize(700,320);
-        Estructuras.obtenerCalendario(this.vista.getJpCalendar());        
+        this.vista.getJpCalendar().setSize(800,350);
+        Estructuras.obtenerCalendario(this.vista.getJpCalendar(),this.vista.getCbxListaMaquinas().getSelectedItem().toString());        
     }
     
     
@@ -71,6 +71,7 @@ public class PlaneacionController  {
             if(vista.getCbxListaMaquinas().getSelectedItem() != null) {
                 if (!"".equals(vista.getCbxListaMaquinas().getSelectedItem().toString())) {
                 llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+                Estructuras.obtenerCalendario(vista.getJpCalendar(),vista.getCbxListaMaquinas().getSelectedItem().toString());        
                 //obtenerProcesoPrincipal(vista.getCbxListaMaquinas().getSelectedItem().toString());
                 }
             }
@@ -93,14 +94,12 @@ public class PlaneacionController  {
     
     private void obtenerProcesoPrincipal(String nombreMaquina){    
         procesoPrincipal = model.obtenerProcesoPrincipal(nombreMaquina);
-        Estructuras.limpiarTabla((DefaultTableModel) vista.getTbBitacoraProducto().getModel());
         limbiarCampos();
         if(procesoPrincipal!=null)
         {
             vista.getLbProductoEnProceso().setText(procesoPrincipal.getClaveProducto());
             vista.getLbCantidadTotal().setText(procesoPrincipal.getCantidadTotal()+"");      
             vista.getLbProcesoActual().setText(procesoPrincipal.getDescProcesoActual());
-            llenarTablaLotes(nombreMaquina);
         }
     }
     
@@ -112,14 +111,7 @@ public class PlaneacionController  {
             vista.getLbCantidadRestante().setText("");
     }
    
-    private void llenarTablaLotes(String nombreMaquina){
-        listaLotes = model.listaLotesProduccion(nombreMaquina);
-        DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbBitacoraProducto().getModel();
-        for(int i = 0;i<listaLotes.size();i++)
-            modelTabla.addRow(new Object[]{listaLotes.get(i).getFechaTrabaho(),listaLotes.get(i).getCantidadTrabajada()});
-              
-        obtenerCantidadesRestantes();
-    }
+ 
     
     private void obtenerCantidadesRestantes(){
         if(listaLotes.size()>0){

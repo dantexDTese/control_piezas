@@ -6,6 +6,7 @@ import Model.Estructuras;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class AsignacionMaquinaAPedidoModel {
                         pedidos.add(pedido);
                     } while (rs.next());
                c.close(); 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error: class: PlaneacionModel, Method:listaPedidosPendientes"+e.getMessage());
             }
         
@@ -72,15 +73,14 @@ public class AsignacionMaquinaAPedidoModel {
     
     
 
-    public String agregarProductoPendiente(ProductosPendientes pendiente) {
+    public String agregarProductoPendiente(ProductosPendientes pendiente,int nOrden) {
         Connection c = Conexion.getInstance().getConexion();
-        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?,?,?,?)}";
+        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?,?,?,?,?)}";
         String res=null;
         if(c!=null)
             try {
-                JOptionPane.showMessageDialog(null, pendiente.getPiecesByShift());
-                
                 CallableStatement cs = c.prepareCall(query);
+                
                 cs.setInt(1, pendiente.getNoOrdenProduccion());
                 cs.setString(2,pendiente.getClaveProducto());
                 cs.setFloat(3,pendiente.getWorker());
@@ -90,11 +90,12 @@ public class AsignacionMaquinaAPedidoModel {
                 cs.setString(7, pendiente.getFechaMontaje());
                 cs.setString(8, pendiente.getFechaInicio());
                 cs.setInt(9, pendiente.getPiecesByShift());
-                cs.registerOutParameter(10, Types.VARCHAR);
+                cs.setInt(10, nOrden);
+                cs.registerOutParameter(11, Types.VARCHAR);
                 cs.execute();
-                res = cs.getString(10);
+                res = cs.getString(11);
                 c.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error: class: AsignacionMaquinaAPedidoModel metohd:agregarProductoPendiente "+e.getMessage() );
             }
         return res;

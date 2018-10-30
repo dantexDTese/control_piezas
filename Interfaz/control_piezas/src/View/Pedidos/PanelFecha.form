@@ -25,10 +25,20 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="lbFecha" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
+                      <Component id="lbFecha" min="-2" pref="39" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="lbCantidad" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lbNameOP" min="-2" max="-2" attributes="0"/>
+                          <Component id="lbNameCANT" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="lbCantidad" alignment="1" max="32767" attributes="0"/>
+                          <Component id="lbOP" alignment="1" pref="44" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -36,21 +46,42 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <Component id="lbFecha" min="-2" max="-2" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="lbCantidad" pref="18" max="32767" attributes="0"/>
+              <Component id="lbFecha" min="-2" pref="17" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="lbOP" max="32767" attributes="0"/>
+                  <Component id="lbNameOP" pref="19" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="lbCantidad" pref="20" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="lbNameCANT" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="lbCantidad">
+    <Component class="javax.swing.JLabel" name="lbOP">
     </Component>
     <Component class="javax.swing.JLabel" name="lbFecha">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbNameOP">
       <Properties>
-        <Property name="text" type="java.lang.String" value="FECHA"/>
+        <Property name="text" type="java.lang.String" value="OP"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbCantidad">
+    </Component>
+    <Component class="javax.swing.JLabel" name="lbNameCANT">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="CANT"/>
       </Properties>
     </Component>
   </SubComponents>

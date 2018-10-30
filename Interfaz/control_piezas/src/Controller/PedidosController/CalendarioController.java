@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller.PedidosController;
 
 import Model.Estructuras;
@@ -14,18 +10,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author cesar
- */
+
 public class CalendarioController {
 
-    private Calendario vista;
-    private CalendarioModel model;
-    
-    public CalendarioController(Calendario vista,CalendarioModel model) {           
+    private final Calendario vista;
+    private final CalendarioModel model;
+    private final String descMaquina;
+    public CalendarioController(Calendario vista,CalendarioModel model,String descMaquina) {           
      this.vista = vista;
      this.model = model;
+     this.descMaquina = descMaquina;
      this.vista.getJtCalendario().setDefaultRenderer(Object.class,new FechaCalendario());   
      this.vista.getJycAnioCalendario().addPropertyChangeListener(listenerFechas);
      this.vista.getJmtMesCalendario().addPropertyChangeListener(listenerFechas);  
@@ -39,10 +33,17 @@ public class CalendarioController {
     
     private void agregarCalendario(PanelFecha [] fechas){                
         DefaultTableModel model = (DefaultTableModel) vista.getJtCalendario().getModel();
-        vista.getJtCalendario().setRowHeight(50);        
+        vista.getJtCalendario().setRowHeight(90);        
+        
         model.addRow(fechas);        
     }
    
+    private String crearFecha(int dia,int mes,int anio){
+        return String.format("%d/%d/%d",anio,mes,dia);
+    }
+    
+    
+    
     private void llenarTabla(){
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtCalendario().getModel());
         int anio = vista.getJycAnioCalendario().getValue();
@@ -56,7 +57,9 @@ public class CalendarioController {
             fechas[i] = null;
         
         for(int i = 0;i<dias;i++){
-            fechas[diaSemana] = new PanelFecha(i+1);
+            CalendarioModel.OrdenPlaneada orden = model.obtenerOrdenPlaneada(crearFecha(i+1, mes, anio), descMaquina);
+            fechas[diaSemana] = new PanelFecha(i+1,orden.getNoOrden(),orden.getCantidad());
+            
             if(diaSemana==6){
                 agregarCalendario(fechas);
                 diaSemana = 0;

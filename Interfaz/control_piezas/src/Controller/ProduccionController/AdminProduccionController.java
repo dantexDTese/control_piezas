@@ -85,7 +85,16 @@ public class AdminProduccionController {
                 vista.getLbNoOP().setText(orden.getOrdenProduccion()+"");
                 vista.getLbProducto().setText(orden.getClaveProducto());
                 vista.getLbCliente().setText(orden.getNombreCliente());
-                
+                vista.getLbOrdenCompra().setText(orden.getNoOrdenCompra());
+                vista.getLbCantidad().setText(orden.getCantidadCliente()+"");
+                vista.getLbPiezasPorTurno().setText(orden.getPiezasPorTurno()+"");
+                vista.getLbMaterial().setText(orden.getDescMaterial());
+                vista.getLbMaquina().setText(orden.getDescMaquina());
+                vista.getLbCantidadProduccir().setText(orden.getCantidadTotal()+"");
+                vista.getLbBarrasNecesarias().setText(orden.getBarrasNecesarias()+"");
+                vista.getLbFechaMontajeMolde().setText(orden.getFechaMontaje());
+                vista.getLbFechaArranqueProceso().setText(orden.getFechaInicioOP());
+                vista.getLbFechaDesmontajeModel().setText(orden.getFechaDesmontaje());
                 
             }
             else

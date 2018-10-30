@@ -48,11 +48,12 @@ public class Estructuras {
         return selector;
     }
     
-    public static void obtenerCalendario(JPanel contenedor){    
+    public static void obtenerCalendario(JPanel contenedor,String descMaquina){    
         Calendario calendarioView = new Calendario();
-        CalendarioController calendarioController = new CalendarioController(calendarioView, new CalendarioModel());        
+        CalendarioController calendarioController = new CalendarioController(calendarioView, new CalendarioModel(),descMaquina);        
          calendarioView.setSize(contenedor.getWidth(),contenedor.getHeight());
          calendarioView.setLocation(0,0);
+         contenedor.removeAll();
          contenedor.add(calendarioView);
          contenedor.revalidate();
          contenedor.repaint();         
