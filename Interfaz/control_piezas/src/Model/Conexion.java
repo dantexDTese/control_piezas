@@ -11,16 +11,18 @@ public class Conexion {
     
     private Connection nuevaConexion;
     private static String driver = "com.mysql.jdbc.Driver";
-    private static String user = "root";
-    private static String password = "sasa";
-    private static String dataBaseName = "control_piezas_2";
-    private static String url="jdbc:mysql://localhost:3306/"+dataBaseName;
-
+    private static String host = "controlpiezas.000webhostapp.com:3306/";
+    private static String user = "id7704058_root";
+    private static String password = "password";
+    private static String dataBaseName = "id7704058_control_piezas";
+    private static String url="jdbc:mysql://"+host+dataBaseName;
+ 
     private Conexion() {
         nuevaConexion = null;
         try {
             Class.forName(driver);
-            nuevaConexion = DriverManager.getConnection(url+"?useSSL=false",user,password);
+            nuevaConexion = DriverManager.getConnection(url,user,password);
+            System.err.println("conectado");
         } catch (Exception e) {
             System.err.println("error:"+e.getMessage());
         }
