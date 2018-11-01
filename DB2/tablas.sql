@@ -10,6 +10,8 @@ id_material          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_material       VARCHAR (100) NOT NULL
 );
 
+
+
 CREATE TABLE productos(
 id_producto        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 clave_producto     VARCHAR (50) NOT NULL    
@@ -30,10 +32,6 @@ id_defecto_producto         INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_defecto_producto       VARCHAR (100) NOT NULL    
 );
 
-CREATE TABLE operadores(
-id_operador         INT NOT NULL PRIMARY KEY AUTO_INCREMENT
-);
-
 CREATE TABLE maquinas(
 id_maquina          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_maquina        VARCHAR (50) NOT NULL    
@@ -50,10 +48,6 @@ id_tipo_estado		INT NOT NULL REFERENCES tipos_estado (id_tipo_estado),
 desc_estados        VARCHAR (50) NOT NULL
 );
 
-CREATE TABLE turnos(
-id_turno            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-desc_turno          VARCHAR (20) NOT NULL    
-);
 
 CREATE TABLE clientes(
 id_cliente          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -65,15 +59,23 @@ id_contacto 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_cliente 		INT NOT NULL REFERENCES clientes(id_cliente),
 desc_contacto	VARCHAR(50) NOT NULL
 );
+
+
+CREATE TABLE proveedores(
+id_proveedor 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_proveedor	VARCHAR(150),
+direccion		VARCHAR(150)
+);
+
 /**FIN DE CATALOGOS CONTROL_PIEZAS*/ 
 
 /** TABLAS DEBILES*/
 CREATE TABLE pedidos(
 id_pedido					INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_estado					INT NOT NULL REFERENCES estados	(id_estado),
+id_contacto					INT NOT NULL REFERENCES contactos (id_contacto),
 fecha_recepcion				DATE NOT NULL,
 no_orden_compra				VARCHAR(50) NOT NULL,
-id_contacto					INT NOT NULL REFERENCES contactos (id_contacto),
-id_estado					INT NOT NULL REFERENCES estados	(id_estado),
 fecha_entrega				DATE,
 fecha_confirmacion_entrega 	DATE
 );
@@ -93,9 +95,11 @@ id_orden_trabajo        INT NOT NULL REFERENCES ordenes_trabajo(id_orden_trabajo
 id_producto             INT NOT NULL REFERENCES productos(id_producto),
 id_estado				INT	NOT NULL REFERENCES estados(id_estado),
 id_empaque				INT REFERENCES empaques(id_empaque),
+id_material				INT REFERENCES materiales(id_material),
+barras_necesarias		INT ,
 cantidad_cliente        INT NOT NULL,
-worker					FLOAT,
 cantidad_total          INT,
+worker					FLOAT,
 piezas_por_turno		INT,
 turnos_necesarios       INT,
 turnos_reales           INT,
@@ -137,34 +141,42 @@ merma                       FLOAT,
 tiempo_muerto               TIME
 ); 
 
-CREATE TABLE parcialidades_pedidos(
-id_parcialidad_pedido 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_pedido					INT NOT NULL REFERENCES pedidos (id_pedido),
-fecha_entrega				DATETIME NOT NULL,
-cantidad_entregada			INT NOT NULL
-);
-
 CREATE TABLE requisiciones(
-id_requisicion 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-fecha_peticion		DATE,
-fecha_cerrado 		DATE
+id_requisicion INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+fecha_creacion		DATE,
+fecha_cerrarda		DATE
 );
 
-CREATE TABLE parcialidades_requisiciones(
-id_parcialidad			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_requisicion_orden 	INT NOT NULL REFERENCES requisiciones_ordenes(id_requisicion_orden),
-cantidad				INT NOT NULL,
-fecha_peticion			DATE NOT NULL,
-fecha_entrega			DATE
+CREATE TABLE parcialidades_requisicion(
+id_parcialidad		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_requisicion		INT NOT NULL REFERENCES requisiciones(id_requisicion),
+solicitante			VARCHAR(50),
+fecha_solicitud		DATE,
+terminos			VARCHAR(100),
+lugar_entrega		VARCHAR(100),
+comentarios			VARCHAR(255),
+sub_total			FLOAT,
+IVA					FLOAT,
+TOTAL				FLOAT
 );
 
-CREATE TABLE requisiciones_ordenes(
-id_requisicion_orden	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_orden_produccion		INT REFERENCES ordenes_produccion(id_orden_produccion),
-id_requisicion			INT REFERENCES requisiciones(id_requisicion),
-id_material				INT REFERENCES materiales(id_material),
-barras_necesarias		INT 
+
+CREATE TABLE parcialidades_orden_requerida(
+id_parcialidad_orden_requerida		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_parcialidad						INT NOT NULL REFERENCES parcialidades(id_parcialidad),
+id_orden_produccion					INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
+id_estado							INT NOT NULL REFERENCES estados(id_estado),
+id_proveedor						INT NOT NULL REFERENCES proveedores(id_proveedor),
+cantidad							INT NOT NULL,
+num_parcialidad						INT NOT NULL,
+fecha_solicitud						DATE,
+fecha_entrega						DATE,
+unidad								VARCHAR(10),
+pecio_total							FLOAT
 );
+
+
+
 /** FIN TABLAS DEBILES 1*/
 
 /** TABLAS RELACIONALES*/
@@ -181,4 +193,15 @@ id_orden_produccion			INT NOT NULL REFERENCES ordenes_produccion(id_orden_produc
 id_empaque					INT NOT NULL REFERENCES empaques (id_empaque),
 cantidad					INTEGER NOT NULL
 );
+
+
+
+CREATE TABLE materiales_proveedor(
+id_material_proveedor		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_material					INT NOT NULL REFERENCES materiales(id_material),
+id_proveedor				INT NOT NULL REFERENCES proveedores(id_proveedor),
+precio_unitario				FLOAT
+);
+
+
 /**FIN TABLAS RELACIONALES*/

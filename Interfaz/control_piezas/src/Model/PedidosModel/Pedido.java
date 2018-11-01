@@ -20,13 +20,17 @@ public class Pedido {
         
     }
     
-    
 
     public Pedido(int noOrdenTrabajo, String estado) {
         this.noOrdenTrabajo = noOrdenTrabajo;
         this.estado = estado;
     }
     
+    
+    public Pedido(String noOrdenCompra,int noOrdenTrabajo){
+        this.noOrdenTrabajo = noOrdenTrabajo;
+        this.noOrdenCompra = noOrdenCompra;
+    }
 
     public Pedido(int noOrdenTrabajo, String noOrdenCompra, String fechaEntrega, String fechaConfirmacionEntrega, String fechaRecepcion, String descContacto, String nombreCliente, String claveProducto, int cantidadCliente, String estado) {
         this.noOrdenTrabajo = noOrdenTrabajo;

@@ -65,8 +65,7 @@ tp.desc_tipo_proceso,
 mq.desc_maquina 
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo 
-JOIN requisiciones_ordenes AS ro ON op.id_orden_produccion = ro.id_orden_produccion 
-JOIN materiales AS mt ON mt.id_material = ro.id_material 
+JOIN materiales AS mt ON mt.id_material = op.id_material 
 JOIN productos AS pr ON pr.id_producto = op.id_producto 
 JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion 
 JOIN tipos_proceso AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso 
@@ -95,11 +94,10 @@ lp.fecha_trabajo
 FROM ordenes_produccion AS op JOIN productos AS pr ON op.id_producto = pr.id_producto
 JOIN procesos_produccion AS pp ON op.id_orden_produccion = pp.id_orden_produccion
 JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = pp.id_proceso_produccion
-JOIN requisiciones_ordenes AS ro ON ro.id_orden_produccion = op.id_orden_produccion
 JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina 
 JOIN todos_los_estados AS tes ON tes.id_estado = pp.id_estado
 JOIN tipos_proceso AS tp ON tp.id_tipo_proceso = pp.id_tipo_proceso
-JOIN materiales AS mt ON mt.id_material = ro.id_material
+JOIN materiales AS mt ON mt.id_material = op.id_material
 WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
 
 
@@ -140,7 +138,7 @@ pt.cantidad_total,
 pt.id_orden_produccion,
 pt.desc_material,
 pt.desc_maquina,
-ro.barras_necesarias,
+op.barras_necesarias,
 op.piezas_por_turno,
 op.turnos_necesarios,
 op.fecha_registro AS fecha_registro_op,
@@ -150,12 +148,6 @@ op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
 FROM bitacorapedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
-JOIN requisiciones_ordenes AS ro ON op.id_orden_produccion = ro.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
-
-select * from ordenes_produccion;
-select * from procesos_produccion;
-select * from requisiciones;
-select * from requisiciones_ordenes;
 
 

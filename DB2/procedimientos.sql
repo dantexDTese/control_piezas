@@ -47,6 +47,7 @@ END //
 DELIMITER ;
 
 
+
 DELIMITER //
 CREATE PROCEDURE agregar_orden_produccion(
 IN id_pedido		 		INT,
@@ -128,7 +129,7 @@ BEGIN
         /*fin seleccion estado*/
 			
 		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,
-					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
+					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto,@id_material);
         
 		SET SQL_SAFE_UPDATES=0;		      
 		UPDATE procesos_produccion 
@@ -143,10 +144,8 @@ BEGIN
         
         
         IF n_orden = 1 THEN
-			INSERT INTO requisiciones(fecha_peticion) VALUES(NOW());
+			INSERT INTO requisiciones(fecha_creacion) VALUES(NOW());
         END IF;
-                
-        CALL agregar_requisicion_orden(@id_material,id_orden_produccion);
         
         SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
     
@@ -160,25 +159,6 @@ END //
 DELIMITER ;            
 
 
-
-DELIMITER //
-CREATE PROCEDURE agregar_requisicion_orden(
-IN id_material			INT,
-IN id_orden_produccion	INT
-)
-BEGIN 
-	DECLARE id_requisicion INT;    
-    SELECT @id_requisicion := count(*) FROM requisiciones;    
-
-    IF @id_requisicion IS NOT NULL THEN
-		INSERT INTO requisiciones_ordenes(id_orden_produccion,id_requisicion,id_material) 
-		VALUES(id_orden_produccion,@id_requisicion,id_material);    
-    END IF;
-    
-END //
-DELIMITER ;
-
-
 DELIMITER //
 CREATE PROCEDURE actualizar_orden_produccion(
 IN nuevo_worker 			FLOAT,
@@ -187,18 +167,22 @@ IN fecha_montaje_molde		DATE,
 IN fecha_inicio_produccion	DATE,
 IN nuevo_piezas_por_turno	INT,
 IN id_orden_produccion		INT,
-IN id_producto				INT
+IN id_producto				INT,
+IN nuevo_id_material		INT
 )
 BEGIN
+
     UPDATE ordenes_produccion 
     SET 
     /*ordenes_produccion.id_material = @id_material, /*cambiar*/
+    ordenes_produccion.id_material = nuevo_id_material,
     ordenes_produccion.worker = nuevo_worker,
     ordenes_produccion.cantidad_total = nueva_cantidad_total,
     ordenes_produccion.fecha_montaje = fecha_montaje_molde,
     ordenes_produccion.fecha_inicio = fecha_inicio_produccion,
     ordenes_produccion.piezas_por_turno = nuevo_piezas_por_turno
     WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion AND ordenes_produccion.id_producto = @id_producto;								
+    
 END //
 DELIMITER ;
 
