@@ -146,9 +146,16 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
                 "ORDEN TRABAJO", "NO. COMPRA"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -182,7 +189,7 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "PRODUCTO", "CANTIDAD", "MATERIAL"
+                "PRODUCTO", "CANT. PRODUCTO", "MATERIAL"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -320,7 +327,6 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("TERMINOS DE COMPRA");
 
-        txtTerminoCompra.setEditable(false);
         txtTerminoCompra.setColumns(20);
         txtTerminoCompra.setRows(5);
         jScrollPane5.setViewportView(txtTerminoCompra);
@@ -344,7 +350,6 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("LUGAR DE ENTREGA");
 
-        txtLugarEntrega.setEditable(false);
         txtLugarEntrega.setColumns(20);
         txtLugarEntrega.setRows(5);
         jScrollPane7.setViewportView(txtLugarEntrega);

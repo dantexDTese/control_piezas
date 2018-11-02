@@ -28,5 +28,10 @@ select * from productos;
 select * from ordenes_produccion;
 
 
+select * from materiales_ordenes_requeridas;
 
-select * from lotes_planeados;
+
+
+
+
+

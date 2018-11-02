@@ -5,7 +5,7 @@ package Model.PedidosModel;
 public class ProductosPendientes {
 
     private String noOrdenCompra;
-    private final int noOrdenProduccion;
+    private int noOrdenProduccion;
     private final String claveProducto;
     private  int cantidadCliente;
     private int qty;
@@ -40,6 +40,12 @@ public class ProductosPendientes {
         this.material = material;
         this.worker = worker;
         this.piecesByShift = piecesByShift;
+    }
+
+    public ProductosPendientes(String claveProducto, int qty, String material) {
+        this.claveProducto = claveProducto;
+        this.qty = qty;
+        this.material = material;
     }
     
         

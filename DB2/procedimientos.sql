@@ -129,7 +129,7 @@ BEGIN
         /*fin seleccion estado*/
 			
 		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,
-					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto,@id_material);
+					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
         
 		SET SQL_SAFE_UPDATES=0;		      
 		UPDATE procesos_produccion 
@@ -147,6 +147,8 @@ BEGIN
 			INSERT INTO requisiciones(fecha_creacion) VALUES(NOW());
         END IF;
         
+		 call agregar_material_orden_requerida(id_orden_produccion,@id_material);
+        
         SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
     
     ELSE
@@ -158,6 +160,23 @@ BEGIN
 END //
 DELIMITER ;            
 
+DELIMITER //
+CREATE PROCEDURE agregar_material_orden_requerida(
+IN id_orden_produccion	INT,
+IN id_material			INT
+)
+BEGIN
+	DECLARE id_requisicion INT;    
+    DECLARE id_estado 		INT;
+    SELECT @id_requisicion := max(requisiciones.id_requisicion) FROM requisiciones;	
+
+    SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'REQUISICIONES' and desc_estados = 'ABIERTO';
+    
+    INSERT INTO materiales_ordenes_requeridas(id_orden_produccion,id_material,id_requisicion,id_estado) 
+    VALUES(id_orden_produccion,id_material,@id_requisicion,@id_estado);    
+END	//
+DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE actualizar_orden_produccion(
@@ -167,15 +186,13 @@ IN fecha_montaje_molde		DATE,
 IN fecha_inicio_produccion	DATE,
 IN nuevo_piezas_por_turno	INT,
 IN id_orden_produccion		INT,
-IN id_producto				INT,
-IN nuevo_id_material		INT
+IN id_producto				INT
 )
 BEGIN
 
     UPDATE ordenes_produccion 
     SET 
     /*ordenes_produccion.id_material = @id_material, /*cambiar*/
-    ordenes_produccion.id_material = nuevo_id_material,
     ordenes_produccion.worker = nuevo_worker,
     ordenes_produccion.cantidad_total = nueva_cantidad_total,
     ordenes_produccion.fecha_montaje = fecha_montaje_molde,

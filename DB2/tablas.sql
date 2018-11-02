@@ -95,8 +95,6 @@ id_orden_trabajo        INT NOT NULL REFERENCES ordenes_trabajo(id_orden_trabajo
 id_producto             INT NOT NULL REFERENCES productos(id_producto),
 id_estado				INT	NOT NULL REFERENCES estados(id_estado),
 id_empaque				INT REFERENCES empaques(id_empaque),
-id_material				INT REFERENCES materiales(id_material),
-barras_necesarias		INT ,
 cantidad_cliente        INT NOT NULL,
 cantidad_total          INT,
 worker					FLOAT,
@@ -110,6 +108,7 @@ fecha_inicio            DATE,
 fecha_fin               DATE,
 observaciones			VARCHAR(250)      
 );
+
 
 CREATE TABLE lotes_planeados(
 id_lote_planeado 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -142,31 +141,40 @@ tiempo_muerto               TIME
 ); 
 
 CREATE TABLE requisiciones(
-id_requisicion INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_requisicion 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 fecha_creacion		DATE,
 fecha_cerrarda		DATE
 );
 
+
+CREATE TABLE materiales_ordenes_requeridas(
+id_material_orden_requerida 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_orden_produccion				INT REFERENCES ordenes_produccion(id_orden_produccion),
+id_material						INT REFERENCES materiales(id_material),
+id_requisicion					INT REFERENCES requisiciones(id_requisicion),
+id_estado							INT NOT NULL REFERENCES estados(id_estado),
+barras_necesarias				INT 
+);
+
+
 CREATE TABLE parcialidades_requisicion(
-id_parcialidad		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_requisicion		INT NOT NULL REFERENCES requisiciones(id_requisicion),
-solicitante			VARCHAR(50),
-fecha_solicitud		DATE,
-terminos			VARCHAR(100),
-lugar_entrega		VARCHAR(100),
-comentarios			VARCHAR(255),
-sub_total			FLOAT,
-IVA					FLOAT,
-TOTAL				FLOAT
+id_parcialidad_requisicion		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_proveedor					INT REFERENCES proveedores(id_proveedor),
+solicitante						VARCHAR(50),
+fecha_solicitud					DATE,
+terminos						VARCHAR(100),
+lugar_entrega					VARCHAR(100),
+comentarios						VARCHAR(255),
+sub_total						FLOAT,
+IVA								FLOAT,
+TOTAL							FLOAT
 );
 
 
 CREATE TABLE parcialidades_orden_requerida(
 id_parcialidad_orden_requerida		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_parcialidad						INT NOT NULL REFERENCES parcialidades(id_parcialidad),
-id_orden_produccion					INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
-id_estado							INT NOT NULL REFERENCES estados(id_estado),
-id_proveedor						INT NOT NULL REFERENCES proveedores(id_proveedor),
+id_parcialidad_requisicion			INT NOT NULL REFERENCES parcialidades_requisicion(id_parcialidad_requisicion),
+id_material_orden_requerida			INT NOT NULL REFERENCES materiales_ordenes_requeridas(id_material_orden_requerida),
 cantidad							INT NOT NULL,
 num_parcialidad						INT NOT NULL,
 fecha_solicitud						DATE,
@@ -174,12 +182,9 @@ fecha_entrega						DATE,
 unidad								VARCHAR(10),
 pecio_total							FLOAT
 );
+/**FIN TABLAS DEBILES 1*/
 
-
-
-/** FIN TABLAS DEBILES 1*/
-
-/** TABLAS RELACIONALES*/
+/**TABLAS RELACIONALES*/
 CREATE TABLE defectos_lotes(
 id_defecto_lote             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_defecto_producto         INT NOT NULL REFERENCES defectos_producto (id_defecto_producto),

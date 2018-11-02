@@ -65,7 +65,8 @@ tp.desc_tipo_proceso,
 mq.desc_maquina 
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo 
-JOIN materiales AS mt ON mt.id_material = op.id_material 
+JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
+JOIN materiales AS mt ON mt.id_material = mor.id_material
 JOIN productos AS pr ON pr.id_producto = op.id_producto 
 JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion 
 JOIN tipos_proceso AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso 
@@ -97,7 +98,8 @@ JOIN lotes_produccion AS lp ON lp.id_proceso_produccion = pp.id_proceso_producci
 JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina 
 JOIN todos_los_estados AS tes ON tes.id_estado = pp.id_estado
 JOIN tipos_proceso AS tp ON tp.id_tipo_proceso = pp.id_tipo_proceso
-JOIN materiales AS mt ON mt.id_material = op.id_material
+JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
+JOIN materiales AS mt ON mt.id_material = mor.id_material
 WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
 
 
@@ -138,7 +140,7 @@ pt.cantidad_total,
 pt.id_orden_produccion,
 pt.desc_material,
 pt.desc_maquina,
-op.barras_necesarias,
+mor.barras_necesarias,
 op.piezas_por_turno,
 op.turnos_necesarios,
 op.fecha_registro AS fecha_registro_op,
@@ -148,6 +150,35 @@ op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
 FROM bitacorapedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
+JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
 
 
+
+CREATE VIEW requisicion_ordenes AS
+SELECT
+mor.id_material_orden_requerida,
+mor.id_material,
+mor.id_requisicion,
+mor.barras_necesarias,
+pt.id_orden_trabajo,
+pt.clave_producto,
+pt.cantidad_total,
+pt.no_orden_compra,
+pt.id_orden_produccion,
+pt.piezas_por_turno,
+pt.desc_material,
+pt.desc_tipo_proceso,
+pt.desc_maquina,
+st.desc_estados
+FROM materiales_ordenes_requeridas AS mor 
+JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_produccion 
+JOIN estados AS st ON st.id_estado = mor.id_estado;
+
+
+
+
+select SUM(barras_necesarias) AS barras_necesarias ,desc_material from requisicion_ordenes AS ro GROUP BY desc_material;
+
+
+   
