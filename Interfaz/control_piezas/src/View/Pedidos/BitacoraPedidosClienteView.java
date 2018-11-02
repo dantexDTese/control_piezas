@@ -98,7 +98,6 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         rbtnSelecMes.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         rbtnSelecMes.setForeground(new java.awt.Color(255, 255, 255));
         rbtnSelecMes.setText("SELECCIONAR MES");
-        rbtnSelecMes.setOpaque(false);
 
         jButton1.setText("BUSCAR");
 
@@ -188,8 +187,8 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -206,7 +205,8 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(32, 32, 32)
-                        .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(23, 23, 23)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

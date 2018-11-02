@@ -38,7 +38,7 @@ public class AsignacionMaquinaAPedidoModel {
                     } while (rs.next());
                c.close(); 
             } catch (SQLException e) {
-                System.err.println("error: class: PlaneacionModel, Method:listaPedidosPendientes"+e.getMessage());
+                System.err.println("error: class: AsignacionMaquinaAPedido, Method:listaPedidosPendientes"+e.getMessage());
             }
         
         return pedidos;

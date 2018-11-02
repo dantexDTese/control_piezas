@@ -62,32 +62,11 @@ public class Principal extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH); 
         Toolkit t = Toolkit.getDefaultToolkit();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-       
-                
+        
+        
         
     }
     
-    private class fondo extends JPanel{
-        
-        private Image imagen;
-
-        private fondo() {
-            
-        }
-        public void paintComponents(Graphics g){
-            super.paintComponents(g);
-            
-            File file = new File("src/img/fondo.png");
-            try {
-                imagen = ImageIO.read(file);
-                g.drawImage(imagen,500,500, null);
-            } catch (IOException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            
-        }
-    }
 
 
     private void IntroducirPanle(JInternalFrame pnNuevo,JDesktopPane escritorio,Point punto) { 
@@ -150,7 +129,6 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setResizable(false);
 
         Escritorio.setBackground(new java.awt.Color(86, 9, 12));
 
@@ -158,7 +136,7 @@ public class Principal extends javax.swing.JFrame {
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 888, Short.MAX_VALUE)
+            .addGap(0, 1281, Short.MAX_VALUE)
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

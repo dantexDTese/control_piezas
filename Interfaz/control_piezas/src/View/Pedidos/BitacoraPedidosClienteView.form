@@ -56,7 +56,8 @@
                       <Group type="102" attributes="0">
                           <Component id="jPanel7" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                          <Component id="btnNuevaOrden" min="-2" pref="205" max="-2" attributes="0"/>
+                          <Component id="btnNuevaOrden" min="-2" pref="182" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -196,7 +197,6 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="SELECCIONAR MES"/>
-                <Property name="opaque" type="boolean" value="false"/>
               </Properties>
             </Component>
             <Component class="com.toedter.calendar.JMonthChooser" name="cbxSelecMes">
@@ -239,8 +239,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane2" pref="461" max="32767" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPane2" min="-2" pref="367" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

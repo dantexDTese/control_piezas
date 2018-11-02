@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS control_piezas_2;
+ DROP DATABASE IF EXISTS control_piezas_2;
 
 CREATE DATABASE control_piezas_2;    
 
@@ -207,6 +207,4 @@ id_material					INT NOT NULL REFERENCES materiales(id_material),
 id_proveedor				INT NOT NULL REFERENCES proveedores(id_proveedor),
 precio_unitario				FLOAT
 );
-
-
 /**FIN TABLAS RELACIONALES*/
