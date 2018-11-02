@@ -178,7 +178,6 @@ JOIN estados AS st ON st.id_estado = mor.id_estado;
 
 
 
-select SUM(barras_necesarias) AS barras_necesarias ,desc_material from requisicion_ordenes AS ro GROUP BY desc_material;
 
 
    

@@ -33,8 +33,8 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         return jtbListaMateriales;
     }
 
-    public JTable getJtbMateriales() {
-        return jtbMateriales;
+    public JTable getJtbMaterialesRequeridos() {
+        return jtbMaterialesRequeridos;
     }
 
     public JTable getJtbPendientes() {
@@ -95,7 +95,7 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jtbProductos = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jtbMateriales = new javax.swing.JTable();
+        jtbMaterialesRequeridos = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jtbListaMateriales = new javax.swing.JTable();
@@ -224,12 +224,12 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jPanel5.setBackground(new java.awt.Color(230, 230, 230));
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "MATERIALES", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Impact", 0, 18))); // NOI18N
 
-        jtbMateriales.setModel(new javax.swing.table.DefaultTableModel(
+        jtbMaterialesRequeridos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "MATERIAL", "CANT. TOTAL", "CANT. RESTANTE"
+                "MATERIAL", "CANT. BARRAS", "CANT. RESTANTE"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -240,12 +240,12 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        jtbMateriales.getTableHeader().setReorderingAllowed(false);
-        jScrollPane3.setViewportView(jtbMateriales);
-        if (jtbMateriales.getColumnModel().getColumnCount() > 0) {
-            jtbMateriales.getColumnModel().getColumn(0).setResizable(false);
-            jtbMateriales.getColumnModel().getColumn(1).setResizable(false);
-            jtbMateriales.getColumnModel().getColumn(2).setResizable(false);
+        jtbMaterialesRequeridos.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(jtbMaterialesRequeridos);
+        if (jtbMaterialesRequeridos.getColumnModel().getColumnCount() > 0) {
+            jtbMaterialesRequeridos.getColumnModel().getColumn(0).setResizable(false);
+            jtbMaterialesRequeridos.getColumnModel().getColumn(1).setResizable(false);
+            jtbMaterialesRequeridos.getColumnModel().getColumn(2).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -602,7 +602,7 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable jtbListaMateriales;
-    private javax.swing.JTable jtbMateriales;
+    private javax.swing.JTable jtbMaterialesRequeridos;
     private javax.swing.JTable jtbPendientes;
     private javax.swing.JTable jtbProductos;
     private javax.swing.JLabel lbFechaSolicitud;

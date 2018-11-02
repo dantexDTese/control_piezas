@@ -25,12 +25,18 @@ public class AgregarRequisicinesController {
         this.model = model;
         llenarListaPendientes();
         view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
+        
     }
+    
+    private void llenarListaProveedores(){
+        
+    }
+    
+    
     
     private void llenarListaPendientes(){
         ArrayList<Pedido> listaPendientes = model.listaOrdenesPendientes();
         Estructuras.limpiarTabla((DefaultTableModel) view.getJtbPendientes().getModel());
-        
         DefaultTableModel model = (DefaultTableModel) view.getJtbPendientes().getModel();
         for(int i = 0;i<listaPendientes.size();i++)
         model.addRow(new Object[]{
@@ -46,6 +52,7 @@ public class AgregarRequisicinesController {
             super.mousePressed(e);
             int fila = view.getJtbPendientes().rowAtPoint(e.getPoint());
             llenarListaProductos((int) view.getJtbPendientes().getValueAt(fila,0));                        
+            llenarListaMateriales((int) view.getJtbPendientes().getValueAt(fila,0));
         }
         
        private void llenarListaProductos(int noOrdenTrabajo){
@@ -60,14 +67,19 @@ public class AgregarRequisicinesController {
                 });
         }
        
-       private void llenarListaMateriales(){
-           
+       private void llenarListaMateriales(int noOrdenTrabajo){
+           ArrayList<AgregarRequisicionesModel.MaterialesRequisicion> materialesRequeridos = model.listaMaterialesRequeridos(noOrdenTrabajo);
+            Estructuras.limpiarTabla((DefaultTableModel) view.getJtbMaterialesRequeridos().getModel());
+            DefaultTableModel model = (DefaultTableModel) view.getJtbMaterialesRequeridos().getModel();
+            for(int i = 0;i<materialesRequeridos.size();i++)
+                model.addRow(new Object[]{
+                    materialesRequeridos.get(i).getMaterial(),
+                    materialesRequeridos.get(i).getBarrasNecesarias(),
+                    0
+                });
        }
         
     };
-    
-    
-    
     
     
 }

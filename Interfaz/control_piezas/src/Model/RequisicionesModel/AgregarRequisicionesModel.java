@@ -52,10 +52,50 @@ public class AgregarRequisicionesModel {
             } catch (SQLException e) {
                 
             }
-        
         return productosPendientes;
+    }  
+    
+    public ArrayList<MaterialesRequisicion> listaMaterialesRequeridos(int noOrdenTrabajo){
+        ArrayList<MaterialesRequisicion> materialesRequeridos = new ArrayList<>();
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "select SUM(barras_necesarias) AS barras_necesarias ,desc_material"
+                + " FROM requisicion_ordenes AS ro WHERE ro.id_orden_trabajo = "+noOrdenTrabajo+""
+                + " GROUP BY desc_material;";
+        if(c!=null)
+            
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    do {                        
+                        materialesRequeridos.add(new MaterialesRequisicion(rs.getInt(1),rs.getString(2)));
+                    } while (rs.next());                
+            } catch (SQLException e) {
+                System.err.println("error: class: AgregarRequisicionesModel method:listaMaterialesRequeridos "+e.getMessage());            
+            }
+        
+        return materialesRequeridos;
     }
     
+        
+    public final class MaterialesRequisicion{
+        private final String material;
+        private final int barrasNecesarias;
+
+        public MaterialesRequisicion(int barrasNecesarias,String material) {
+            this.material = material;
+            this.barrasNecesarias = barrasNecesarias;
+        }
+
+        public String getMaterial() {
+            return material;
+        }
+
+        public int getBarrasNecesarias() {
+            return barrasNecesarias;
+        }
+              
+    }
     
     
 }
