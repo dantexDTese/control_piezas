@@ -5,6 +5,7 @@ import Model.Estructuras;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
 import Model.RequisicionesModel.AgregarRequisicionesModel;
+import Model.RequisicionesModel.Proveedores;
 import View.Requisiciones.AgregarRequisiciones;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,8 +28,11 @@ public class AgregarRequisicinesController {
         view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
         
     }
+    ArrayList<Proveedores> listProveedores;
     
     private void llenarListaProveedores(){
+        listProveedores = model.listaProveedores();
+        view.getCbxNoProveedor().removeAllItems();
         
     }
     

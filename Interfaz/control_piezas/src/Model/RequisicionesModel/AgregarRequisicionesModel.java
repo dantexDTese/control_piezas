@@ -28,11 +28,14 @@ public class AgregarRequisicionesModel {
                     do{
                        pedidos.add(new Pedido(rs.getString(2),rs.getInt(1)));
                     }while(rs.next());
+                c.close();
             } catch (SQLException e) {
                 System.err.println("error class:AgregarRequisicionesModel method:listaOrdenesPendientes "+e.getMessage());
             }
         return pedidos;       
     }
+    
+    
     
     public ArrayList<ProductosPendientes> listaProductosPendientes(int noOrdenTrabajo){
         ArrayList<ProductosPendientes> productosPendientes = new ArrayList<>();
@@ -48,8 +51,9 @@ public class AgregarRequisicionesModel {
                     do {                        
                         productosPendientes.add(new ProductosPendientes(rs.getString(1),rs.getInt(2),rs.getString(3))); 
                     } while (rs.next());
-                
+                c.close();
             } catch (SQLException e) {
+                System.err.println("error: AgregarRequisicionesModel method:listaProductosPendientes "+e.getMessage());
                 
             }
         return productosPendientes;
@@ -69,12 +73,35 @@ public class AgregarRequisicionesModel {
                 if(rs.first())
                     do {                        
                         materialesRequeridos.add(new MaterialesRequisicion(rs.getInt(1),rs.getString(2)));
-                    } while (rs.next());                
+                    } while (rs.next());
+
+              c.close();
             } catch (SQLException e) {
                 System.err.println("error: class: AgregarRequisicionesModel method:listaMaterialesRequeridos "+e.getMessage());            
             }
         
         return materialesRequeridos;
+    }
+    
+    public ArrayList<Proveedores> listaProveedores(){
+        ArrayList<Proveedores> proveedores = new ArrayList<>();
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "SELECT * FROM proveedores";
+        if(c!= null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    do {                        
+                        proveedores.add(new Proveedores(rs.getInt(1),rs.getString(2),rs.getString(3)));
+                    } while (rs.next());
+                    c.close();
+            } catch (SQLException e) {
+                System.err.println("error: class:AgregarRequisicionesModel method: listaProveedores "+e.getMessage());
+            }
+                
+            
+            return proveedores;
     }
     
         
