@@ -71,6 +71,7 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tbPedidosClientes = new javax.swing.JTable();
 
+        setBorder(null);
         setVisible(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
@@ -230,7 +231,7 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1187, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(

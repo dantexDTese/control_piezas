@@ -7,6 +7,8 @@ import Model.PedidosModel.ProductosPendientes;
 import Model.RequisicionesModel.AgregarRequisicionesModel;
 import Model.RequisicionesModel.Proveedores;
 import View.Requisiciones.AgregarRequisiciones;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,24 +20,28 @@ public class AgregarRequisicinesController {
 
     private final AgregarRequisiciones view;
     private final AgregarRequisicionesModel model;
+    private ArrayList<Proveedores> listProveedores;
     
     public AgregarRequisicinesController(AgregarRequisiciones view,
                         AgregarRequisicionesModel model) {
    
         this.view = view;
         this.model = model;
+        this.listProveedores = model.listaProveedores();
         llenarListaPendientes();
+        llenarListaProveedores();
         view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
+        view.getCbxNoProveedor().addActionListener(listenerProveedorSeleccionado);
         
     }
-    ArrayList<Proveedores> listProveedores;
+    
     
     private void llenarListaProveedores(){
-        listProveedores = model.listaProveedores();
-        view.getCbxNoProveedor().removeAllItems();
-        
-    }
     
+        view.getCbxNoProveedor().removeAllItems();
+        for(int i = 0;i<listProveedores.size();i++)
+            view.getCbxNoProveedor().addItem(listProveedores.get(i).getNoProveedor()+"");
+    }
     
     
     private void llenarListaPendientes(){
@@ -49,7 +55,18 @@ public class AgregarRequisicinesController {
         });
     }
     
-    
+    private final ActionListener listenerProveedorSeleccionado = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(view.getCbxNoProveedor().getItemCount()>0){
+                Proveedores proveedor = listProveedores.get(
+                        Integer.parseInt(view.getCbxNoProveedor().getSelectedItem().toString()) - 1 );                
+                view.getTxtDescProveedor().setText(proveedor.getDescProveedor());
+                view.getTxtDireccion().setText(proveedor.getDireccion());   
+            }   
+        }
+    };
+            
     private final MouseAdapter listenerOrdenesPendientes = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -83,6 +100,18 @@ public class AgregarRequisicinesController {
                 });
        }
         
+    };
+    
+    private final MouseAdapter listenerMaterialesOrden = new MouseAdapter() {
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            
+            
+            
+        }
+    
     };
     
     

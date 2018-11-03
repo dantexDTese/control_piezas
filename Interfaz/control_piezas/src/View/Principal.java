@@ -70,7 +70,7 @@ public class Principal extends javax.swing.JFrame {
 
 
     private void IntroducirPanle(JInternalFrame pnNuevo,JDesktopPane escritorio,Point punto) { 
-            Dimension d = pnNuevo.getPreferredSize();
+        Dimension d = pnNuevo.getPreferredSize();
             pnNuevo.setSize(d);
             pnNuevo.setLocation(punto.x-pnNuevo.getWidth()/2,
                     punto.y-pnNuevo.getHeight()/2);
@@ -129,6 +129,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setUndecorated(true);
 
         Escritorio.setBackground(new java.awt.Color(86, 9, 12));
 
@@ -146,6 +147,11 @@ public class Principal extends javax.swing.JFrame {
         jMenu3.setText("Archivo                    ");
 
         jMenuItem1.setText("Salir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem1);
 
         jMenuBar2.add(jMenu3);
@@ -349,6 +355,10 @@ public class Principal extends javax.swing.JFrame {
             
     }//GEN-LAST:event_menuItemControlEntregaMPActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+            dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -381,6 +391,7 @@ public class Principal extends javax.swing.JFrame {
             public void run() {         
                 Principal p = new Principal();
                 p.setVisible(true);
+                
             }
         });
     }
