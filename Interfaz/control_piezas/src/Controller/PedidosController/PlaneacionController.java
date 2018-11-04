@@ -47,9 +47,14 @@ public class PlaneacionController  {
     private AsignarMaquinaAPedido vistaMaquinaPedido;
     
     public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
-        
+    
         this.vista = vista;
         this.model = model;
+        Hilo hilo = new Hilo();
+        hilo.start();
+        
+        /*
+        
         
         llenarListaMaquinas();
         
@@ -60,7 +65,27 @@ public class PlaneacionController  {
         this.vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});               
         this.vista.getJpCalendar().setSize(800,350);
         Estructuras.obtenerCalendario(this.vista.getJpCalendar(),this.vista.getCbxListaMaquinas().getSelectedItem().toString());        
+        */
+        
     }
+    
+    class Hilo extends Thread{
+
+        
+        @Override
+        public void run() {
+            super.run();
+        llenarListaMaquinas();
+        vista.getCbxListaMaquinas().addItemListener(maquinaSeleccionada);
+        llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+        vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});               
+        vista.getJpCalendar().setSize(800,350);
+        Estructuras.obtenerCalendario(vista.getJpCalendar(),vista.getCbxListaMaquinas().getSelectedItem().toString()); 
+            
+        }
+    
+    }
+    
     
     
     //Eventos
