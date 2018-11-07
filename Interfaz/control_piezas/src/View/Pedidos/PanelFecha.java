@@ -25,6 +25,13 @@ public class PanelFecha extends javax.swing.JPanel {
             
     }
 
+    public PanelFecha(int dia) {
+        initComponents();
+        lbFecha.setText(dia+"");
+        lbNameCANT.setText("");
+        lbNameOP.setText("");
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -252,22 +252,39 @@ IN orden_produccion INT,
 INOUT respuesta VARCHAR(150)
 )
 BEGIN
-	
     IF EXISTS (SELECT * FROM ordenes_produccion WHERE ordenes_produccion.id_orden_produccion = orden_produccion)
     THEN
-		
+
         UPDATE ordenes_produccion SET observaciones = observacion WHERE ordenes_produccion.id_orden_produccion = orden_produccion;
-			
         SET respuesta = 'OBSERVACION AGREGADA';
-			                
 	ELSE SET respuesta = 'NO FUE POSIBLE ENCONTRAR ESTA ORDEN DE TRABAJO';
-		
-		
     END IF;
     
 END //
 DELIMITER ;
 
+
+DELIMITER //
+CREATE PROCEDURE modificar_barras_necesarias(
+IN id_orden_produccion INT,
+IN barras_necesarias	INT,
+INOUT respuesta	VARCHAR(150)
+)
+BEGIN
+	IF EXISTS(SELECT * FROM materiales_ordenes_requeridas AS bn 
+    WHERE bn.id_orden_produccion = id_orden_produccion) THEN			
+		SET SQL_SAFE_UPDATES=0;		      
+        UPDATE materiales_ordenes_requeridas AS bn SET bn.barras_necesarias =  barras_necesarias
+        WHERE bn.id_orden_produccion = id_orden_produccion;
+        SET SQL_SAFE_UPDATES=1;		      
+        SET respuesta = 'SE HA MODIFICADO LA ORDEN DE PRODUCCION.';		
+        ELSE SET respuesta = 'OCURRIO UN ERROR AL MODIFICAR LA ORDEN';			
+    END IF;
+END //
+DELIMITER ;
+
+
+/*
 DELIMITER //
 CREATE PROCEDURE obtener_orden_planeada(
 IN fecha DATE,
@@ -284,9 +301,10 @@ BEGIN
     JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
 	JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina    
     WHERE fecha_planeada = fecha AND mq.desc_maquina = d_maquina;
-
     SET no_orden = @orden;
     SET cantidad = @cant;
 
 END //
 DELIMITER ;
+*/
+

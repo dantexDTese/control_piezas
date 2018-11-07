@@ -11,5 +11,4 @@ BEGIN
 	JOIN parcialidades_orden_requerida AS por ON ro.id_material_orden_requerida = por.id_material_orden_requerida 
     WHERE ro.desc_material = desc_material GROUP BY desc_material; 
 
-	
 END ; //

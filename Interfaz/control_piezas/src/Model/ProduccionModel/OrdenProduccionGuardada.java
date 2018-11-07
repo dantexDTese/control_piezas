@@ -26,7 +26,15 @@ public class OrdenProduccionGuardada {
     private final  String fechaFinOP;
     private final  String observacionesOP;
 
-    public OrdenProduccionGuardada(int ordenTrabajo, String noOrdenCompra, String fechaEntregaPedido, String fechaConfirmacionEntregaPedido, String fechaRecepcionPedido, String descContacto, String nombreCliente, int cantidadCliente, String claveProducto, int cantidadTotal, int ordenProduccion, String descMaterial, String descMaquina, int barrasNecesarias, int piezasPorTurno, String fechaRegistroOP, String fechaMontaje, String fechaDesmontaje, String fechaInicioOP, String fechaFinOP, String observacionesOP) {
+    public OrdenProduccionGuardada(int ordenTrabajo, String noOrdenCompra, 
+            String fechaEntregaPedido, String fechaConfirmacionEntregaPedido,
+            String fechaRecepcionPedido, String descContacto, String nombreCliente,
+            int cantidadCliente, String claveProducto, int cantidadTotal,
+            int ordenProduccion, String descMaterial, String descMaquina, 
+            int barrasNecesarias, int piezasPorTurno, String fechaRegistroOP,
+            String fechaMontaje,String fechaInicioOP, String fechaDesmontaje,
+            String fechaFinOP, String observacionesOP) {
+        
         this.ordenTrabajo = ordenTrabajo;
         this.noOrdenCompra = noOrdenCompra;
         this.fechaEntregaPedido = fechaEntregaPedido;

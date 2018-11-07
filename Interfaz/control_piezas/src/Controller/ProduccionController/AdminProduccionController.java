@@ -5,10 +5,14 @@ import Model.Estructuras;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.OrdenProduccionGuardada;
 import View.Produccion.AdminProduccion;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,11 +24,21 @@ public class AdminProduccionController {
     
     
     public AdminProduccionController(AdminProduccion vista, AdminProduccionModel model) {
+      
         this.vista = vista;
         this.model = model;
         llenarTablaOrdenesTrabajo();
         this.vista.getJtbOrdenesTrabajo().addMouseListener(listenerSeleccionOrdenTrabajo);
         this.vista.getJtbOrdenesProduccion().addMouseListener(listenerSeleccionOrdenProduccion);
+        this.vista.getBtnModificar().addActionListener(listenerBotones);
+        this.vista.getBtnGuardarModificacion().addActionListener(listenerBotones);
+        
+    }
+    
+    private void desActivarModificacion(){
+        vista.getTxtBarrasNecesarias().setEditable(false);
+        vista.getTxtTurnosNecesarios().setEditable(false);   
+        vista.getJdcDesmontajeMolde().setEnabled(false);
     }
     
     private void llenarTablaOrdenesTrabajo(){
@@ -44,6 +58,36 @@ public class AdminProduccionController {
     }
     
     
+    private final ActionListener listenerBotones = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() == vista.getBtnModificar())
+                actiarModificacion();
+            else if(e.getSource() == vista.getBtnGuardarModificacion())
+                guardarCambios();
+        }
+      
+        private void guardarCambios(){
+            try {
+                model.modificarBarrasNecesarias(
+                        Integer.parseInt(vista.getLbNoOP().getText()),
+                        Integer.parseInt(vista.getTxtBarrasNecesarias().toString()));    
+            } catch (NumberFormatException e) {
+                System.err.println("error al modificar las barras necesarias");
+            }
+            
+            llenarOrdenProduccion(Integer.parseInt(vista.getLbNoOP().getText()));
+            
+        }
+        
+         private void actiarModificacion(){
+                vista.getTxtBarrasNecesarias().setEditable(true);
+                vista.getTxtTurnosNecesarios().setEditable(true);   
+                vista.getJdcDesmontajeMolde().setEnabled(true);
+        }
+    };
+    
+    
     private final MouseListener listenerSeleccionOrdenTrabajo = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -51,7 +95,7 @@ public class AdminProduccionController {
           
                 int fila = vista.getJtbOrdenesTrabajo().rowAtPoint(e.getPoint());
                 llenarTablaOrdenesProduccion(Integer.parseInt(vista.getJtbOrdenesTrabajo().getValueAt(fila, 0).toString()));
-               
+                
         }
     
         private void llenarTablaOrdenesProduccion(int ordenTrabajo){
@@ -76,10 +120,11 @@ public class AdminProduccionController {
             super.mousePressed(e);            
             int fila = vista.getJtbOrdenesProduccion().rowAtPoint(e.getPoint());
             llenarOrdenProduccion((Integer)vista.getJtbOrdenesProduccion().getValueAt(fila,0));
-            
+            desActivarModificacion();
         }
-                
-        private void llenarOrdenProduccion(Integer noOrdenProduccion){
+    };
+    
+    private void llenarOrdenProduccion(Integer noOrdenProduccion){
             OrdenProduccionGuardada orden = model.obtenerOrdenProduccion(noOrdenProduccion);
             if(orden!= null){
                 vista.getLbNoOP().setText(orden.getOrdenProduccion()+"");
@@ -91,17 +136,16 @@ public class AdminProduccionController {
                 vista.getLbMaterial().setText(orden.getDescMaterial());
                 vista.getLbMaquina().setText(orden.getDescMaquina());
                 vista.getLbCantidadProduccir().setText(orden.getCantidadTotal()+"");
-                vista.getLbBarrasNecesarias().setText(orden.getBarrasNecesarias()+"");
+                vista.getTxtBarrasNecesarias().setText(orden.getBarrasNecesarias()+"");
                 vista.getLbFechaMontajeMolde().setText(orden.getFechaMontaje());
                 vista.getLbFechaArranqueProceso().setText(orden.getFechaInicioOP());
-                vista.getLbFechaDesmontajeModel().setText(orden.getFechaDesmontaje());
+                if(orden.getFechaDesmontaje() != null && !"".equals(orden.getFechaDesmontaje()))
+                    vista.getJdcDesmontajeMolde().setDate(new Date(orden.getFechaDesmontaje()));
                 
             }
             else
                 JOptionPane.showMessageDialog(null,"error");
                 
         }
-        
-    };
     
 }

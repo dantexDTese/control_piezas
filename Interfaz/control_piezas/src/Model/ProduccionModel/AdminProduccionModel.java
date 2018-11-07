@@ -4,11 +4,14 @@ package Model.ProduccionModel;
 import Model.Conexion;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 
 public class AdminProduccionModel {
@@ -92,6 +95,24 @@ public class AdminProduccionModel {
         
         
         return orden;
+    }
+
+    
+
+    public void modificarBarrasNecesarias(int noOrden,int barras) {
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "{Call modificar_barras_necesarias(?,?,?)}";
+        if(c!=null)
+            try {
+                CallableStatement cs = c.prepareCall(query);
+                cs.setInt(1,noOrden);
+                cs.setInt(2, barras);
+                cs.registerOutParameter(3,Types.VARCHAR);
+                cs.execute();
+                JOptionPane.showMessageDialog(null, cs.getString(3));
+            } catch (SQLException e) {
+                System.err.println("Error: Class: AdminProduccionModel Method:modificarBarrasNecesarias "+e.getMessage());
+            }
     }
      
     public final class OrdenTrabajo extends Pedido{

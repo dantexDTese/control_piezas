@@ -10,13 +10,28 @@ import java.util.logging.Logger;
 public class Conexion {
     
     private Connection nuevaConexion;
-    private static String driver = "com.mysql.jdbc.Driver";
+    private static final String driver = "com.mysql.jdbc.Driver";
+    /**
+     * CONEXION REMOTA
+     *
+    
     private static String host = "69.175.92.67:3306/";
     private static String user = "tlpnowlq_gmcmmt";
     private static String password = ",2004conyla";
     private static String dataBaseName = "tlpnowlq_control_piezas";
-    private static String url="jdbc:mysql://"+host+dataBaseName;
- 
+    */
+    
+    /**
+    * CONEXION REMOTA LOCAL
+    **/ 
+    private static final String host = "localhost/";
+    private static final String user = "root";
+    private static final String password = "sasa";
+    private static final String dataBaseName = "control_piezas_2";
+    
+    
+    private static final String url="jdbc:mysql://"+host+dataBaseName;
+    
     private Conexion() {
         nuevaConexion = null;
         try {

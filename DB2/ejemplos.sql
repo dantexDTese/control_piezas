@@ -26,10 +26,15 @@ SELECT * FROM procesando_producto;
 
 select * from productos;
 select * from ordenes_produccion;
+ 
+
+SELECT * FROM materiales_ordenes_requeridas;
 
 
 select * from materiales_ordenes_requeridas;
 
+select * from ordenes_produccion;
+select * from ver_ordenes_produccion;
 
 
 

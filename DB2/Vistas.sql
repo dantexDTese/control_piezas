@@ -1,6 +1,8 @@
 
 USE control_piezas_2;
 
+    
+
 
 /*yaaaa*/
 CREATE VIEW bitacoraPedidos 
@@ -31,7 +33,7 @@ fecha_recepcion
 from bitacoraPedidos AS bp JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
-pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" ORDER BY no_orden_compra;
+pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
 
 
 CREATE VIEW productosEnEspera
@@ -46,7 +48,7 @@ JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo JOIN ord
 ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_producto
-WHERE estados.desc_estados = "PLANEACION" ORDER BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
+WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
 
 /*ya*/
 
@@ -148,10 +150,10 @@ op.fecha_montaje,op.fecha_desmontaje,
 op.fecha_inicio AS fecha_inicio_op,
 op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
-FROM bitacoraPedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
+FROM bitacorapedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
-ORDER BY pt.id_orden_produccion;
+GROUP BY pt.id_orden_produccion;
 
 
 
@@ -177,8 +179,10 @@ JOIN estados AS st ON st.id_estado = mor.id_estado;
 
 
 
+CREATE VIEW fechas_planeadas
+AS
+SELECT op.id_orden_produccion,lpn.cantidad_planeada,DAY(fecha_planeada) AS dia ,fecha_planeada,mq.desc_maquina 
+FROM lotes_planeados AS lpn JOIN ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
+JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
+JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
 
-select SUM(barras_necesarias) AS barras_necesarias ,desc_material from requisicion_ordenes AS ro GROUP BY desc_material;
-
-
-   

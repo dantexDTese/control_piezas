@@ -8,6 +8,7 @@ import View.Pedidos.FechaCalendario;
 import View.Pedidos.PanelFecha;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -46,20 +47,29 @@ public class CalendarioController {
     
     private void llenarTabla(){
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtCalendario().getModel());
+        
+        
         int anio = vista.getJycAnioCalendario().getValue();
         int mes = vista.getJmtMesCalendario().getMonth()+1;
         int dias = diasMes(anio, mes);
         int zeller = obtenerZeller(anio, mes);
         int diaSemana = 0;
         PanelFecha [] fechas = new PanelFecha[7];
+        ArrayList<CalendarioModel.OrdenPlaneada> listOrdenesMes = model.obtenerOrdenesPlaneadas(dias,crearFecha(1, mes, anio), descMaquina);
         
         for(int i = 0;i<zeller;i++,diaSemana++)
             fechas[i] = null;
         
+        
+        
         for(int i = 0;i<dias;i++){
-            CalendarioModel.OrdenPlaneada orden = model.obtenerOrdenPlaneada(crearFecha(i+1, mes, anio), descMaquina);
-            fechas[diaSemana] = new PanelFecha(i+1,orden.getNoOrden(),orden.getCantidad());
+            CalendarioModel.OrdenPlaneada orden = obtenerOrden(i+1, listOrdenesMes);
             
+            if(orden != null)
+                fechas[diaSemana] = new PanelFecha(i+1,orden.getNoOrden(),orden.getCantidad());
+            else 
+                fechas[diaSemana] = new PanelFecha(i+1);
+        
             if(diaSemana==6){
                 agregarCalendario(fechas);
                 diaSemana = 0;
@@ -70,6 +80,15 @@ public class CalendarioController {
             agregarCalendario(fechas);
                 
     }
+    
+    private CalendarioModel.OrdenPlaneada obtenerOrden(int dia,ArrayList<CalendarioModel.OrdenPlaneada> listOrdenesMes){
+        for(int i = 0;i<listOrdenesMes.size();i++)
+            if(listOrdenesMes.get(i).getDia() == dia)
+                return listOrdenesMes.get(i);
+                
+                return null;
+    }
+    
     
     private int obtenerZeller(int anio, int mes){
         int a = (14-mes)/12;
