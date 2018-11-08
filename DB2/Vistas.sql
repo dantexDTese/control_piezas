@@ -124,6 +124,7 @@ JOIN productos AS pr ON pr.id_producto = op.id_producto
 JOIN estados AS st ON st.id_estado = op.id_estado;
 
 
+SELECT * FROM ver_ordenes_produccion JOIN parcialidades_requisicion;
 
 
 CREATE VIEW ver_ordenes_produccion
@@ -155,7 +156,7 @@ JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
 
-
+select * from requisicion_ordenes;
 
 CREATE VIEW requisicion_ordenes AS
 SELECT

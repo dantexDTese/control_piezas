@@ -203,6 +203,8 @@ BEGIN
 END //
 DELIMITER ;
 
+
+
 DELIMITER //
 CREATE PROCEDURE agregar_lotes_planeados(
 IN id_orden_produccion INT,
@@ -231,16 +233,25 @@ BEGIN
 				SET nuevo_piezas_por_turno = nueva_cantidad_total;
                 SET nueva_cantidad_total = 0;
             END IF;
-								
+			
 			INSERT INTO lotes_planeados(id_orden_produccion,cantidad_planeada,fecha_planeada)
-			VALUES(id_orden_produccion,nuevo_piezas_por_turno,ADDDATE(fecha_inicio_produccion,INTERVAL iterador DAY));        		            
-        
+			VALUES(id_orden_produccion,nuevo_piezas_por_turno,fecha_inicio_produccion);        		            
+			
+            dias_semana_loop: LOOP
+            
+				SET fecha_inicio_produccion = ADDDATE(fecha_inicio_produccion,INTERVAL 1 DAY);
+				
+				IF WEEKDAY(fecha_inicio_produccion) < 5 THEN
+					LEAVE dias_semana_loop;
+				END IF;
+            
+            END LOOP dias_semana_loop;
+			
         SET iterador = iterador + 1;        			
         
       END LOOP my_loop;
       
-    END IF;
-    
+    END IF;    
 END //
 DELIMITER ;
 
@@ -282,29 +293,4 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
-
-
-/*
-DELIMITER //
-CREATE PROCEDURE obtener_orden_planeada(
-IN fecha DATE,
-IN d_maquina VARCHAR(50),
-INOUT no_orden INT,
-INOUT cantidad INT
-)
-BEGIN
-	DECLARE orden INT;
-    DECLARE cant  INT;
-    
-    SELECT @orden := op.id_orden_produccion,@cant := lpn.cantidad_planeada FROM lotes_planeados AS lpn JOIN
-    ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
-    JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
-	JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina    
-    WHERE fecha_planeada = fecha AND mq.desc_maquina = d_maquina;
-    SET no_orden = @orden;
-    SET cantidad = @cant;
-
-END //
-DELIMITER ;
-*/
 

@@ -4,9 +4,6 @@ import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
 import View.Pedidos.AsignarMaquinaAPedido;
-import ds.desktop.notify.DesktopNotify;
-import ds.desktop.notify.NotifyTheme;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 

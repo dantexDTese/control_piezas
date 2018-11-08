@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 
 public class AsignacionMaquinaAPedidoModel {
@@ -60,7 +59,7 @@ public class AsignacionMaquinaAPedidoModel {
                                 rs.getInt(2), rs.getString(3), rs.getInt(4)));                        
                     } while (rs.next());
                 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("mensaje: class:AsignacionMaquinaAPedido"
                         + "Method:listaProductosPendientes"+e.getMessage());
             }

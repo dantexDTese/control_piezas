@@ -104,16 +104,70 @@ public class AgregarRequisicionesModel {
             return proveedores;
     }
     
+    public final class ParcialidadMaterial extends  MaterialesRequisicion{
+        private int noPartida;
+        //private final String material;
+        private int noParcialidad;
+        private String fechaSolicitadaParcialidadMaterial;
+        private String cuentaCargo;
+        private String unidad;
+        private int cantidad;
+        private int precioUnitario;
+        private int precioTotal;
+
+        public ParcialidadMaterial(int noPartida,int noParcialidad,String material) {
+            super(material);
+            this.noParcialidad = noParcialidad;
+            this.noPartida = noPartida;
+        }
         
-    public final class MaterialesRequisicion{
+        public int getNoPartida() {
+            return noPartida;
+        }
+
+        public int getNoParcialidad() {
+            return noParcialidad;
+        }
+
+        public String getFechaSolicitadaParcialidadMaterial() {
+            return fechaSolicitadaParcialidadMaterial;
+        }
+
+        public String getCuentaCargo() {
+            return cuentaCargo;
+        }
+
+        public String getUnidad() {
+            return unidad;
+        }
+
+        public int getCantidad() {
+            return cantidad;
+        }
+
+        public int getPrecioUnitario() {
+            return precioUnitario;
+        }
+
+        public int getPrecioTotal() {
+            return precioTotal;
+        }
+    }
+    
+        
+    public class MaterialesRequisicion{
         private final String material;
-        private final int barrasNecesarias;
+        private int barrasNecesarias;
 
         public MaterialesRequisicion(int barrasNecesarias,String material) {
             this.material = material;
             this.barrasNecesarias = barrasNecesarias;
         }
 
+        public MaterialesRequisicion(String material) {
+            this.material = material;
+        }
+        
         public String getMaterial() {
             return material;
         }

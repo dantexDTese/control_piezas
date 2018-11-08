@@ -41,9 +41,8 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
-
-select * from PedidosPendientes;
-
 INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR1','DIRECCION1');
 INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR2','DIRECCION2');
 INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR3','DIRECCION3');
+
+

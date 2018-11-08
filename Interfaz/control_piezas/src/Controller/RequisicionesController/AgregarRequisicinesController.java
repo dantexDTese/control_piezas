@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -21,29 +22,30 @@ public class AgregarRequisicinesController {
     private final AgregarRequisiciones view;
     private final AgregarRequisicionesModel model;
     private ArrayList<Proveedores> listProveedores;
-    
+    private ArrayList<AgregarRequisicionesModel.ParcialidadMaterial> listaParcialidad;
     public AgregarRequisicinesController(AgregarRequisiciones view,
                         AgregarRequisicionesModel model) {
-   
+        
+        this.listaParcialidad = new ArrayList<>();
+        this.noOrdenSeleccionada = null;   
         this.view = view;
         this.model = model;
         this.listProveedores = model.listaProveedores();
         llenarListaPendientes();
         llenarListaProveedores();
-        view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
-        view.getCbxNoProveedor().addActionListener(listenerProveedorSeleccionado);
-        
+        this.view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
+        this.view.getCbxNoProveedor().addActionListener(listenerProveedorSeleccionado);
+        this.view.getJtbMaterialesRequeridos().addMouseListener(listenerMaterialesOrden);
     }
     
     
-    private void llenarListaProveedores(){
-    
+    private void llenarListaProveedores(){    
         view.getCbxNoProveedor().removeAllItems();
         for(int i = 0;i<listProveedores.size();i++)
             view.getCbxNoProveedor().addItem(listProveedores.get(i).getNoProveedor()+"");
     }
     
-    
+    private Integer noOrdenSeleccionada;
     private void llenarListaPendientes(){
         ArrayList<Pedido> listaPendientes = model.listaOrdenesPendientes();
         Estructuras.limpiarTabla((DefaultTableModel) view.getJtbPendientes().getModel());
@@ -72,8 +74,9 @@ public class AgregarRequisicinesController {
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
             int fila = view.getJtbPendientes().rowAtPoint(e.getPoint());
-            llenarListaProductos((int) view.getJtbPendientes().getValueAt(fila,0));                        
-            llenarListaMateriales((int) view.getJtbPendientes().getValueAt(fila,0));
+            noOrdenSeleccionada = (int) view.getJtbPendientes().getValueAt(fila,0);
+            llenarListaProductos(noOrdenSeleccionada);                        
+            llenarListaMateriales(noOrdenSeleccionada);
         }
         
        private void llenarListaProductos(int noOrdenTrabajo){
@@ -102,17 +105,32 @@ public class AgregarRequisicinesController {
         
     };
     
+    
+    
+    
     private final MouseAdapter listenerMaterialesOrden = new MouseAdapter() {
         
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
+            if(e.getClickCount() == 2){
+                JOptionPane.showConfirmDialog(null,"¿Segur@ que desea comenzar la requisicion?");
+                int fila = view.getJtbMaterialesRequeridos().rowAtPoint(e.getPoint());
+                inicializarTabla(view.getJtbMaterialesRequeridos().getValueAt(fila, 0).toString());
+            }
             
-            
-            
+        }
+        
+        private void inicializarTabla(String material){
+            Estructuras.limpiarTabla((DefaultTableModel) view.getJtbListaMateriales().getModel());
+            DefaultTableModel modelTabla = (DefaultTableModel) view.getJtbListaMateriales().getModel();
+            int noPartida = modelTabla.getRowCount()+1;
+            modelTabla.addRow(new Object[]{noPartida,material});            
         }
     
     };
+    
+    
     
     
 }

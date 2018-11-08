@@ -71,9 +71,9 @@ public class AdminProduccionController {
             try {
                 model.modificarBarrasNecesarias(
                         Integer.parseInt(vista.getLbNoOP().getText()),
-                        Integer.parseInt(vista.getTxtBarrasNecesarias().toString()));    
+                        Integer.parseInt(vista.getTxtBarrasNecesarias().getText()));    
             } catch (NumberFormatException e) {
-                System.err.println("error al modificar las barras necesarias");
+                System.err.println("error al modificar las barras necesarias " +e.getMessage());
             }
             
             llenarOrdenProduccion(Integer.parseInt(vista.getLbNoOP().getText()));
