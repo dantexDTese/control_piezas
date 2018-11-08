@@ -46,3 +46,4 @@ INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR2','DIRECCION
 INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR3','DIRECCION3');
 
 
+	

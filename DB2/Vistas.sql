@@ -162,10 +162,10 @@ JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
 
 CREATE VIEW requisicion_ordenes AS
 SELECT
-mr.id_material_orden_requerida,
+mr.id_material_requerido,
 mr.id_material,
 mr.id_requisicion,
-mr.barras_necesarias,
+mor.barras_necesarias,
 pt.id_orden_trabajo,
 pt.clave_producto,
 pt.cantidad_total,
@@ -178,4 +178,5 @@ pt.desc_maquina,
 st.desc_estados
 FROM materiales_ordenes_requeridas AS mor 
 JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_produccion 
-JOIN estados AS st ON st.id_estado = mor.id_estado;
+JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
+JOIN estados AS st ON st.id_estado = mr.id_estado;

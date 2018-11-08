@@ -114,14 +114,13 @@ BEGIN
     DECLARE id_nuevo_estado INT;
     DECLARE id_producto INT;
     DECLARE cantidad_por_lote_planeado INT;
-    
+    DECLARE id_orden_trabajo INT;
 	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion)
     THEN
 		        
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
         SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
-        
         /*procesos para seleccionar el estado*/
 		SELECT @id_nuevo_estado := todos_los_estados.id_estado 
         FROM todos_los_estados WHERE  desc_tipo_estado = 'PROCESOS DE PRODUCCION'
@@ -144,7 +143,12 @@ BEGIN
         
         
         IF n_orden = 1 THEN
-			INSERT INTO requisiciones(fecha_creacion) VALUES(NOW());
+			
+            SELECT @id_orden_trabajo := ot.id_orden_trabajo FROM ordenes_trabajo AS ot WHERE ot.id_orden_trabajo = 
+			(SELECT op.id_orden_trabajo FROM ordenes_produccion  AS op WHERE op.id_orden_produccion = id_orden_produccion);
+		
+			INSERT INTO requisiciones(id_orden_trabajo,fecha_creacion) VALUES(@id_orden_trabajo,NOW());
+            
         END IF;
         
 		 call agregar_material_orden_requerida(id_orden_produccion,@id_material);
@@ -160,6 +164,9 @@ BEGIN
 END //
 DELIMITER ;            
 
+select * from requisiciones;
+
+
 DELIMITER //
 CREATE PROCEDURE agregar_material_orden_requerida(
 IN id_orden_produccion	INT,
@@ -168,12 +175,23 @@ IN id_material			INT
 BEGIN
 	DECLARE id_requisicion INT;    
     DECLARE id_estado 		INT;
-    SELECT @id_requisicion := max(requisiciones.id_requisicion) FROM requisiciones;	
-
-    SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'REQUISICIONES' and desc_estados = 'ABIERTO';
+    DECLARE id_material_requerido INT;
     
-    INSERT INTO materiales_ordenes_requeridas(id_orden_produccion,id_material,id_requisicion,id_estado) 
-    VALUES(id_orden_produccion,id_material,@id_requisicion,@id_estado);    
+    SELECT @id_requisicion := max(requisiciones.id_requisicion) FROM requisiciones;	
+    
+    IF NOT EXISTS(SELECT * FROM  materiales_requeridos AS mr 
+    WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion) THEN    
+		SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'REQUISICIONES' and desc_estados = 'ABIERTO';
+		INSERT INTO materiales_requeridos(id_material,id_estado,id_requisicion) 
+		VALUES(id_material,@id_estado,@id_requisicion);    
+    END IF;
+    
+    SELECT @id_material_requerido := mr.id_material_requerido 
+    FROM  materiales_requeridos AS mr WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
+    
+    INSERT INTO materiales_ordenes_requeridas(id_material_requerido,id_orden_produccion)
+    VALUES(@id_material_requerido,@id_orden_produccion);    		    
+    
 END	//
 DELIMITER ;
 
@@ -189,10 +207,8 @@ IN id_orden_produccion		INT,
 IN id_producto				INT
 )
 BEGIN
-
     UPDATE ordenes_produccion 
     SET 
-    /*ordenes_produccion.id_material = @id_material, /*cambiar*/
     ordenes_produccion.worker = nuevo_worker,
     ordenes_produccion.cantidad_total = nueva_cantidad_total,
     ordenes_produccion.fecha_montaje = fecha_montaje_molde,
@@ -282,14 +298,29 @@ IN barras_necesarias	INT,
 INOUT respuesta	VARCHAR(150)
 )
 BEGIN
+		
+	DECLARE id_material_requerido INT;
+    
 	IF EXISTS(SELECT * FROM materiales_ordenes_requeridas AS bn 
     WHERE bn.id_orden_produccion = id_orden_produccion) THEN			
-		SET SQL_SAFE_UPDATES=0;		      
+		
+        SELECT @id_material_requerido := mr.id_material_requerido FROM materiales_requeridos AS mr JOIN
+        materiales_ordenes_requeridas AS mor ON mor.id_material_requerido = mr.id_material_requerido WHERE
+        mor.id_orden_produccion = id_orden_produccion;
+        
+        SET SQL_SAFE_UPDATES=0;		      
         UPDATE materiales_ordenes_requeridas AS bn SET bn.barras_necesarias =  barras_necesarias
         WHERE bn.id_orden_produccion = id_orden_produccion;
+        
+        UPDATE materiales_requeridos SET cantidad_total = cantidad_total + barras_necesarias 
+        WHERE id_material_requerido = @id_material_requerido;
+        
+        
         SET SQL_SAFE_UPDATES=1;		      
         SET respuesta = 'SE HA MODIFICADO LA ORDEN DE PRODUCCION.';		
         ELSE SET respuesta = 'OCURRIO UN ERROR AL MODIFICAR LA ORDEN';			
+        
+        
     END IF;
 END //
 DELIMITER ;
