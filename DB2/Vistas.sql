@@ -1,8 +1,4 @@
-
 USE control_piezas_2;
-
-    
-
 
 /*yaaaa*/
 CREATE VIEW bitacoraPedidos 
@@ -68,7 +64,8 @@ mq.desc_maquina
 from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo 
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
-JOIN materiales AS mt ON mt.id_material = mor.id_material
+JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
+JOIN materiales AS mt ON mt.id_material = mr.id_material
 JOIN productos AS pr ON pr.id_producto = op.id_producto 
 JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion 
 JOIN tipos_proceso AS tp ON pp.id_tipo_proceso = tp.id_tipo_proceso 
@@ -101,7 +98,8 @@ JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina
 JOIN todos_los_estados AS tes ON tes.id_estado = pp.id_estado
 JOIN tipos_proceso AS tp ON tp.id_tipo_proceso = pp.id_tipo_proceso
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
-JOIN materiales AS mt ON mt.id_material = mor.id_material
+JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
+JOIN materiales AS mt ON mt.id_material = mr.id_material
 WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PRODUCCION';
 
 
@@ -122,9 +120,6 @@ from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido
 JOIN ordenes_produccion AS op ON op.id_orden_trabajo = ot.id_orden_trabajo
 JOIN productos AS pr ON pr.id_producto = op.id_producto
 JOIN estados AS st ON st.id_estado = op.id_estado;
-
-
-SELECT * FROM ver_ordenes_produccion JOIN parcialidades_requisicion;
 
 
 CREATE VIEW ver_ordenes_produccion
@@ -156,14 +151,21 @@ JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
 
-select * from requisicion_ordenes;
+
+CREATE VIEW fechas_planeadas
+AS
+SELECT op.id_orden_produccion,lpn.cantidad_planeada,DAY(fecha_planeada) AS dia ,fecha_planeada,mq.desc_maquina 
+FROM lotes_planeados AS lpn JOIN ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
+JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
+JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
+
 
 CREATE VIEW requisicion_ordenes AS
 SELECT
-mor.id_material_orden_requerida,
-mor.id_material,
-mor.id_requisicion,
-mor.barras_necesarias,
+mr.id_material_orden_requerida,
+mr.id_material,
+mr.id_requisicion,
+mr.barras_necesarias,
 pt.id_orden_trabajo,
 pt.clave_producto,
 pt.cantidad_total,
@@ -177,13 +179,3 @@ st.desc_estados
 FROM materiales_ordenes_requeridas AS mor 
 JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_produccion 
 JOIN estados AS st ON st.id_estado = mor.id_estado;
-
-
-
-CREATE VIEW fechas_planeadas
-AS
-SELECT op.id_orden_produccion,lpn.cantidad_planeada,DAY(fecha_planeada) AS dia ,fecha_planeada,mq.desc_maquina 
-FROM lotes_planeados AS lpn JOIN ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
-JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
-JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
-

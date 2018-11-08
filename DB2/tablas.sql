@@ -10,8 +10,6 @@ id_material          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_material       VARCHAR (100) NOT NULL
 );
 
-
-
 CREATE TABLE productos(
 id_producto        INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 clave_producto     VARCHAR (50) NOT NULL    
@@ -109,7 +107,6 @@ fecha_fin               DATE,
 observaciones			VARCHAR(250)      
 );
 
-
 CREATE TABLE lotes_planeados(
 id_lote_planeado 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_produccion INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
@@ -142,6 +139,7 @@ tiempo_muerto               TIME
 
 CREATE TABLE requisiciones(
 id_requisicion 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_orden_trabajo    INT NOT NULL REFERENCES ordenes_trabajo(id_orden_trabajo),
 fecha_creacion		DATE,
 fecha_cerrarda		DATE
 );
@@ -149,13 +147,18 @@ fecha_cerrarda		DATE
 
 CREATE TABLE materiales_ordenes_requeridas(
 id_material_orden_requerida 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_material_requerido           INT REFERENCES materiales_requeridos(id_material_requerido),
 id_orden_produccion				INT REFERENCES ordenes_produccion(id_orden_produccion),
-id_material						INT REFERENCES materiales(id_material),
-id_requisicion					INT REFERENCES requisiciones(id_requisicion),
-id_estado							INT NOT NULL REFERENCES estados(id_estado),
 barras_necesarias				INT 
 );
 
+CREATE TABLE materiales_requeridos(
+id_material_requerido   INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_material             INT NOT NULL REFERENCES materiales(id_material),
+id_estado               INT NOT NULL REFERENCES estados(id_estado),
+id_requisicion          INT NOT NULL REFERENCES requisiciones(id_requisicion),
+cantidad_total          INT
+);
 
 CREATE TABLE parcialidades_requisicion(
 id_parcialidad_requisicion		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -174,7 +177,7 @@ TOTAL							FLOAT
 CREATE TABLE parcialidades_orden_requerida(
 id_parcialidad_orden_requerida		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_parcialidad_requisicion			INT NOT NULL REFERENCES parcialidades_requisicion(id_parcialidad_requisicion),
-id_material_orden_requerida			INT NOT NULL REFERENCES materiales_ordenes_requeridas(id_material_orden_requerida),
+id_material_requerido      			INT NOT NULL REFERENCES materiales_requeridos(id_material_requerido),
 cantidad							INT NOT NULL,
 num_parcialidad						INT NOT NULL,
 fecha_solicitud						DATE,
@@ -198,8 +201,6 @@ id_orden_produccion			INT NOT NULL REFERENCES ordenes_produccion(id_orden_produc
 id_empaque					INT NOT NULL REFERENCES empaques (id_empaque),
 cantidad					INTEGER NOT NULL
 );
-
-
 
 CREATE TABLE materiales_proveedor(
 id_material_proveedor		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
