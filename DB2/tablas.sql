@@ -149,7 +149,7 @@ CREATE TABLE materiales_ordenes_requeridas(
 id_material_orden_requerida 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material_requerido           INT REFERENCES materiales_requeridos(id_material_requerido),
 id_orden_produccion				INT REFERENCES ordenes_produccion(id_orden_produccion),
-barras_necesarias				INT 
+barras_necesarias				INT DEFAULT 0
 );
 
 CREATE TABLE materiales_requeridos(
@@ -157,7 +157,7 @@ id_material_requerido   INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material             INT NOT NULL REFERENCES materiales(id_material),
 id_estado               INT NOT NULL REFERENCES estados(id_estado),
 id_requisicion          INT NOT NULL REFERENCES requisiciones(id_requisicion),
-cantidad_total          INT
+cantidad_total          INT DEFAULT 0
 );
 
 CREATE TABLE parcialidades_requisicion(
@@ -178,12 +178,12 @@ CREATE TABLE parcialidades_orden_requerida(
 id_parcialidad_orden_requerida		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_parcialidad_requisicion			INT NOT NULL REFERENCES parcialidades_requisicion(id_parcialidad_requisicion),
 id_material_requerido      			INT NOT NULL REFERENCES materiales_requeridos(id_material_requerido),
-cantidad							INT NOT NULL,
-num_parcialidad						INT NOT NULL,
+cantidad							INT NOT NULL DEFAULT 0,
+num_parcialidad						INT NOT NULL DEFAULT 0,
 fecha_solicitud						DATE,
 fecha_entrega						DATE,
 unidad								VARCHAR(10),
-pecio_total							FLOAT
+pecio_total							FLOAT DEFAULT 0
 );
 /**FIN TABLAS DEBILES 1*/
 
@@ -209,3 +209,5 @@ id_proveedor				INT NOT NULL REFERENCES proveedores(id_proveedor),
 precio_unitario				FLOAT
 );
 /**FIN TABLAS RELACIONALES*/
+
+

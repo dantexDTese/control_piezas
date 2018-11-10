@@ -82,15 +82,12 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
     private void guardarListaProductos(){
         ArrayList<ordenProducto> productos = obtenerListaProductos();
         
-        if(productos.size()>0){
-            SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
-            Date fecha = vistaNuevoPedido.getDcFechaEntrega().getDate();
-
+        if(productos.size()>0){           
             int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
                     this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
                     ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
                     ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
-                    ,sdf.format(fecha));
+                    ,Estructuras.convertirFecha(vistaNuevoPedido.getDcFechaEntrega().getDate()));
 
             if(idPedidoAgregado > 0){
             
@@ -98,6 +95,7 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
                     ordenProducto producto = productos.get(i);
                 modelNuevoPedido.agregarOrdenProduccion(idPedidoAgregado,
                         producto.getCodProducto(), producto.getCantidadSolicitada());
+
                 }
             
                 

@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -102,6 +104,10 @@ public class Estructuras {
          return model;
     }
     
+    public static String convertirFecha(Date fecha){
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
+        return sdf.format(fecha);
+    }
     
     
     

@@ -476,7 +476,7 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         gridBagConstraints.insets = new java.awt.Insets(5, 54, 0, 0);
         jPanel9.add(jLabel9, gridBagConstraints);
 
-        lbSubTotal.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        lbSubTotal.setFont(new java.awt.Font("Impact", 0, 14)); // NOI18N
         lbSubTotal.setForeground(new java.awt.Color(255, 255, 255));
         lbSubTotal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         gridBagConstraints = new java.awt.GridBagConstraints();

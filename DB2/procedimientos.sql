@@ -190,7 +190,7 @@ BEGIN
     FROM  materiales_requeridos AS mr WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
     
     INSERT INTO materiales_ordenes_requeridas(id_material_requerido,id_orden_produccion)
-    VALUES(@id_material_requerido,@id_orden_produccion);    		    
+    VALUES(@id_material_requerido,id_orden_produccion);    		    
     
 END	//
 DELIMITER ;
@@ -290,7 +290,7 @@ BEGIN
 END //
 DELIMITER ;
 
-
+CALL modificar_barras_necesarias(1,400,@res);
 DELIMITER //
 CREATE PROCEDURE modificar_barras_necesarias(
 IN id_orden_produccion INT,
@@ -312,9 +312,8 @@ BEGIN
         UPDATE materiales_ordenes_requeridas AS bn SET bn.barras_necesarias =  barras_necesarias
         WHERE bn.id_orden_produccion = id_orden_produccion;
         
-        UPDATE materiales_requeridos SET cantidad_total = cantidad_total + barras_necesarias 
-        WHERE id_material_requerido = @id_material_requerido;
-        
+        UPDATE materiales_requeridos AS mr SET mr.cantidad_total = mr.cantidad_total + barras_necesarias 
+        WHERE mr.id_material_requerido = @id_material_requerido;
         
         SET SQL_SAFE_UPDATES=1;		      
         SET respuesta = 'SE HA MODIFICADO LA ORDEN DE PRODUCCION.';		
@@ -325,3 +324,8 @@ BEGIN
 END //
 DELIMITER ;
 
+SELECT mr.id_material_requerido FROM materiales_requeridos AS mr JOIN
+        materiales_ordenes_requeridas AS mor ON mor.id_material_requerido = mr.id_material_requerido WHERE
+        mor.id_orden_produccion = 1;
+        
+ 

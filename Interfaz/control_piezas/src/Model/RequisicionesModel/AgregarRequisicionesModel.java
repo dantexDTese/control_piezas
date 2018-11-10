@@ -35,8 +35,6 @@ public class AgregarRequisicionesModel {
         return pedidos;       
     }
     
-    
-    
     public ArrayList<ProductosPendientes> listaProductosPendientes(int noOrdenTrabajo){
         ArrayList<ProductosPendientes> productosPendientes = new ArrayList<>();
         String query = "select clave_producto,cantidad_total,desc_material FROM"
@@ -62,11 +60,10 @@ public class AgregarRequisicionesModel {
     public ArrayList<MaterialesRequisicion> listaMaterialesRequeridos(int noOrdenTrabajo){
         ArrayList<MaterialesRequisicion> materialesRequeridos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "select SUM(barras_necesarias) AS barras_necesarias ,desc_material"
-                + " FROM requisicion_ordenes AS ro WHERE ro.id_orden_trabajo = "+noOrdenTrabajo+""
-                + " GROUP BY desc_material;";
+        String query = "select cantidad_total,desc_material " +
+                        "FROM materiales_requeridos AS mr JOIN materiales AS mt ON mt.id_material = mr.id_material " +
+                        "WHERE id_requisicion = (SELECT id_requisicion FROM requisiciones WHERE id_orden_trabajo = "+noOrdenTrabajo+");";
         if(c!=null)
-            
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
@@ -103,80 +100,25 @@ public class AgregarRequisicionesModel {
             
             return proveedores;
     }
-    
-    public final class ParcialidadMaterial extends  MaterialesRequisicion{
-        private int noPartida;
-        //private final String material;
-        private int noParcialidad;
-        private String fechaSolicitadaParcialidadMaterial;
-        private String cuentaCargo;
-        private String unidad;
-        private int cantidad;
-        private int precioUnitario;
-        private int precioTotal;
 
-        public ParcialidadMaterial(int noPartida,int noParcialidad,String material) {
-            super(material);
-            this.noParcialidad = noParcialidad;
-            this.noPartida = noPartida;
-        }
+    public int obtenerParcialidad(String material,int noOrdenSeleccionada) {
+        int parcialidad=0;
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "SELECT num_parcialidad from parcialidades_orden_requerida as por WHERE " +
+                        "por.id_material_requerido = (SELECT cantidad_total FROM materiales_requeridos AS mr " +
+                        "WHERE mr.id_requisicion = (SELECT id_requisicion FROM requisiciones AS rq WHERE rq.id_orden_trabajo = "+noOrdenSeleccionada+")" +
+                        "AND mr.id_material = (SELECT id_material FROM materiales AS mt WHERE mt.desc_material = '"+material+"'));";
         
-        public int getNoPartida() {
-            return noPartida;
-        }
-
-        public int getNoParcialidad() {
-            return noParcialidad;
-        }
-
-        public String getFechaSolicitadaParcialidadMaterial() {
-            return fechaSolicitadaParcialidadMaterial;
-        }
-
-        public String getCuentaCargo() {
-            return cuentaCargo;
-        }
-
-        public String getUnidad() {
-            return unidad;
-        }
-
-        public int getCantidad() {
-            return cantidad;
-        }
-
-        public int getPrecioUnitario() {
-            return precioUnitario;
-        }
-
-        public int getPrecioTotal() {
-            return precioTotal;
-        }
+        if(c!=null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    parcialidad = rs.getInt(1);
+            } catch (SQLException e) {
+                System.err.println("error: class:AgregarRequisicionModel method:obtenerParcialidad "+e.getMessage());
+            }
+        return parcialidad;
     }
-    
-        
-    public class MaterialesRequisicion{
-        private final String material;
-        private int barrasNecesarias;
-
-        public MaterialesRequisicion(int barrasNecesarias,String material) {
-            this.material = material;
-            this.barrasNecesarias = barrasNecesarias;
-        }
-
-        public MaterialesRequisicion(String material) {
-            this.material = material;
-        }
-        
-        public String getMaterial() {
-            return material;
-        }
-
-        public int getBarrasNecesarias() {
-            return barrasNecesarias;
-        }
-              
-    }
-    
     
 }

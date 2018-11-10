@@ -25,8 +25,9 @@ AS
 select 
 no_orden_compra,
 ot.id_orden_trabajo,
-fecha_recepcion 
-from bitacoraPedidos AS bp JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo 
+fecha_entrega 
+from bitacoraPedidos AS bp 
+JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
@@ -47,7 +48,6 @@ pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_
 WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
 
 /*ya*/
-
 CREATE VIEW procedimiento_total
 AS
 SELECT 
@@ -180,3 +180,8 @@ FROM materiales_ordenes_requeridas AS mor
 JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_produccion 
 JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
 JOIN estados AS st ON st.id_estado = mr.id_estado;
+
+select cantidad_total,desc_material 
+FROM materiales_requeridos AS mr JOIN materiales AS mt ON mt.id_material = mr.id_material
+WHERE id_requisicion = (SELECT id_requisicion FROM requisiciones WHERE id_orden_trabajo = 1);
+

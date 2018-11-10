@@ -341,7 +341,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuItemNuevasRequisicionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNuevasRequisicionesActionPerformed
         AgregarRequisiciones AgregarRequisicionView = new AgregarRequisiciones(this);
-        AgregarRequisicinesController controller = new AgregarRequisicinesController(AgregarRequisicionView,new AgregarRequisicionesModel());
+        AgregarRequisicinesController controller = new AgregarRequisicinesController(AgregarRequisicionView,new AgregarRequisicionesModel(),this);
         Escritorio.removeAll();
         IntroducirPanle(AgregarRequisicionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_menuItemNuevasRequisicionesActionPerformed

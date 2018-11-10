@@ -86,8 +86,7 @@ public class PlaneacionController  {
             this.vistaMaquinaPedido = new AsignarMaquinaAPedido(this.vista.getPrincpial(), true); 
             AsignacionMaquinaAPedidoController controllerMaquinaPedido = new AsignacionMaquinaAPedidoController(vistaMaquinaPedido
                     , new AsignacionMaquinaAPedidoModel());            
-            vistaMaquinaPedido.setVisible(true);
-        
+            vistaMaquinaPedido.setVisible(true); 
     }
     
     

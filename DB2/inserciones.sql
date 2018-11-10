@@ -46,4 +46,6 @@ INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR2','DIRECCION
 INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR3','DIRECCION3');
 
 
-	
+INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,1,20);
+INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,2,30);
+INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,3,40);
