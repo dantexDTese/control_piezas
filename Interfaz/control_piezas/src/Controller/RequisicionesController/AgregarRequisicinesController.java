@@ -57,8 +57,9 @@ public class AgregarRequisicinesController {
         llenarListaPendientes();
         llenarListaProveedores();
         this.view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
-        this.view.getCbxNoProveedor().addActionListener(listenerProveedorSeleccionado);
+        this.view.getCbxNoProveedor().addActionListener(listenerAccion);
         this.view.getJtbMaterialesRequeridos().addMouseListener(listenerMaterialesOrden);
+        this.view.getBtnEnviar().addActionListener(listenerAccion);
     }
     
     /**
@@ -81,22 +82,39 @@ public class AgregarRequisicinesController {
         });
     }
     
-    
     /**
      * EVENTOS
      */
-    
-    private final ActionListener listenerProveedorSeleccionado = new ActionListener() {
+    private final ActionListener listenerAccion = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(view.getCbxNoProveedor().getItemCount()>0){
-                Proveedores proveedor = listProveedores.get(
-                        Integer.parseInt(view.getCbxNoProveedor().getSelectedItem().toString()) - 1 );                
-                view.getTxtDescProveedor().setText(proveedor.getDescProveedor());
-                view.getTxtDireccion().setText(proveedor.getDireccion());   
-                proveedorSeleccionado = proveedor.getDescProveedor();
-            }   
+            if(e.getSource() == view.getCbxNoProveedor()){
+                if(view.getCbxNoProveedor().getItemCount()>0){
+                    Proveedores proveedor = listProveedores.get(
+                            Integer.parseInt(view.getCbxNoProveedor().getSelectedItem().toString()) - 1 );                
+                    view.getTxtDescProveedor().setText(proveedor.getDescProveedor());
+                    view.getTxtDireccion().setText(proveedor.getDireccion());   
+                    proveedorSeleccionado = proveedor.getDescProveedor();
+                }   
+            }else if(e.getSource() == view.getBtnEnviar()){
+                if(listaParcialidad.size()>0)
+                    enviarSolicitud();
+                else
+                    JOptionPane.showMessageDialog(null,"no ha agregado materiales a la lista");
+            }
         }
+        
+        
+        private void enviarSolicitud(){
+            if(!"".equals(view.getTxtLugarEntrega().getText()) && !"".equals(view.getTxtTerminoCompra().getText()) 
+                    &&!"".equals(view.getTxtSolicitante().getText()) && !"".equals(view.getTxtIVA().getText())){
+                
+                
+                
+                
+            }
+        }
+        
     };
             
     private final MouseAdapter listenerOrdenesPendientes = new MouseAdapter() {

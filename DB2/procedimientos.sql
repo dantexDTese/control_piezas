@@ -164,8 +164,6 @@ BEGIN
 END //
 DELIMITER ;            
 
-select * from requisiciones;
-
 
 DELIMITER //
 CREATE PROCEDURE agregar_material_orden_requerida(
@@ -290,7 +288,6 @@ BEGIN
 END //
 DELIMITER ;
 
-CALL modificar_barras_necesarias(1,400,@res);
 DELIMITER //
 CREATE PROCEDURE modificar_barras_necesarias(
 IN id_orden_produccion INT,
@@ -324,8 +321,61 @@ BEGIN
 END //
 DELIMITER ;
 
-SELECT mr.id_material_requerido FROM materiales_requeridos AS mr JOIN
-        materiales_ordenes_requeridas AS mor ON mor.id_material_requerido = mr.id_material_requerido WHERE
-        mor.id_orden_produccion = 1;
-        
- 
+DESCRIBE parcialidades_requisicion;
+
+DELIMITER //
+CREATE PROCEDURE agregar_parcialidad_requisicion(
+desc_proveedor 		VARCHAR(150),
+id_orden_trabajo	INT,
+solicitante			VARCHAR(50),
+terminos 			VARCHAR(100),
+lugar_entrega		VARCHAR(100),
+comentario			VARCHAR(255),
+sub_total			FLOAT,
+IVA					FLOAT,
+TOTAL				FLOAT
+)BEGIN
+	
+    DECLARE id_proveedor INT;
+	DECLARE id_requisicion INT;
+    
+    SELECT @id_proveedor := pr.id_proveedor FROM proveedores AS pr WHERE pr.desc_proveedor = desc_proveedor;
+	SELECT @id_requisicion := rq.id_requisicion FROM requisiciones AS rq WHERE rq.id_orden_trabajo = id_orden_trabajo;
+    
+    IF id_proveedor IS NOT NULL AND id_requisicion IS NOT NULL THEN
+    
+		INSERT parcialidades_requisicion(id_proveedor,id_requisicion,solicitante,
+        fecha_solicitud,terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL) 
+        VALUES(@id_proveedor,@id_requisicion,solicitante,NOW(),terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL);
+		
+    END IF;
+	
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_parcialidad_orden_requerida(
+desc_material_requerido 	VARCHAR(100),
+cantidad					INT,
+num_parcialidad				INT,
+unidad						VARCHAR(10),
+precio_total				FLOAT
+)BEGIN
+
+	DECLARE id_parcialidad_requisicion  INT;
+    DECLARE id_material_requerido 		INT;
+    
+    SELECT @id_parcialidad_requisicion := MAX(pr.id_parcialidad_requisicion) FROM parcialidades_requisicion AS pr;
+    
+    SELECT @id_material_requerido := mr.id_material_requerido 
+    FROM materiales_requeridos AS mr WHERE mr.id_requisicion = 
+    (SELECT id_requisicion FROM parcialiades_requisicion WHERE id_parcialidad_requisicion = @id_parcialidad_requisicion);
+    
+	IF id_material_requerido IS NOT NULL AND id_parcialidad_requisicion IS NOT NULL THEN 
+		INSERT INTO parcialidades_orden_requerida(id_parcialidad_requisicion,id_material_requerido,cantidad,
+        num_parcialidad,fecha_solicitud,unidad,precio_total) VALUES
+        (@id_pacialidad_requisicion,@id_material_requerido,cantidad,num_parcialidad,NOW(),unidad,precio_total);
+    END IF;
+    
+END //
+DELIMITER ;

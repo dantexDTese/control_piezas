@@ -163,6 +163,7 @@ cantidad_total          INT DEFAULT 0
 CREATE TABLE parcialidades_requisicion(
 id_parcialidad_requisicion		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_proveedor					INT REFERENCES proveedores(id_proveedor),
+id_requisicion					INT REFERENCES requisiciones(id_requisicion),
 solicitante						VARCHAR(50),
 fecha_solicitud					DATE,
 terminos						VARCHAR(100),
