@@ -66,10 +66,6 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         return txtDireccion;
     }
 
-    public JTextField getTxtIVA() {
-        return txtIVA;
-    }
-
     public JTextArea getTxtLugarEntrega() {
         return txtLugarEntrega;
     }
@@ -81,6 +77,12 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
     public JTextArea getTxtTerminoCompra() {
         return txtTerminoCompra;
     }
+
+    public JLabel getLbIVA() {
+        return lbIVA;
+    }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -126,17 +128,18 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         lbTotal = new javax.swing.JLabel();
-        txtIVA = new javax.swing.JTextField();
         btnEnviar = new javax.swing.JButton();
         jScrollPane10 = new javax.swing.JScrollPane();
         txtComentarios = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        lbIVA = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane9.setViewportView(jTextArea1);
 
         setBorder(null);
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
@@ -381,7 +384,6 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         gridBagConstraints.insets = new java.awt.Insets(11, 16, 0, 0);
         jPanel8.add(jLabel5, gridBagConstraints);
 
-        cbxNoProveedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
@@ -503,12 +505,9 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         lbTotal.setFont(new java.awt.Font("Impact", 0, 12)); // NOI18N
         lbTotal.setForeground(new java.awt.Color(255, 255, 255));
         lbTotal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbTotal.setText("1000");
         lbTotal.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         lbTotal.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-
-        txtIVA.setFont(new java.awt.Font("Impact", 0, 12)); // NOI18N
-        txtIVA.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtIVA.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         btnEnviar.setText("ENVIAR");
 
@@ -519,6 +518,13 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Impact", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("COMETARIOS");
+
+        lbIVA.setFont(new java.awt.Font("Impact", 0, 12)); // NOI18N
+        lbIVA.setForeground(new java.awt.Color(255, 255, 255));
+        lbIVA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbIVA.setText("10");
+        lbIVA.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lbIVA.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -535,16 +541,17 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
                         .addGap(24, 24, 24)
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lbSubTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                    .addComponent(lbTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                    .addComponent(lbIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(56, 56, 56)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(74, 74, 74)
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(31, 31, 31)
-                .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(btnEnviar, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2)))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -563,17 +570,17 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lbSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbIVA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtIVA, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(11, 11, 11)
-                                .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel9Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(14, 14, 14)
-                                .addComponent(jLabel13)))))
+                                .addComponent(jLabel13))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
+                                .addComponent(lbTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -676,12 +683,12 @@ public class AgregarRequisiciones extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtbMaterialesRequeridos;
     private javax.swing.JTable jtbPendientes;
     private javax.swing.JTable jtbProductos;
+    private javax.swing.JLabel lbIVA;
     private javax.swing.JLabel lbSubTotal;
     private javax.swing.JLabel lbTotal;
     private javax.swing.JTextArea txtComentarios;
     private javax.swing.JTextArea txtDescProveedor;
     private javax.swing.JTextArea txtDireccion;
-    private javax.swing.JTextField txtIVA;
     private javax.swing.JTextArea txtLugarEntrega;
     private javax.swing.JTextField txtSolicitante;
     private javax.swing.JTextArea txtTerminoCompra;

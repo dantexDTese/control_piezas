@@ -41,9 +41,9 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
 
-INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR1','DIRECCION1');
-INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR2','DIRECCION2');
-INSERT INTO proveedores(desc_proveedor,direccion) VALUES('PROVEEDOR3','DIRECCION3');
+INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR1','DIRECCION1',10);
+INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR2','DIRECCION2',5);
+INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR3','DIRECCION3',20);
 
 
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,1,20);

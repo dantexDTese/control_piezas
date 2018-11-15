@@ -16,7 +16,9 @@ SELECT * FROM requisiciones;
 SELECT * FROM proveedores;
 SELECT * FROM materiales_proveedor;
 SELECT * FROM parcialidades_requisicion;
-
+SELECT * FROM materiales_ordenes_requeridas;
+SELECT * FROM parcialidades_orden_requerida;
+SELECT * FROM materiales_requeridos;
 
 SELECT * FROM bitacoraPedidos;
 SELECT * FROM todos_los_estados;
@@ -45,4 +47,6 @@ AND mp.id_proveedor = (SELECT id_proveedor FROM proveedores AS pr WHERE pr.desc_
 SELECT mr.id_material_requerido FROM materiales_requeridos AS mr JOIN
 materiales_ordenes_requeridas AS mor ON mor.id_material_requerido = mr.id_material_requerido WHERE
 mor.id_orden_produccion = 1;
-            
+
+
+SELECT * FROM proveedores;            

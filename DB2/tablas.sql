@@ -62,10 +62,10 @@ desc_contacto	VARCHAR(50) NOT NULL
 CREATE TABLE proveedores(
 id_proveedor 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_proveedor	VARCHAR(150),
-direccion		VARCHAR(150)
+direccion		VARCHAR(150),
+IVA				FLOAT
 );
-
-/**FIN DE CATALOGOS CONTROL_PIEZAS*/ 
+/**FIN DE CATALOGOS CONTROL_PIEZAS*/
 
 /** TABLAS DEBILES*/
 CREATE TABLE pedidos(
@@ -170,7 +170,6 @@ terminos						VARCHAR(100),
 lugar_entrega					VARCHAR(100),
 comentarios						VARCHAR(255),
 sub_total						FLOAT,
-IVA								FLOAT,
 TOTAL							FLOAT
 );
 
@@ -184,7 +183,7 @@ num_parcialidad						INT NOT NULL DEFAULT 0,
 fecha_solicitud						DATE,
 fecha_entrega						DATE,
 unidad								VARCHAR(10),
-pecio_total							FLOAT DEFAULT 0
+precio_total							FLOAT DEFAULT 0
 );
 /**FIN TABLAS DEBILES 1*/
 

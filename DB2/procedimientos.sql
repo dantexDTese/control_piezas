@@ -321,19 +321,20 @@ BEGIN
 END //
 DELIMITER ;
 
-DESCRIBE parcialidades_requisicion;
+
 
 DELIMITER //
 CREATE PROCEDURE agregar_parcialidad_requisicion(
-desc_proveedor 		VARCHAR(150),
-id_orden_trabajo	INT,
-solicitante			VARCHAR(50),
-terminos 			VARCHAR(100),
-lugar_entrega		VARCHAR(100),
-comentario			VARCHAR(255),
-sub_total			FLOAT,
-IVA					FLOAT,
-TOTAL				FLOAT
+IN desc_proveedor 		VARCHAR(150),
+IN id_orden_trabajo	INT,
+IN solicitante			VARCHAR(50),
+IN terminos 			VARCHAR(100),
+IN lugar_entrega		VARCHAR(100),
+IN comentarios			VARCHAR(255),
+IN sub_total			FLOAT,
+IN IVA					FLOAT,
+IN TOTAL				FLOAT,
+INOUT respuesta			BOOLEAN
 )BEGIN
 	
     DECLARE id_proveedor INT;
@@ -342,24 +343,28 @@ TOTAL				FLOAT
     SELECT @id_proveedor := pr.id_proveedor FROM proveedores AS pr WHERE pr.desc_proveedor = desc_proveedor;
 	SELECT @id_requisicion := rq.id_requisicion FROM requisiciones AS rq WHERE rq.id_orden_trabajo = id_orden_trabajo;
     
-    IF id_proveedor IS NOT NULL AND id_requisicion IS NOT NULL THEN
+    IF @id_proveedor IS NOT NULL AND @id_requisicion IS NOT NULL THEN
     
-		INSERT parcialidades_requisicion(id_proveedor,id_requisicion,solicitante,
-        fecha_solicitud,terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL) 
+		INSERT parcialidades_requisicion(id_proveedor,id_requisicion,solicitante,fecha_solicitud,terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL) 
         VALUES(@id_proveedor,@id_requisicion,solicitante,NOW(),terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL);
-		
+		SET respuesta = TRUE;
+        
+	ELSE SET respuesta = FALSE;
+        
     END IF;
 	
 END //
 DELIMITER ;
 
+
 DELIMITER //
 CREATE PROCEDURE agregar_parcialidad_orden_requerida(
-desc_material_requerido 	VARCHAR(100),
-cantidad					INT,
-num_parcialidad				INT,
-unidad						VARCHAR(10),
-precio_total				FLOAT
+IN desc_material_requerido 	VARCHAR(100),
+IN cantidad					INT,
+IN num_parcialidad			INT,
+IN unidad					VARCHAR(10),
+IN precio_total				FLOAT,
+INOUT respuesta				BOOLEAN
 )BEGIN
 
 	DECLARE id_parcialidad_requisicion  INT;
@@ -369,13 +374,21 @@ precio_total				FLOAT
     
     SELECT @id_material_requerido := mr.id_material_requerido 
     FROM materiales_requeridos AS mr WHERE mr.id_requisicion = 
-    (SELECT id_requisicion FROM parcialiades_requisicion WHERE id_parcialidad_requisicion = @id_parcialidad_requisicion);
+    (SELECT pr.id_requisicion FROM parcialidades_requisicion AS pr WHERE pr.id_parcialidad_requisicion = @id_parcialidad_requisicion)
+    AND mr.id_material = (SELECT id_material FROM materiales WHERE materiales.desc_material = desc_material_requerido);
     
-	IF id_material_requerido IS NOT NULL AND id_parcialidad_requisicion IS NOT NULL THEN 
-		INSERT INTO parcialidades_orden_requerida(id_parcialidad_requisicion,id_material_requerido,cantidad,
-        num_parcialidad,fecha_solicitud,unidad,precio_total) VALUES
-        (@id_pacialidad_requisicion,@id_material_requerido,cantidad,num_parcialidad,NOW(),unidad,precio_total);
+	IF @id_material_requerido IS NOT NULL AND @id_parcialidad_requisicion IS NOT NULL THEN 
+		INSERT INTO parcialidades_orden_requerida(
+		id_parcialidad_requisicion,id_material_requerido,cantidad,num_parcialidad,fecha_solicitud,
+        unidad,precio_total) VALUES
+        (@id_parcialidad_requisicion,@id_material_requerido,cantidad,num_parcialidad,NOW(),unidad,precio_total);
+        SET respuesta = TRUE;
+        
+        ELSE SET respuesta = FALSE;
+        
     END IF;
     
 END //
 DELIMITER ;
+
+

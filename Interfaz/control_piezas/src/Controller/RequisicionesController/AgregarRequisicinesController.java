@@ -9,6 +9,7 @@ import Model.RequisicionesModel.AgregarRequisicionesModel;
 import Model.RequisicionesModel.MaterialesRequisicion;
 import Model.RequisicionesModel.ParcialidadMaterial;
 import Model.RequisicionesModel.Proveedores;
+import Model.RequisicionesModel.Requisicion;
 import View.Principal;
 import View.Requisiciones.AgregarMaterialRequisicion;
 import View.Requisiciones.AgregarRequisiciones;
@@ -36,9 +37,7 @@ public class AgregarRequisicinesController {
     private final ArrayList<ParcialidadMaterial> listaParcialidad;
     private Integer noOrdenSeleccionada;
     private final Principal principal;
-    private String proveedorSeleccionado=null;
     private float subTotalRequisicion;
-    private final ArrayList<ParcialidadMaterial> listMaterialesParcialidad;
     /**
      * CONSTRUCTOR
      * @param view
@@ -53,7 +52,6 @@ public class AgregarRequisicinesController {
         this.model = model;
         this.principal = principal;
         this.listProveedores = model.listaProveedores();
-        this.listMaterialesParcialidad = new ArrayList<>();
         llenarListaPendientes();
         llenarListaProveedores();
         this.view.getJtbPendientes().addMouseListener(listenerOrdenesPendientes);
@@ -82,19 +80,36 @@ public class AgregarRequisicinesController {
         });
     }
     
+    private void limpiar(){
+        listaParcialidad.clear();
+        view.getTxtComentarios().setText("");
+        view.getTxtDescProveedor().setText("");
+        view.getTxtDireccion().setText("");
+        view.getTxtLugarEntrega().setText("");
+        view.getTxtSolicitante().setText("");
+        view.getTxtTerminoCompra().setText("");
+        view.getLbIVA().setText("");
+        view.getLbSubTotal().setText("");
+        view.getLbTotal().setText("");
+        Estructuras.limpiarTabla((DefaultTableModel) view.getJtbListaMateriales().getModel());
+        Estructuras.limpiarTabla((DefaultTableModel) view.getJtbProductos().getModel());
+        llenarListaPendientes();
+    }
+    
     /**
      * EVENTOS
      */
+    
+    Proveedores proveedorSeleccionado;
+    
     private final ActionListener listenerAccion = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == view.getCbxNoProveedor()){
                 if(view.getCbxNoProveedor().getItemCount()>0){
-                    Proveedores proveedor = listProveedores.get(
-                            Integer.parseInt(view.getCbxNoProveedor().getSelectedItem().toString()) - 1 );                
-                    view.getTxtDescProveedor().setText(proveedor.getDescProveedor());
-                    view.getTxtDireccion().setText(proveedor.getDireccion());   
-                    proveedorSeleccionado = proveedor.getDescProveedor();
+                    proveedorSeleccionado = listProveedores.get(Integer.parseInt(view.getCbxNoProveedor().getSelectedItem().toString()) - 1 );                
+                    view.getTxtDescProveedor().setText(proveedorSeleccionado.getDescProveedor());
+                    view.getTxtDireccion().setText(proveedorSeleccionado.getDireccion());   
                 }   
             }else if(e.getSource() == view.getBtnEnviar()){
                 if(listaParcialidad.size()>0)
@@ -107,12 +122,30 @@ public class AgregarRequisicinesController {
         
         private void enviarSolicitud(){
             if(!"".equals(view.getTxtLugarEntrega().getText()) && !"".equals(view.getTxtTerminoCompra().getText()) 
-                    &&!"".equals(view.getTxtSolicitante().getText()) && !"".equals(view.getTxtIVA().getText())){
+                    &&!"".equals(view.getTxtSolicitante().getText()) && !"".equals(view.getLbIVA().getText())){
+                
+                Requisicion requisicion = new Requisicion(
+                        view.getTxtDescProveedor().getText(),noOrdenSeleccionada,view.getTxtSolicitante().getText(),view.getTxtTerminoCompra().getText(),
+                        view.getTxtLugarEntrega().getText(),view.getTxtComentarios().getText(),Float.parseFloat(view.getLbSubTotal().getText())
+                        ,Float.parseFloat(view.getLbIVA().getText()),Float.parseFloat(view.getLbTotal().getText()));
                 
                 
-                
+                agregarListaMatereriales(model.agregarRequisicion(requisicion));               
                 
             }
+        }
+        
+        private void agregarListaMatereriales(boolean respuesta){
+            if(respuesta){
+                for(int i = 0;i<listaParcialidad.size();i++){
+                    ParcialidadMaterial material = listaParcialidad.get(i);
+                    model.agregarMaterialRequisicion(material);
+                }
+                JOptionPane.showMessageDialog(null,"La requisicion fue guardada y se enviara para su aprovacion");
+                limpiar();      
+            }
+                    
+
         }
         
     };
@@ -175,7 +208,7 @@ public class AgregarRequisicinesController {
             int fila = view.getJtbMaterialesRequeridos().rowAtPoint(e.getPoint());
                     String material =view.getJtbMaterialesRequeridos().getValueAt(fila, 0).toString(); 
                     int nParcialidad = model.obtenerParcialidad(material,noOrdenSeleccionada);
-            return new ParcialidadMaterial(listaParcialidad.size()+1, nParcialidad+1, material,proveedorSeleccionado);
+            return new ParcialidadMaterial(listaParcialidad.size()+1, nParcialidad+1, material,proveedorSeleccionado.getDescProveedor());
         }
                 
         private void agregarParcialidad(ParcialidadMaterial parcialidad){            
@@ -196,7 +229,10 @@ public class AgregarRequisicinesController {
                         private void AgregarParcialidadRegistrada(ParcialidadMaterial parcialidad) {
                             listaParcialidad.add(parcialidad);
                             subTotalRequisicion += parcialidad.getPrecioTotal();
+                            float ivaCalculado = subTotalRequisicion*proveedorSeleccionado.getIVA()/100;
                             view.getLbSubTotal().setText(subTotalRequisicion+"");
+                            view.getLbIVA().setText(ivaCalculado+"");
+                            view.getLbTotal().setText(ivaCalculado+subTotalRequisicion+"");
                             DefaultTableModel modelMaterialesRequeridos = (DefaultTableModel) view.getJtbListaMateriales().getModel();
                             modelMaterialesRequeridos.addRow(new Object[]{
                             parcialidad.getNoPartida(),
@@ -217,7 +253,5 @@ public class AgregarRequisicinesController {
         }
 
     };
-    
-    
     
 }
