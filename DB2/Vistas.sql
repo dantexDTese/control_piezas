@@ -6,14 +6,14 @@ AS
 SELECT 
 ot.id_orden_trabajo,
 pd.no_orden_compra,
+pr.clave_producto,
 pd.fecha_entrega,
 pd.fecha_confirmacion_entrega,
 pd.fecha_recepcion,
 es.desc_estados,
 cn.desc_contacto,
 cl.nombre_cliente,
-op.cantidad_cliente,
-pr.clave_producto
+op.cantidad_cliente
 FROM pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido JOIN contactos cn ON
 pd.id_contacto = cn.id_contacto JOIN clientes cl ON cl.id_cliente = cn.id_cliente
 JOIN ordenes_produccion op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN

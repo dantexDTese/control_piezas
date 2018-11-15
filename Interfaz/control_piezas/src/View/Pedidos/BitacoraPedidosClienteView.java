@@ -2,6 +2,7 @@
 package View.Pedidos;
 
 import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JYearChooser;
 import java.awt.Image;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -11,26 +12,44 @@ import javax.swing.JFrame;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 
 public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
 
     
-    private JFrame principal;
+    private final JFrame principal;
     public BitacoraPedidosClienteView(JFrame principal) {
         initComponents();
         this.principal = principal;
         
     }
     
-    /**
-     * todo bien
-     */
     
-
     public JFrame getPrincipal() {
         return principal;
     }
+
+    public JButton getBtnBuscarOrden() {
+        return btnBuscarOrden;
+    }
+
+    public JButton getBtnVertodo() {
+        return btnVertodo;
+    }
+
+    public JMonthChooser getJmcMes() {
+        return jmcMes;
+    }
+
+    public JYearChooser getJycAnio() {
+        return jycAnio;
+    }
+
+    public JTextField getTxtOrdenCompra() {
+        return txtOrdenCompra;
+    }
+    
     
     
 
@@ -39,19 +58,11 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
     }
    
 
-    public JMonthChooser getCbxSelecMes() {
-        return cbxSelecMes;
-    }
-
     public JTable getTbPedidosClientes() {
         return tbPedidosClientes;
     }
 
-    public JRadioButton getRbtnSelecMes() {
-        return rbtnSelecMes;
-    }
         
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -62,10 +73,12 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        rbtnSelecMes = new javax.swing.JRadioButton();
-        cbxSelecMes = new com.toedter.calendar.JMonthChooser();
-        jYearChooser1 = new com.toedter.calendar.JYearChooser();
+        jmcMes = new com.toedter.calendar.JMonthChooser();
+        jycAnio = new com.toedter.calendar.JYearChooser();
         btnNuevaOrden = new javax.swing.JButton();
+        txtOrdenCompra = new javax.swing.JTextField();
+        btnBuscarOrden = new javax.swing.JButton();
+        btnVertodo = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbPedidosClientes = new javax.swing.JTable();
@@ -95,27 +108,30 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("SELECCIONAR AÑO");
 
-        rbtnSelecMes.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        rbtnSelecMes.setForeground(new java.awt.Color(255, 255, 255));
-        rbtnSelecMes.setText("SELECCIONAR MES");
-        rbtnSelecMes.setOpaque(false);
-
         btnNuevaOrden.setText("NUEVA ORDEN");
+
+        btnBuscarOrden.setText("BUSCAR");
+
+        btnVertodo.setText("VER TODO");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(25, 25, 25)
+                .addComponent(txtOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBuscarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rbtnSelecMes)
+                .addComponent(jycAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbxSelecMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(205, 205, 205)
+                .addComponent(jmcMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVertodo, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -123,14 +139,21 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(rbtnSelecMes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jYearChooser1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(cbxSelecMes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnNuevaOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnBuscarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jycAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jmcMes, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnVertodo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -141,11 +164,11 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ORDEN TRABAJO", "ORDEN COMPRA", "FECHA RECEPCION", "SEGUIMIENTO", "FECHA DE ENTREGA", "PRODUCTO", "CANTIDAD", "CLIENTE", "CONTACTO", "CONFIRMACION ENTREGA"
+                "ORDEN TRABAJO", "ORDEN COMPRA", "PRODUCTO", "FECHA DE ENTREGA", "CONFIRMACION ENTREGA", "FECHA RECEPCION", "ESTADO", "CONTACTO", "CLIENTE", "CANTIDAD"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false
@@ -236,8 +259,9 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscarOrden;
     private javax.swing.JButton btnNuevaOrden;
-    private com.toedter.calendar.JMonthChooser cbxSelecMes;
+    private javax.swing.JButton btnVertodo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -246,8 +270,9 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private com.toedter.calendar.JYearChooser jYearChooser1;
-    private javax.swing.JRadioButton rbtnSelecMes;
+    private com.toedter.calendar.JMonthChooser jmcMes;
+    private com.toedter.calendar.JYearChooser jycAnio;
     private javax.swing.JTable tbPedidosClientes;
+    private javax.swing.JTextField txtOrdenCompra;
     // End of variables declaration//GEN-END:variables
 }

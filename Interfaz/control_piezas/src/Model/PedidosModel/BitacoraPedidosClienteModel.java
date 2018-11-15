@@ -6,13 +6,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Vector;
-import javax.swing.ComboBoxModel;
-
 
 public class BitacoraPedidosClienteModel {
-    
-    /*todo bien*/
     
     public ArrayList<Pedido> listaPedidos(){
         ArrayList<Pedido> pedidos = new ArrayList<>();
@@ -25,10 +20,17 @@ public class BitacoraPedidosClienteModel {
                 
                 if(rs.first())
                     do{
-                        pedidos.add(new Pedido(rs.getInt(1), rs.getString(2),
-                        rs.getString(3),rs.getString(4),rs.getString(5),
-                        rs.getString(6),rs.getString(7),rs.getString(8),rs.getInt(9),
-                        rs.getString(10)));
+                        pedidos.add(new Pedido(
+                                rs.getInt(1),       //ordenTrabajo
+                                rs.getString(2),    //ordenCompra
+                                rs.getString(3),    //claveProducto
+                                rs.getString(4),    //fechaEntrega
+                                rs.getString(5),    //fechaConfirmacionEntrega
+                                rs.getString(6),    //fechaRecepcion
+                                rs.getString(7),    //estado
+                                rs.getString(8),    //contacto
+                                rs.getString(9),    //cliente
+                                rs.getInt(10)));    //cantidad
                     }while(rs.next());
             } catch (Exception e) {
                 System.err.println("error: class: nuevoPedidoClientes,"

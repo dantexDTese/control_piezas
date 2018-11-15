@@ -170,6 +170,7 @@ terminos						VARCHAR(100),
 lugar_entrega					VARCHAR(100),
 comentarios						VARCHAR(255),
 sub_total						FLOAT,
+IVA								FLOAT,
 TOTAL							FLOAT
 );
 
