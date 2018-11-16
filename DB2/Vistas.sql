@@ -146,7 +146,7 @@ op.fecha_montaje,op.fecha_desmontaje,
 op.fecha_inicio AS fecha_inicio_op,
 op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
-FROM bitacorapedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
+FROM bitacoraPedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo = pt.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;

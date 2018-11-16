@@ -19,6 +19,7 @@ SELECT * FROM parcialidades_requisicion;
 SELECT * FROM materiales_ordenes_requeridas;
 SELECT * FROM parcialidades_orden_requerida;
 SELECT * FROM materiales_requeridos;
+SELECT * FROM requisiciones;
 
 SELECT * FROM bitacoraPedidos;
 SELECT * FROM todos_los_estados;

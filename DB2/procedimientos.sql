@@ -326,7 +326,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE agregar_parcialidad_requisicion(
 IN desc_proveedor 		VARCHAR(150),
-IN id_orden_trabajo	INT,
+IN id_orden_trabajo		INT,
 IN solicitante			VARCHAR(50),
 IN terminos 			VARCHAR(100),
 IN lugar_entrega		VARCHAR(100),
