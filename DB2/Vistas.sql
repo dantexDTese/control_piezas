@@ -181,7 +181,11 @@ JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_producci
 JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
 JOIN estados AS st ON st.id_estado = mr.id_estado;
 
+
+
 select cantidad_total,desc_material 
 FROM materiales_requeridos AS mr JOIN materiales AS mt ON mt.id_material = mr.id_material
 WHERE id_requisicion = (SELECT id_requisicion FROM requisiciones WHERE id_orden_trabajo = 1);
+
+
 

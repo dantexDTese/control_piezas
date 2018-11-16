@@ -23,7 +23,7 @@ public class ProductosPendientes {
     
     
 
-    public ProductosPendientes(String noOrdenCompra, int noOrdenProduccion, String claveProducto, int cantidadCliente) {
+    public ProductosPendientes(String noOrdenCompra, int noOrdenProduccion, String claveProducto, int cantidadCliente){
         this.noOrdenCompra = noOrdenCompra;
         this.noOrdenProduccion = noOrdenProduccion;
         this.claveProducto = claveProducto;
@@ -42,11 +42,14 @@ public class ProductosPendientes {
         this.piecesByShift = piecesByShift;
     }
 
-    public ProductosPendientes(String claveProducto, int qty, String material) {
+    public ProductosPendientes(String claveProducto,int qty,String material ,String fecha_inicio){
         this.claveProducto = claveProducto;
         this.qty = qty;
         this.material = material;
+        this.fechaInicio = fecha_inicio;
     }
+
+    
     
         
     public String getNoOrdenCompra() {

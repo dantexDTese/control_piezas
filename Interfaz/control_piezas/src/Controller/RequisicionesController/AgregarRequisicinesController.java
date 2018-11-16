@@ -38,6 +38,7 @@ public class AgregarRequisicinesController {
     private Integer noOrdenSeleccionada;
     private final Principal principal;
     private float subTotalRequisicion;
+    private Proveedores proveedorSeleccionado;
     /**
      * CONSTRUCTOR
      * @param view
@@ -93,6 +94,7 @@ public class AgregarRequisicinesController {
         view.getLbTotal().setText("");
         Estructuras.limpiarTabla((DefaultTableModel) view.getJtbListaMateriales().getModel());
         Estructuras.limpiarTabla((DefaultTableModel) view.getJtbProductos().getModel());
+        Estructuras.limpiarTabla((DefaultTableModel) view.getJtbMaterialesRequeridos().getModel());
         llenarListaPendientes();
     }
     
@@ -100,7 +102,7 @@ public class AgregarRequisicinesController {
      * EVENTOS
      */
     
-    Proveedores proveedorSeleccionado;
+    
     
     private final ActionListener listenerAccion = new ActionListener() {
         @Override
@@ -169,7 +171,8 @@ public class AgregarRequisicinesController {
                 model.addRow(new Object[]{
                     productosPendientes.get(i).getClaveProducto(),
                     productosPendientes.get(i).getQty(),
-                    productosPendientes.get(i).getMaterial()
+                    productosPendientes.get(i).getMaterial(),
+                    productosPendientes.get(i).getFechaInicio()
                 });
         }
        

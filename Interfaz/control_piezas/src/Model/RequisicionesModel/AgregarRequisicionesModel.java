@@ -39,22 +39,21 @@ public class AgregarRequisicionesModel {
     
     public ArrayList<ProductosPendientes> listaProductosPendientes(int noOrdenTrabajo){
         ArrayList<ProductosPendientes> productosPendientes = new ArrayList<>();
-        String query = "select clave_producto,cantidad_total,desc_material FROM"
-                        + " requisicion_ordenes AS ro WHERE ro.id_orden_trabajo = "+noOrdenTrabajo+";";
+        String query =  "select ro.clave_producto,ro.cantidad_total,ro.desc_material,op.fecha_inicio "
+                        + "FROM requisicion_ordenes AS ro JOIN ordenes_produccion AS op ON " +
+                        " op.id_orden_produccion = ro.id_orden_produccion WHERE ro.id_orden_trabajo = "+noOrdenTrabajo+";";
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
-                
                 if(rs.first())
                     do {                        
-                        productosPendientes.add(new ProductosPendientes(rs.getString(1),rs.getInt(2),rs.getString(3))); 
+                        productosPendientes.add(new ProductosPendientes(rs.getString(1),rs.getInt(2),rs.getString(3),rs.getString(4))); 
                     } while (rs.next());
                 c.close();
             } catch (SQLException e) {
                 System.err.println("error: AgregarRequisicionesModel method:listaProductosPendientes "+e.getMessage());
-                
             }
         return productosPendientes;
     }  
