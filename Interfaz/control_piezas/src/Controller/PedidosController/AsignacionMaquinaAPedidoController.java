@@ -38,8 +38,8 @@ public class AsignacionMaquinaAPedidoController {
         llenarTablaPedidosPendientes();        
         
         agregados = new ArrayList<>();
-        
-        Estructuras.obtenerCalendario(this.vista.getJpCalendario(),this.vista.getCbxMaquina().getSelectedItem().toString());
+        if(this.vista.getCbxMaquina().getSelectedItem() != null)
+            Estructuras.obtenerCalendario(this.vista.getJpCalendario(),this.vista.getCbxMaquina().getSelectedItem().toString());
         
         this.vista.getBtnTerminar().addActionListener(listenerTerminarPendientes);
         

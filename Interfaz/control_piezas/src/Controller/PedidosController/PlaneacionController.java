@@ -55,12 +55,14 @@ public class PlaneacionController  {
         llenarListaMaquinas();
         
         this.vista.getCbxListaMaquinas().addItemListener(maquinaSeleccionada);
-        llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
-        
-        
         this.vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});               
+
         this.vista.getJpCalendar().setSize(800,350);
-        Estructuras.obtenerCalendario(this.vista.getJpCalendar(),this.vista.getCbxListaMaquinas().getSelectedItem().toString());        
+        
+        if(vista.getCbxListaMaquinas().getSelectedItem() != null){
+            llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+            Estructuras.obtenerCalendario(this.vista.getJpCalendar(),this.vista.getCbxListaMaquinas().getSelectedItem().toString());        
+        }
        
         
     }
@@ -133,6 +135,7 @@ public class PlaneacionController  {
     }
     
     private void llenarTablaMaquinas(String nombreMaquina){
+        if(nombreMaquina != null){
         Estructuras.limpiarTabla((DefaultTableModel) vista.getTbLIstaPedidosMaquina().getModel());
         ArrayList<procedimientoTotal> procedimientos = model.listaProcedimientoMaquina(nombreMaquina);
         DefaultTableModel modelMaquinas = (DefaultTableModel) vista.getTbLIstaPedidosMaquina().getModel();
@@ -145,6 +148,7 @@ public class PlaneacionController  {
                 procedimiento.getNoOrdenProduccion(),procedimiento.getPiecesByShift(),procedimiento.getMaterial(),procedimiento.getWorker(),
                 procedimiento.getProcesoActual()});
             }
+        }
         
         
     }

@@ -14,22 +14,20 @@ public class Conexion {
     /**
      * CONEXION REMOTA
      *
+     * 
+    */
     private final String host = "69.175.92.67:3306/";
     private final String user = "tlpnowlq_gmcmmt";
     private final String password = ",2004conyla";
     private final String dataBaseName = "tlpnowlq_control_piezas";
     
-    */
     /**
     * CONEXION REMOTA LOCAL
-    
-    */
-    
     private static final String host = "localhost/";
     private static final String user = "root";
     private static final String password = "sasa";
     private static final String dataBaseName = "control_piezas_2";
-    
+    */
     
     private final String url="jdbc:mysql://"+host+dataBaseName;
     
