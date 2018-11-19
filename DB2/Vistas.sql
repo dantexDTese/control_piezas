@@ -23,14 +23,14 @@ estados es ON pd.id_estado = es.id_estado;
 CREATE VIEW PedidosPendientes
 AS
 select 
-no_orden_compra,
+bp.no_orden_compra,
 ot.id_orden_trabajo,
 fecha_entrega 
 from bitacoraPedidos AS bp 
 JOIN ordenes_trabajo AS ot ON bp.id_orden_trabajo = ot.id_orden_trabajo 
 JOIN ordenes_produccion AS op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON 
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
-pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY no_orden_compra;
+pp.id_estado = estados.id_estado WHERE estados.desc_estados = "PLANEACION" GROUP BY bp.no_orden_compra;
 
 
 CREATE VIEW productosEnEspera
@@ -188,4 +188,12 @@ FROM materiales_requeridos AS mr JOIN materiales AS mt ON mt.id_material = mr.id
 WHERE id_requisicion = (SELECT id_requisicion FROM requisiciones WHERE id_orden_trabajo = 1);
 
 
+SELECT * FROM materiales;
+SELECT * FROM productos;
 
+
+select * from productos_material;
+
+SELECT piezas_por_turno FROM productos_material WHERE 
+id_material = (SELECT id_material FROM materiales WHERE desc_material = 'MATERIAL 1')
+AND id_producto = (SELECT id_producto FROM productos WHERE clave_producto = '6613-8');

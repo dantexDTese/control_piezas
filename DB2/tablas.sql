@@ -211,4 +211,9 @@ precio_unitario				FLOAT
 );
 /**FIN TABLAS RELACIONALES*/
 
-
+CREATE TABLE productos_material(
+id_producto_material 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_material 			INT NOT NULL REFERENCES materiales(id_material),
+id_producto				INT NOT NULL REFERENCES productos(id_producto),
+piezas_por_turno		INT NOT NULL
+);

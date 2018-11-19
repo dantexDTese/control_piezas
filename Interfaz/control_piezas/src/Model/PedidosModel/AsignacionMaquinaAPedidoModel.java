@@ -100,4 +100,25 @@ public class AsignacionMaquinaAPedidoModel {
         return res;
     }
 
+    public Integer obtenerPiezasTurno(String claveProducto, String descMaterial) {        
+        Connection c = Conexion.getInstance().getConexion();        
+        String query = "SELECT piezas_por_turno FROM productos_material WHERE " +
+                       "id_material = (SELECT id_material FROM materiales WHERE desc_material = '"+descMaterial+"') " +
+                       "AND id_producto = (SELECT id_producto FROM productos WHERE clave_producto = '"+claveProducto+"');";        
+        
+        Integer piezasTurno = null;
+        
+        if(c!=null)
+            try {                
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    piezasTurno = rs.getInt(1);                    
+            } catch (SQLException e) {
+                System.err.println("error: class:AsignacionMaquinaAPedidoModel method:obtenerPiezasTurno "+e.getMessage());                
+            }
+        
+        return piezasTurno;
+    }
+
 }

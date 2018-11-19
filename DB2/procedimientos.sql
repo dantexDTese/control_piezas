@@ -390,5 +390,3 @@ INOUT respuesta				BOOLEAN
     
 END //
 DELIMITER ;
-
-

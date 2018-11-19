@@ -40,6 +40,7 @@ INSERT INTO maquinas(desc_maquina) VALUES('maquina1');
 INSERT INTO maquinas(desc_maquina) VALUES('maquina2');
 
 INSERT INTO materiales(desc_material) VALUES('MATERIAL 1');
+INSERT INTO materiales(desc_material) VALUES('MATERIAL 2');
 
 INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR1','DIRECCION1',10);
 INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR2','DIRECCION2',5);
@@ -49,3 +50,10 @@ INSERT INTO proveedores(desc_proveedor,direccion,IVA) VALUES('PROVEEDOR3','DIREC
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,1,20);
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,2,30);
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,3,40);
+
+INSERT INTO productos_material(id_material,id_producto,piezas_por_turno) VALUES(1,1,100);
+INSERT INTO productos_material(id_material,id_producto,piezas_por_turno) VALUES(1,2,50);
+
+SELECT piezas_por_turno FROM productos_material WHERE
+id_material = (SELECT id_material FROM materiales WHERE desc_material = 'MATERIAL 1') 
+AND id_producto = (SELECT id_producto FROM productos WHERE clave_producto = '6613-8');
