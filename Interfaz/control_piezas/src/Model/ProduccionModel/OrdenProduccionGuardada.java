@@ -26,15 +26,33 @@ public class OrdenProduccionGuardada {
     private final  String fechaFinOP;
     private final  String observacionesOP;
 
-    public OrdenProduccionGuardada(int ordenTrabajo, String noOrdenCompra, 
-            String fechaEntregaPedido, String fechaConfirmacionEntregaPedido,
-            String fechaRecepcionPedido, String descContacto, String nombreCliente,
-            int cantidadCliente, String claveProducto, int cantidadTotal,
-            int ordenProduccion, String descMaterial, String descMaquina, 
-            int barrasNecesarias, int piezasPorTurno, String fechaRegistroOP,
-            String fechaMontaje,String fechaInicioOP, String fechaDesmontaje,
-            String fechaFinOP, String observacionesOP) {
-        
+    /**
+     * CONSTRUCTOR
+     * 
+     * @param ordenTrabajo
+     * @param noOrdenCompra
+     * @param fechaEntregaPedido
+     * @param fechaConfirmacionEntregaPedido
+     * @param fechaRecepcionPedido
+     * @param descContacto
+     * @param nombreCliente
+     * @param cantidadCliente
+     * @param claveProducto
+     * @param cantidadTotal
+     * @param ordenProduccion
+     * @param descMaterial
+     * @param descMaquina
+     * @param barrasNecesarias
+     * @param piezasPorTurno
+     * @param fechaRegistroOP
+     * @param fechaMontaje
+     * @param fechaInicioOP
+     * @param fechaDesmontaje
+     * @param fechaFinOP
+     * @param observacionesOP
+     */
+    
+    public OrdenProduccionGuardada(int ordenTrabajo, String noOrdenCompra, String fechaEntregaPedido, String fechaConfirmacionEntregaPedido,String fechaRecepcionPedido, String descContacto, String nombreCliente,int cantidadCliente, String claveProducto, int cantidadTotal,int ordenProduccion, String descMaterial, String descMaquina, int barrasNecesarias, int piezasPorTurno, String fechaRegistroOP,String fechaMontaje,String fechaInicioOP, String fechaDesmontaje,String fechaFinOP, String observacionesOP) { 
         this.ordenTrabajo = ordenTrabajo;
         this.noOrdenCompra = noOrdenCompra;
         this.fechaEntregaPedido = fechaEntregaPedido;
@@ -58,11 +76,6 @@ public class OrdenProduccionGuardada {
         this.observacionesOP = observacionesOP;
     }
 
-    
-
-    
-    
-    
     public int getOrdenTrabajo() {
         return ordenTrabajo;
     }

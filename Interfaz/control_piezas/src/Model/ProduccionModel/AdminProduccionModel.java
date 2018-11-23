@@ -4,14 +4,12 @@ package Model.ProduccionModel;
 import Model.Conexion;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
-import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+
 
 
 public class AdminProduccionModel {
@@ -78,13 +76,27 @@ public class AdminProduccionModel {
                     do {                        
                        
                         orden = new OrdenProduccionGuardada(
-                                rs.getInt(1),rs.getString(2),rs.getString(3),
-                                rs.getString(4),rs.getString(5),rs.getString(6),
-                                rs.getString(7),rs.getInt(8),rs.getString(9),
-                                rs.getInt(10),rs.getInt(11),rs.getString(12),
-                                rs.getString(13),rs.getInt(14),rs.getInt(15),
-                                rs.getString(16),rs.getString(17),rs.getString(18),
-                                rs.getString(19),rs.getString(20),rs.getString(21));
+                                rs.getInt(1),       // ordenTrabajo
+                                rs.getString(2),   //  ordenCompra
+                                rs.getString(3),    //fechaEntregaPedido
+                                rs.getString(4),    //fechaConfirmacionEntrega
+                                rs.getString(5),    //fechaRecepcion
+                                rs.getString(6),    //descContacto
+                                rs.getString(7),    //descCliente
+                                rs.getInt(8),       //claveProducto
+                                rs.getString(9),    //cantidadTotal
+                                rs.getInt(10),      //ordenProduccion
+                                rs.getInt(11),      //descMaterial
+                                rs.getString(12),   //descMaquina
+                                rs.getString(13),   //barrasNecesarias
+                                rs.getInt(14),      //piezasPorTurno
+                                rs.getInt(15),      //turnosNecesarios
+                                rs.getString(16),   //fechaRegistroOrp
+                                rs.getString(17),   //fechaMontaje
+                                rs.getString(18),   //fechaDesmontaje
+                                rs.getString(19),   //fechaInicioProduccion
+                                rs.getString(20),   //fechaFin
+                                rs.getString(21));  //observaciones
                         
                     } while (rs.next());
                 
@@ -98,26 +110,8 @@ public class AdminProduccionModel {
     }
 
     
-
-    public void modificarBarrasNecesarias(int noOrden,int barras) {
-        Connection c = Conexion.getInstance().getConexion();
-        String query = "{Call modificar_barras_necesarias(?,?,?)}";
-        if(c!=null)
-            try {
-                CallableStatement cs = c.prepareCall(query);
-                cs.setInt(1,noOrden);
-                cs.setInt(2, barras);
-                cs.registerOutParameter(3,Types.VARCHAR);
-                cs.execute();
-                JOptionPane.showMessageDialog(null, cs.getString(3));
-            } catch (SQLException e) {
-                System.err.println("Error: Class: AdminProduccionModel Method:modificarBarrasNecesarias "+e.getMessage());
-            }
-    }
      
-    public final class OrdenTrabajo extends Pedido{
-        
-        
+    public final class OrdenTrabajo extends Pedido{                
         public OrdenTrabajo(int noOrdenTrabajo, String estado) {
             super(noOrdenTrabajo, estado);
         }    

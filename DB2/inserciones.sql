@@ -51,9 +51,17 @@ INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUE
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,2,30);
 INSERT INTO materiales_proveedor(id_material,id_proveedor,precio_unitario) VALUES(1,3,40);
 
-INSERT INTO productos_material(id_material,id_producto,piezas_por_turno) VALUES(1,1,100);
-INSERT INTO productos_material(id_material,id_producto,piezas_por_turno) VALUES(1,2,50);
+INSERT INTO productos_material(id_material,id_producto,piezas_por_turno,piezas_por_barra) VALUES(1,1,100,20);
+INSERT INTO productos_material(id_material,id_producto,piezas_por_turno,piezas_por_barra) VALUES(1,2,50,20);
 
 SELECT piezas_por_turno FROM productos_material WHERE
 id_material = (SELECT id_material FROM materiales WHERE desc_material = 'MATERIAL 1') 
 AND id_producto = (SELECT id_producto FROM productos WHERE clave_producto = '6613-8');
+
+
+
+SELECT * FROM ordenes_produccion;
+SELECT * FROM materiales_requeridos;
+select * from materiales_ordenes_requeridas;
+
+

@@ -149,7 +149,7 @@ CREATE TABLE materiales_ordenes_requeridas(
 id_material_orden_requerida 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material_requerido           INT REFERENCES materiales_requeridos(id_material_requerido),
 id_orden_produccion				INT REFERENCES ordenes_produccion(id_orden_produccion),
-barras_necesarias				INT DEFAULT 0
+barras_necesarias				FLOAT DEFAULT 0
 );
 
 CREATE TABLE materiales_requeridos(
@@ -157,7 +157,7 @@ id_material_requerido   INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material             INT NOT NULL REFERENCES materiales(id_material),
 id_estado               INT NOT NULL REFERENCES estados(id_estado),
 id_requisicion          INT NOT NULL REFERENCES requisiciones(id_requisicion),
-cantidad_total          INT DEFAULT 0
+cantidad_total          FLOAT DEFAULT 0
 );
 
 CREATE TABLE parcialidades_requisicion(
@@ -184,7 +184,7 @@ num_parcialidad						INT NOT NULL DEFAULT 0,
 fecha_solicitud						DATE,
 fecha_entrega						DATE,
 unidad								VARCHAR(10),
-precio_total							FLOAT DEFAULT 0
+precio_total						FLOAT DEFAULT 0
 );
 /**FIN TABLAS DEBILES 1*/
 
@@ -215,5 +215,6 @@ CREATE TABLE productos_material(
 id_producto_material 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material 			INT NOT NULL REFERENCES materiales(id_material),
 id_producto				INT NOT NULL REFERENCES productos(id_producto),
-piezas_por_turno		INT NOT NULL
+piezas_por_turno		INT NOT NULL,
+piezas_por_barra		INT NOT NULL
 );

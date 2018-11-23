@@ -4,15 +4,22 @@ import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
 import View.Pedidos.AsignarMaquinaAPedido;
+import com.toedter.calendar.JDateChooser;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -55,11 +62,15 @@ public class AsignacionMaquinaAPedidoController {
         this.vista.getCbxMaquina().addActionListener((ActionEvent e) -> {
             Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());
         });
+        
+        this.vista.getJdcFechaMontajeMolde().addPropertyChangeListener(listenerValidacionFecha);
+        this.vista.getDcrFechaInicioProduccion().addPropertyChangeListener(listenerValidacionFecha);
     }
     
     /**
      * METODOS
      */
+     
     
    
     private void llenarTablaPedidosPendientes(){        
@@ -274,5 +285,99 @@ public class AsignacionMaquinaAPedidoController {
             if(piezasTurno != null)
                 vista.getSprPiecesByShift().setValue(piezasTurno);
         }
+    };
+    
+    PropertyChangeListener listenerValidacionFecha = new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            
+            if(evt.getSource() == vista.getJdcFechaMontajeMolde())
+                validarFechaMontaje();
+            
+            else if(evt.getSource() == vista.getDcrFechaInicioProduccion())
+                validarFechaInicio(vista.getJdcFechaMontajeMolde().getDate(),
+                        vista.getDcrFechaInicioProduccion().getDate());
+        }
+        
+        private void validarFechaInicio(Date fechaMontaje, Date fechaInicio) {
+                if(fechaMontaje == null && fechaInicio != null){
+                    JOptionPane.showMessageDialog(null,"por favor antes seleccione una fecha de montaje");
+                    vista.getDcrFechaInicioProduccion().setCalendar(null);
+                }else if(fechaInicio != null && fechaMontaje!=null){
+                    validarTodasFechas(vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(ordenTrabajo), 2).toString(),
+                    Estructuras.convertirFecha(fechaMontaje),Estructuras.convertirFecha(fechaInicio));   
+                }
+        }
+        
+        private void validarTodasFechas(String fechaEntrega, String fechaMontaje, String fechaInicio) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");            
+            try {
+                Date fechaE = dateFormat.parse(fechaEntrega.replace('/', '-'));
+                Date fechaM = dateFormat.parse(fechaMontaje.replace('/', '-'));
+                Date fechaI = dateFormat.parse(fechaInicio.replace('/', '-'));    
+                
+                if(fechaM.compareTo(fechaI) >= 0 || fechaI.compareTo(fechaE) >= 0){
+                    JOptionPane.showMessageDialog(null, "esta fecha no es valida");
+                    vista.getDcrFechaInicioProduccion().setCalendar(null);
+                }else if(!validarFecha(Integer.parseInt(vista.getSprPiecesByShift().getValue().toString()),
+                                Integer.parseInt(vista.getSprCantidadProducir().getValue().toString()),fechaI,
+                                vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(ordenTrabajo), 2).toString(),
+                                Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString())))
+                        vista.getDcrFechaInicioProduccion().setCalendar(null);
+                           
+            } catch (ParseException ex) {
+                Logger.getLogger(AsignacionMaquinaAPedidoController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        private void validarFechaMontaje(){
+            boolean validacion=true;
+            try {
+                if((int)vista.getSprPiecesByShift().getValue() > 0 && vista.getJdcFechaMontajeMolde().getDate() != null){
+                        validacion = validarFecha(Integer.parseInt(vista.getSprPiecesByShift().getValue().toString()),
+                                Integer.parseInt(vista.getSprCantidadProducir().getValue().toString()),
+                                vista.getJdcFechaMontajeMolde().getDate(),
+                                vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(ordenTrabajo), 2).toString(),
+                                Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()));  
+                    if(!validacion)
+                        vista.getJdcFechaMontajeMolde().setCalendar(null);
+                }
+                
+            } catch (NumberFormatException e) {
+                System.err.println("error: class: AsignacionMaquinaAPedidoController,ListenerValidacionFecha "+e.getMessage());
+            }            
+        }
+        
+        private boolean validarFecha(int piezasTurno,int cantidadTotal,Date fechaSeleccionada,String fechaEntrega,float turnos){
+            turnos = (turnos < 1)? 1:2;
+            int diasNecesarios = (int)(Math.ceil((float)cantidadTotal/(float)piezasTurno) / turnos);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");            
+            try {                
+                Date dateEntrega = dateFormat.parse(fechaEntrega);
+                int diasSeleccionado=(int) ((dateEntrega.getTime()-fechaSeleccionada.getTime())/86400000);
+                
+                if(diasSeleccionado < 0 || diasSeleccionado+1 < diasNecesarios ||
+                        Estructuras.convertirFecha(dateEntrega).equals(Estructuras.convertirFecha(fechaSeleccionada))){
+                     JOptionPane.showMessageDialog(null, "la fecha seleccionada no es valida","fecha no valida",JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                
+            } catch (ParseException ex) {
+                Logger.getLogger(AsignacionMaquinaAPedidoController.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            return true;                  
+        }
+
+        private int obtenerFilaOrdenTrabajo(String ordenTrabajo) {
+            DefaultTableModel model = (DefaultTableModel) vista.getJtOrdenesPendientes().getModel();
+            int fila = 0;
+                while(!model.getValueAt(fila,1).toString().equals(ordenTrabajo)) fila++;
+            return fila;
+        }
+
+        
+
+        
     };
 }

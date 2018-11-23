@@ -19,6 +19,8 @@ pd.id_contacto = cn.id_contacto JOIN clientes cl ON cl.id_cliente = cn.id_client
 JOIN ordenes_produccion op ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN productos AS pr ON pr.id_producto = op.id_producto JOIN
 estados es ON pd.id_estado = es.id_estado;
 
+
+
 /*ya*/
 CREATE VIEW PedidosPendientes
 AS
@@ -46,6 +48,8 @@ ON ot.id_orden_trabajo = op.id_orden_trabajo JOIN procesos_produccion AS pp ON
 op.id_orden_produccion = pp.id_orden_produccion JOIN estados ON
 pp.id_estado = estados.id_estado JOIN productos AS pr ON pr.id_producto = op.id_producto
 WHERE estados.desc_estados = "PLANEACION" GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;
+
+select * from productosEnEspera;
 
 /*ya*/
 CREATE VIEW procedimiento_total
@@ -142,7 +146,8 @@ mor.barras_necesarias,
 op.piezas_por_turno,
 op.turnos_necesarios,
 op.fecha_registro AS fecha_registro_op,
-op.fecha_montaje,op.fecha_desmontaje,
+op.fecha_montaje,
+op.fecha_desmontaje,
 op.fecha_inicio AS fecha_inicio_op,
 op.fecha_fin AS fecha_fin_op,
 op.observaciones AS observaciones_op
@@ -151,14 +156,12 @@ JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion
 JOIN materiales_ordenes_requeridas AS mor ON mor.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
 
-
 CREATE VIEW fechas_planeadas
 AS
 SELECT op.id_orden_produccion,lpn.cantidad_planeada,DAY(fecha_planeada) AS dia ,fecha_planeada,mq.desc_maquina 
 FROM lotes_planeados AS lpn JOIN ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion 
 JOIN procesos_produccion AS pp ON pp.id_orden_produccion = op.id_orden_produccion
 JOIN maquinas AS mq ON mq.id_maquina = pp.id_maquina;
-
 
 CREATE VIEW requisicion_ordenes AS
 SELECT
@@ -181,19 +184,15 @@ JOIN procedimiento_total AS pt ON mor.id_orden_produccion = pt.id_orden_producci
 JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mor.id_material_requerido
 JOIN estados AS st ON st.id_estado = mr.id_estado;
 
-
-
 select cantidad_total,desc_material 
 FROM materiales_requeridos AS mr JOIN materiales AS mt ON mt.id_material = mr.id_material
 WHERE id_requisicion = (SELECT id_requisicion FROM requisiciones WHERE id_orden_trabajo = 1);
 
-
-SELECT * FROM materiales;
-SELECT * FROM productos;
-
-
-select * from productos_material;
-
 SELECT piezas_por_turno FROM productos_material WHERE 
 id_material = (SELECT id_material FROM materiales WHERE desc_material = 'MATERIAL 1')
 AND id_producto = (SELECT id_producto FROM productos WHERE clave_producto = '6613-8');
+
+SELECT (SELECT op.cantidad_total FROM ordenes_produccion AS op WHERE op.id_orden_produccion = 1)/
+(SELECT pm.piezas_por_barra FROM productos_material AS pm WHERE pm.id_material = 1 
+AND pm.id_producto = (SELECT id_producto FROM ordenes_produccion WHERE
+id_orden_produccion = 1)) AS barras_necesarias;

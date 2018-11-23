@@ -389,6 +389,14 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setDcrFechaInicioProduccion(JDateChooser dcrFechaInicioProduccion) {
+        this.dcrFechaInicioProduccion = dcrFechaInicioProduccion;
+    }
+
+    public void setJdcFechaMontajeMolde(JDateChooser jdcFechaMontajeMolde) {
+        this.jdcFechaMontajeMolde = jdcFechaMontajeMolde;
+    }
+    
     public JButton getBtnTerminar() {
         return btnTerminar;
     }

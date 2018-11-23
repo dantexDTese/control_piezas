@@ -1,70 +1,53 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller.PedidosController;
 
 import Model.Estructuras;
 import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
-import Model.PedidosModel.Pedido;
 import Model.PedidosModel.PlaneacionModel;
 import Model.PedidosModel.ProcesoPrincipal;
 import Model.PedidosModel.lotesProduccion;
 import Model.PedidosModel.procedimientoTotal;
 import View.Pedidos.AsignarMaquinaAPedido;
-import View.Pedidos.FechaCalendario;
-import View.Pedidos.PanelFecha;
 import View.Pedidos.PlaneacionView;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyVetoException;
-import java.beans.VetoableChangeListener;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
+
 
 
 public class PlaneacionController  {
 
+    /**
+     * Atributos
+     */
     private final PlaneacionView vista;
     private final PlaneacionModel model;
     private ProcesoPrincipal procesoPrincipal; 
-    private ArrayList<lotesProduccion> listaLotes = new ArrayList<>();
-    
-    
+    private final ArrayList<lotesProduccion> listaLotes;
     private AsignarMaquinaAPedido vistaMaquinaPedido;
     
-    public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
+    /**
+     * Constructor
+     * @param vista
+     * @param model
+     */
     
+    public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
+        this.listaLotes = new ArrayList<>();
         this.vista = vista;
         this.model = model;
-       
-        
         llenarListaMaquinas();
-        
         this.vista.getCbxListaMaquinas().addItemListener(maquinaSeleccionada);
         this.vista.getBtnAgregarOrdenesPendientes().addActionListener((ActionEvent e) -> {agregarOrdenesPendientes();});               
-
-        this.vista.getJpCalendar().setSize(800,350);
-        
+        this.vista.getJpCalendar().setSize(800,350);        
         if(vista.getCbxListaMaquinas().getSelectedItem() != null){
             llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
             Estructuras.obtenerCalendario(this.vista.getJpCalendar(),this.vista.getCbxListaMaquinas().getSelectedItem().toString());        
-        }
-       
-        
+        }        
     }
     
     private final ItemListener maquinaSeleccionada = new ItemListener() {
@@ -88,10 +71,15 @@ public class PlaneacionController  {
             this.vistaMaquinaPedido = new AsignarMaquinaAPedido(this.vista.getPrincpial(), true); 
             AsignacionMaquinaAPedidoController controllerMaquinaPedido = new AsignacionMaquinaAPedidoController(vistaMaquinaPedido
                     , new AsignacionMaquinaAPedidoModel());            
+            vistaMaquinaPedido.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    super.windowClosed(e); 
+                    llenarTablaMaquinas(vista.getCbxListaMaquinas().getSelectedItem().toString());
+                }                
+            });
             vistaMaquinaPedido.setVisible(true); 
     }
-    
-    
     
     private void obtenerProcesoPrincipal(String nombreMaquina){    
         procesoPrincipal = model.obtenerProcesoPrincipal(nombreMaquina);
