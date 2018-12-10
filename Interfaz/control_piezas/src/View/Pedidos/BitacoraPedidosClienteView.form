@@ -264,16 +264,16 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="10" rowCount="0">
-                        <Column editable="false" title="ORDEN TRABAJO" type="java.lang.Integer"/>
+                        <Column editable="false" title="ESTADO" type="java.lang.Object"/>
+                        <Column editable="false" title="NO. PEDIDO" type="java.lang.Integer"/>
                         <Column editable="false" title="ORDEN COMPRA" type="java.lang.String"/>
                         <Column editable="false" title="PRODUCTO" type="java.lang.String"/>
+                        <Column editable="false" title="CANTIDAD" type="java.lang.Integer"/>
                         <Column editable="false" title="FECHA DE ENTREGA" type="java.lang.String"/>
                         <Column editable="false" title="CONFIRMACION ENTREGA" type="java.lang.String"/>
                         <Column editable="false" title="FECHA RECEPCION" type="java.lang.String"/>
-                        <Column editable="false" title="ESTADO" type="java.lang.Object"/>
                         <Column editable="false" title="CONTACTO" type="java.lang.String"/>
                         <Column editable="false" title="CLIENTE" type="java.lang.String"/>
-                        <Column editable="false" title="CANTIDAD" type="java.lang.Integer"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

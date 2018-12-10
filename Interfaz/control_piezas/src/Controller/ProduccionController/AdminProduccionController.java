@@ -3,8 +3,12 @@ package Controller.ProduccionController;
 
 import Model.Estructuras;
 import Model.ProduccionModel.AdminProduccionModel;
+import Model.ProduccionModel.ControlProduccionModel;
 import Model.ProduccionModel.OrdenProduccionGuardada;
-import View.Produccion.AdminProduccion;
+import Model.ProduccionModel.SeguimientoProduccionModel;
+import View.Produccion.AdminProduccionView;
+import View.Produccion.ControlProduccionDialogView;
+import View.Produccion.SeguimientoProduccionDialogView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -21,7 +25,7 @@ public class AdminProduccionController {
     /**
      * ATRIBUTOS
      */
-    private final AdminProduccion vista;
+    private final AdminProduccionView vista;
     private final AdminProduccionModel model;
     
     
@@ -30,7 +34,7 @@ public class AdminProduccionController {
      * @param vista
      * @param model
      */
-    public AdminProduccionController(AdminProduccion vista, AdminProduccionModel model) {
+    public AdminProduccionController(AdminProduccionView vista, AdminProduccionModel model) {
       
         //INICIALIZACION
         this.vista = vista;
@@ -46,14 +50,14 @@ public class AdminProduccionController {
         //BOTONES MODIFICAR Y GUARDAR MODIFICACION
         this.vista.getBtnModificar().addActionListener(listenerBotones);
         this.vista.getBtnGuardarModificacion().addActionListener(listenerBotones);
-        
+        this.vista.getBtnSeguimientoProduccion().addActionListener(listenerBotones);
+        this.vista.getBtnControlProduccion().addActionListener(listenerBotones);
     }
     
     
     /**
      * METODOS
      */
-    
     private void llenarTablaOrdenesTrabajo(){
         
         ArrayList<AdminProduccionModel.OrdenTrabajo> listaOrdenesTrabajo =  model.listaOrdenesTrabajo();
@@ -66,21 +70,36 @@ public class AdminProduccionController {
                 listaOrdenesTrabajo.get(i).getEstado(),
             });
         }
-        
-        
     }
     
     /**
-     * FUNCIONES
+     * EVENTOS
      */
     
     private final ActionListener listenerBotones = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            if(e.getSource() == vista.getBtnSeguimientoProduccion())
+                mostrarSeguimientoProduccion();
+            else if(e.getSource() == vista.getBtnControlProduccion())
+                mostrarControlProduccion();
         }     
-
+        
+        private void mostrarSeguimientoProduccion(){
+            SeguimientoProduccionDialogView vistaSeguimiento = new SeguimientoProduccionDialogView(vista.getPrincipal(), true);
+            SeguimientoProduccionController controllerSeguimiento = new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel());
+            vistaSeguimiento.setVisible(true);
+        }
+        
+        private void mostrarControlProduccion(){
+            ControlProduccionDialogView viewControlProduccion = new ControlProduccionDialogView(vista.getPrincipal(), true);
+            ControlProduccionController controllerControlProduccion = new ControlProduccionController(viewControlProduccion
+                                        , new ControlProduccionModel());
+            viewControlProduccion.setVisible(true);
+        }
+        
     };
+    
     
     
     private final MouseListener listenerSeleccionOrdenTrabajo = new MouseAdapter() {
@@ -114,9 +133,8 @@ public class AdminProduccionController {
             int filaSeleccionada = vista.getJtbOrdenesProduccion().rowAtPoint(e.getPoint());
             llenarOrdenProduccion((Integer)vista.getJtbOrdenesProduccion().getValueAt(filaSeleccionada,0));
         }
-    };
-    
-    private void llenarOrdenProduccion(Integer noOrdenProduccion){
+        
+        private void llenarOrdenProduccion(Integer noOrdenProduccion){
             OrdenProduccionGuardada orden = model.obtenerOrdenProduccion(noOrdenProduccion);
             if(orden!= null){
                 vista.getLbNoOP().setText(orden.getOrdenProduccion()+"");
@@ -139,8 +157,10 @@ public class AdminProduccionController {
                 
             }
             else
-                JOptionPane.showMessageDialog(null,"error");
-                
+                JOptionPane.showMessageDialog(null,"error");       
         }
+    };
+    
+    
     
 }

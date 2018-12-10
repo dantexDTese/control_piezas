@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
+              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="8a" green="90" red="f" type="rgb"/>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" attributes="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane2" min="-2" pref="1432" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="360" max="-2" attributes="0"/>
+                          <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jScrollPane2" min="-2" pref="444" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+          <SubComponents>
+            <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+              <AuxValues>
+                <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+              </AuxValues>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <SubComponents>
+                <Component class="javax.swing.JTable" name="jtbConntrolProduccion">
+                  <Properties>
+                    <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                      <Table columnCount="50" rowCount="0">
+                        <Column editable="false" title="RECHAZO" type="java.lang.Object"/>
+                        <Column editable="false" title="FECHA" type="java.lang.Object"/>
+                        <Column editable="false" title="OPERADOR" type="java.lang.Object"/>
+                        <Column editable="false" title="TURNO" type="java.lang.Object"/>
+                        <Column editable="false" title="MAQUINA" type="java.lang.Object"/>
+                        <Column editable="false" title="PARTE" type="java.lang.Object"/>
+                        <Column editable="false" title="OPERACION" type="java.lang.Object"/>
+                        <Column editable="false" title="NO. BARRAS" type="java.lang.Object"/>
+                        <Column editable="false" title="MERMA" type="java.lang.Object"/>
+                        <Column editable="false" title="PRODUCCION" type="java.lang.Object"/>
+                        <Column editable="false" title="CANTIDAD RECHAZO LIBERADO" type="java.lang.Object"/>
+                        <Column editable="false" title="SCRAP AJUSTE" type="java.lang.Object"/>
+                        <Column editable="false" title="SCRAP" type="java.lang.Object"/>
+                        <Column editable="false" title="F.E CILINDRADO" type="java.lang.Object"/>
+                        <Column editable="false" title="F.E LARGO" type="java.lang.Object"/>
+                        <Column editable="false" title="C. ARRANCADO" type="java.lang.Object"/>
+                        <Column editable="false" title="B. DESCENTRALIZADO" type="java.lang.Object"/>
+                        <Column editable="false" title="D. DEBASTADOS" type="java.lang.Object"/>
+                        <Column editable="false" title="FILO DE REBABA" type="java.lang.Object"/>
+                        <Column editable="false" title="PUNTO DE CORTE" type="java.lang.Object"/>
+                        <Column editable="false" title="F.E.RADIO" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN CUERDA" type="java.lang.Object"/>
+                        <Column editable="false" title="DOBLE BARRENO" type="java.lang.Object"/>
+                        <Column editable="false" title="MOLETEADO FINO" type="java.lang.Object"/>
+                        <Column editable="false" title="MOLETEADO DESALINEADO" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN MOLETEADO" type="java.lang.Object"/>
+                        <Column editable="false" title="PASA PIN" type="java.lang.Object"/>
+                        <Column editable="false" title="PROFUNDIDAD DE RANURA" type="java.lang.Object"/>
+                        <Column editable="false" title="GOLPE" type="java.lang.Object"/>
+                        <Column editable="false" title="HERRAMIENTA ROTA" type="java.lang.Object"/>
+                        <Column editable="false" title="PIEZA DOBLE" type="java.lang.Object"/>
+                        <Column editable="false" title="RAYADAS" type="java.lang.Object"/>
+                        <Column editable="false" title="NO PASA PIN" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN CAJA" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN CHAFLAN" type="java.lang.Object"/>
+                        <Column editable="false" title="MAL LIMADO" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN BARRENO" type="java.lang.Object"/>
+                        <Column editable="false" title="CHAFLAN PROFUNDO" type="java.lang.Object"/>
+                        <Column editable="false" title="PIEZA RROTA" type="java.lang.Object"/>
+                        <Column editable="false" title="SIN CILINDRADO" type="java.lang.Object"/>
+                        <Column editable="false" title="NO PASA GO" type="java.lang.Object"/>
+                        <Column editable="false" title="PASA NO GO" type="java.lang.Object"/>
+                        <Column editable="false" title="NO PASA GAUGE" type="java.lang.Object"/>
+                        <Column editable="false" title="F.E VUELTAS" type="java.lang.Object"/>
+                        <Column editable="false" title="D. ENTRE BARRENO Y PARED." type="java.lang.Object"/>
+                        <Column editable="false" title="PROFUDIDAD BARENO" type="java.lang.Object"/>
+                        <Column editable="false" title="QUEMADAS" type="java.lang.Object"/>
+                        <Column editable="false" title="F.E. CAJA" type="java.lang.Object"/>
+                        <Column editable="false" title="T. MUERTO" type="java.lang.Object"/>
+                        <Column editable="false" title="CAUSA" type="java.lang.Object"/>
+                      </Table>
+                    </Property>
+                    <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                      <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                    </Property>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel2">
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jLabel1" alignment="0" pref="734" max="32767" attributes="0"/>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel1" pref="56" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabel1">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Impact" size="36" style="0"/>
+                </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
+                <Property name="text" type="java.lang.String" value="CONTROL DE PRODUCCION"/>
+              </Properties>
+            </Component>
+          </SubComponents>
+        </Container>
+      </SubComponents>
+    </Container>
+  </SubComponents>
+</Form>

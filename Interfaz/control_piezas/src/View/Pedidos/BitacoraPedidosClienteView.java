@@ -164,11 +164,11 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "ORDEN TRABAJO", "ORDEN COMPRA", "PRODUCTO", "FECHA DE ENTREGA", "CONFIRMACION ENTREGA", "FECHA RECEPCION", "ESTADO", "CONTACTO", "CLIENTE", "CANTIDAD"
+                "ESTADO", "NO. PEDIDO", "ORDEN COMPRA", "PRODUCTO", "CANTIDAD", "FECHA DE ENTREGA", "CONFIRMACION ENTREGA", "FECHA RECEPCION", "CONTACTO", "CLIENTE"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false, false, false, false

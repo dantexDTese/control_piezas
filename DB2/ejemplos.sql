@@ -51,3 +51,4 @@ mor.id_orden_produccion = 1;
 
 
 SELECT * FROM proveedores;            
+

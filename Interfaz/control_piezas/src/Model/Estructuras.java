@@ -9,17 +9,16 @@ import Controller.PedidosController.CalendarioController;
 import Model.PedidosModel.CalendarioModel;
 import View.Pedidos.Calendario;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -49,6 +48,28 @@ public class Estructuras {
         }
         return selector;
     }
+    
+    public static void modificarAnchoTabla(JTable tablaModificar,Integer[] listaTamanos){
+        //pasar a estructuras
+        tablaModificar.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
+            
+            for(int i = 0;i<listaTamanos.length;i++){
+                TableColumn columna = tablaModificar.getColumnModel().getColumn(i);
+                columna.setPreferredWidth(listaTamanos[i]);
+            }
+    }
+    
+    public static void modificarAltoTabla(JTable tablaModificar,int alto){
+        //pasar a estructuras
+        tablaModificar.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
+            
+                tablaModificar.setRowHeight(alto);
+
+    }
+    
+    
     
     public static void obtenerCalendario(JPanel contenedor,String descMaquina){    
         Calendario calendarioView = new Calendario();

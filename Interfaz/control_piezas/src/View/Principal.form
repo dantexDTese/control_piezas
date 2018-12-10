@@ -64,7 +64,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu4">
+        <Menu class="javax.swing.JMenu" name="menuItemControlProduccion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Producci&#xf2;n                             "/>
           </Properties>
@@ -85,21 +85,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem2ActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu7">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Seguimiento de produccion"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Seguimiento diario"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem3ActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu5">
@@ -109,7 +94,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemMateriaPrima">
               <Properties>
-                <Property name="text" type="java.lang.String" value="MATERIA PRIMA"/>
+                <Property name="text" type="java.lang.String" value="Materia prima"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemMateriaPrimaActionPerformed"/>
@@ -117,7 +102,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemProductoTerminado">
               <Properties>
-                <Property name="text" type="java.lang.String" value="PRODUCTO TERMINADO"/>
+                <Property name="text" type="java.lang.String" value="Producto terminado"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemProductoTerminadoActionPerformed"/>
@@ -132,7 +117,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="itemMenuBitacoraPedidosCliente">
               <Properties>
-                <Property name="text" type="java.lang.String" value="bitacora de pedidos clientes"/>
+                <Property name="text" type="java.lang.String" value="bitacora de pedidos"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="itemMenuBitacoraPedidosClienteActionPerformed"/>
@@ -153,27 +138,19 @@
             <Property name="text" type="java.lang.String" value="Requisicion de materiales            "/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="menuItemNuevasRequisiciones">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Nuevas requisiciones"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemNuevasRequisicionesActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="menuItemControlEntregaMP">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Control de entrega de MP"/>
+                <Property name="text" type="java.lang.String" value="Control de requisiciones"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemControlEntregaMPActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="menuItemAdminRequisiciones">
+            <Menu class="javax.swing.JMenu" name="jMenu4">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Admin. Requisiciones"/>
+                <Property name="text" type="java.lang.String" value="Recepcion de materiales"/>
               </Properties>
-            </MenuItem>
+            </Menu>
           </SubComponents>
         </Menu>
       </SubComponents>

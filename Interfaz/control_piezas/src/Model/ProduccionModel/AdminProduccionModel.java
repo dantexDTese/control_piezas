@@ -17,7 +17,7 @@ public class AdminProduccionModel {
     public ArrayList<OrdenTrabajo> listaOrdenesTrabajo(){
          ArrayList<OrdenTrabajo> lista = new ArrayList<>();
          Connection c = Conexion.getInstance().getConexion();
-         String query = "SELECT ot.id_orden_trabajo,ts.desc_estados " +
+         String query = "SELECT ot.id_orden_trabajo,ts.desc_estado " +
                         "FROM ordenes_trabajo AS ot JOIN procedimiento_total " +
                         "AS pt ON ot.id_orden_trabajo = pt.id_orden_trabajo " +
                         "JOIN todos_los_estados  AS ts ON ot.id_estado = ts.id_estado " + 
@@ -76,8 +76,8 @@ public class AdminProduccionModel {
                     do {                        
                        
                         orden = new OrdenProduccionGuardada(
-                                rs.getInt(1),       // ordenTrabajo
-                                rs.getString(2),   //  ordenCompra
+                                rs.getInt(1),       //ordenTrabajo
+                                rs.getString(2),    //ordenCompra
                                 rs.getString(3),    //fechaEntregaPedido
                                 rs.getString(4),    //fechaConfirmacionEntrega
                                 rs.getString(5),    //fechaRecepcion
@@ -97,7 +97,6 @@ public class AdminProduccionModel {
                                 rs.getString(19),   //fechaInicioProduccion
                                 rs.getString(20),   //fechaFin
                                 rs.getString(21));  //observaciones
-                        
                     } while (rs.next());
                 
                 c.close();

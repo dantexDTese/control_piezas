@@ -2,38 +2,35 @@
 package Controller.PedidosController;
 
 import Model.Estructuras;
-import Model.OrdenProductoActivo;
 import Model.PedidosModel.nuevoPedidoClienteModel;
 import Model.ordenProducto;
 import Model.productoModel;
 import View.Pedidos.NuevoPedidoCliente;
-import ds.desktop.notify.DesktopNotify;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
-public class nuevoPedidoClienteController implements ActionListener,MouseListener{
+public class nuevoPedidoClienteController implements ActionListener{
 
-    private NuevoPedidoCliente vistaNuevoPedido;
-    private nuevoPedidoClienteModel modelNuevoPedido;
-    private BitacoraPedidosClienteController bitacora;
+    private final NuevoPedidoCliente vistaNuevoPedido;
+    private final nuevoPedidoClienteModel modelNuevoPedido;
+    
     
     nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido,
-            nuevoPedidoClienteModel modelNuevoPedido,BitacoraPedidosClienteController bitacora) {
+            nuevoPedidoClienteModel modelNuevoPedido) {
         this.vistaNuevoPedido = vistaNuevoPedido;
         this.modelNuevoPedido = modelNuevoPedido;
         llenarListaClientes();
         llenarListaProductos();
         this.vistaNuevoPedido.getCbxDescCliente().addActionListener(this);
-        this.vistaNuevoPedido.getTbListaProductos().addMouseListener(this);
+        this.vistaNuevoPedido.getTbListaProductos().addMouseListener(listenerAgregarProducto);
        this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
     }
     
@@ -97,11 +94,11 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
                         producto.getCodProducto(), producto.getCantidadSolicitada());
 
                 }
-            
-                
+               
                 this.vistaNuevoPedido.dispose();
             }
-        }
+        }else 
+            JOptionPane.showMessageDialog(null,"Por favor antes de guardar agregue productos a la lista","competar lista",JOptionPane.WARNING_MESSAGE);
     }
     
     private ArrayList obtenerListaProductos(){
@@ -118,56 +115,33 @@ public class nuevoPedidoClienteController implements ActionListener,MouseListene
         return lista;
     }
     
-    
-    
-    
-        
-    
+    private final MouseListener listenerAgregarProducto = new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e); 
+            if(!"".equals(vistaNuevoPedido.getTxtNoOrdenCompra().getText()) && vistaNuevoPedido.getDcFechaEntrega().getDate() != null
+                    && vistaNuevoPedido.getCbxContactoCliente().getSelectedItem() != null){
+            int seleccionado = vistaNuevoPedido.getTbListaProductos().rowAtPoint(e.getPoint());
+                 
+            String cantidad = JOptionPane.showInputDialog(new JFrame(), "INCRESA LA CANTIDAD NECESARIA");
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        int seleccionado = this.vistaNuevoPedido.getTbListaProductos().rowAtPoint(e.getPoint());
-        
-         
-        String cantidad = JOptionPane.showInputDialog(new JFrame(), "INCRESA LA CANTIDAD NECESARIA");
-        
-        if(cantidad!=null && !cantidad.equals("")){
-            try {
-            agregarProductoPedido(this.vistaNuevoPedido.getTbListaProductos()
-                    .getValueAt(seleccionado, 1).toString(),
-                    Integer.parseInt(cantidad));    
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "El valor no es correcto");
+            if(cantidad!=null && !cantidad.equals("")){
+                try {
+                agregarProductoPedido(vistaNuevoPedido.getTbListaProductos()
+                        .getValueAt(seleccionado, 1).toString(),
+                        Integer.parseInt(cantidad));    
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "El valor no es correcto");
+                }
             }
-            
+        }else
+            JOptionPane.showMessageDialog(null, "por favor complete los campos que se encuentran en la seccion de arriba","completar campos",JOptionPane.WARNING_MESSAGE);
         }
         
-    }
-    
-    private void agregarProductoPedido(String claveProducto,int cantidad){
-        DefaultTableModel model = (DefaultTableModel) this.vistaNuevoPedido.getTbListaPedido().getModel();
-        
-        model.addRow(new Object[]{claveProducto,cantidad});
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        
-    }
+        private void agregarProductoPedido(String claveProducto,int cantidad){
+            DefaultTableModel model = (DefaultTableModel) vistaNuevoPedido.getTbListaPedido().getModel();        
+            model.addRow(new Object[]{claveProducto,cantidad});
+        }
+    };
     
 }

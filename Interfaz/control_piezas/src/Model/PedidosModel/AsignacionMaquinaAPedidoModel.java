@@ -18,6 +18,10 @@ public class AsignacionMaquinaAPedidoModel {
      
     }
     
+    public ArrayList<String> listaProcesosProduccion(){
+        return Estructuras.obtenerlistaDatos("SELECT desc_tipo_proceso FROM tipos_proceso");
+    }
+    
     public ArrayList<String> listaMaquinas(){
         return Estructuras.obtenerlistaDatos("SELECT desc_maquina FROM maquinas");
     }
@@ -29,7 +33,11 @@ public class AsignacionMaquinaAPedidoModel {
         if(c!=null)
             try {
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM PedidosPendientes");
+                ResultSet rs = st.executeQuery("SELECT pd.no_orden_compra,ot.id_orden_trabajo," +
+                "pd.fecha_entrega FROM pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido " +
+                "JOIN estados ON ot.id_estado = estados.id_estado WHERE estados.desc_estado = 'PLANEACION' "
+                + "GROUP BY pd.no_orden_compra;");
+                
                 if(rs.first())
                     do {                        
                         Pedido pedido = new Pedido(rs.getString(1),rs.getInt(2),rs.getString(3));
@@ -37,7 +45,7 @@ public class AsignacionMaquinaAPedidoModel {
                     } while (rs.next());
                c.close(); 
             } catch (SQLException e) {
-                System.err.println("error: class: AsignacionMaquinaAPedido, Method:listaPedidosPendientes"+e.getMessage());
+                System.err.println("error: class: AsignacionMaquinaAPedidoModel, Method:listaPedidosPendientes"+e.getMessage());
             }
         
         return pedidos;
@@ -51,14 +59,17 @@ public class AsignacionMaquinaAPedidoModel {
         if(c!=null)
             try {       
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM productosEnEspera "
-                        + "WHERE id_orden_trabajo = '"+noOrdenTrabajo+"'");
+                ResultSet rs = st.executeQuery("SELECT ot.id_orden_trabajo,op.id_orden_produccion,pr.clave_producto," +
+                "op.cantidad_cliente FROM ordenes_trabajo AS ot JOIN ordenes_produccion "
+              + "AS op ON ot.id_orden_trabajo = op.id_orden_trabajo " +
+                "JOIN productos AS pr ON pr.id_producto = op.id_producto "
+                        + "WHERE ot.id_orden_trabajo = "+noOrdenTrabajo+" "
+              + "GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;");
                 if(rs.first())
                     do {                        
                         listaProductos.add(new ProductosPendientes(rs.getString(1),
                                 rs.getInt(2), rs.getString(3), rs.getInt(4)));                        
                     } while (rs.next());
-                
             } catch (SQLException e) {
                 System.err.println("mensaje: class:AsignacionMaquinaAPedido"
                         + "Method:listaProductosPendientes"+e.getMessage());
@@ -70,11 +81,9 @@ public class AsignacionMaquinaAPedidoModel {
         return Estructuras.obtenerlistaDatos("SELECT desc_material FROM materiales");
     }
     
-    
-
     public String agregarProductoPendiente(ProductosPendientes pendiente,int nOrden) {
         Connection c = Conexion.getInstance().getConexion();
-        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?,?,?,?,?)}";
+        String query = "{Call agregar_orden_maquina(?,?,?,?,?,?,?,?,?,?,?,?)}";
         String res=null;
         if(c!=null)
             try {
@@ -90,9 +99,10 @@ public class AsignacionMaquinaAPedidoModel {
                 cs.setString(8, pendiente.getFechaInicio());
                 cs.setInt(9, pendiente.getPiecesByShift());
                 cs.setInt(10, nOrden);
-                cs.registerOutParameter(11, Types.VARCHAR);
+                cs.setString(11, pendiente.getDescTipoProceso());
+                cs.registerOutParameter(12, Types.VARCHAR);
                 cs.execute();
-                res = cs.getString(11);
+                res = cs.getString(12);
                 c.close();
             } catch (SQLException e) {
                 System.err.println("error: class: AsignacionMaquinaAPedidoModel metohd:agregarProductoPendiente "+e.getMessage() );

@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package View;
 
-import View.Produccion.AdminProduccion;
+import View.Produccion.AdminProduccionView;
 import Controller.AlmacenController.MateriaPrimaController;
 import Controller.AlmacenController.ProductoTerminadoController;
 import Controller.RequisicionesController.controlEntregasController;
@@ -13,9 +9,6 @@ import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
 import Controller.ProduccionController.AdminProduccionController;
 import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
-import Controller.RequisicionesController.AgregarRequisicinesController;
-import Controller.SeguimientoOrdenesController;
-import Controller.SeguimientoProductosController;
 import Model.AlmacenModel.MateriaPrimaModel;
 import Model.AlmacenModel.ProductoTerminadoModel;
 import Model.RequisicionesModel.controlEntregasModel;
@@ -23,29 +16,17 @@ import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
-import Model.RequisicionesModel.AgregarRequisicionesModel;
-import Model.SeguimientoOrdenesModel;
-import Model.SeguimientoProductosModel;
 import View.Requisiciones.ControlEntregasView;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.PlaneacionView;
 import View.Produccion.BitacoraOrdenesTrabajoView;
-import View.Requisiciones.AgregarRequisiciones;
 import View.almacenView.MateriaPrimaView;
 import View.almacenView.ProductoTerminadoView;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
-import javax.swing.JPanel;
 
 /**
  *
@@ -72,8 +53,7 @@ public class Principal extends javax.swing.JFrame {
     private void IntroducirPanle(JInternalFrame pnNuevo,JDesktopPane escritorio,Point punto) { 
         Dimension d = pnNuevo.getPreferredSize();
             pnNuevo.setSize(d);
-            pnNuevo.setLocation(punto.x-pnNuevo.getWidth()/2,
-                    punto.y-pnNuevo.getHeight()/2);
+            pnNuevo.setLocation(punto.x-pnNuevo.getWidth()/2,punto.y-pnNuevo.getHeight()/2);
             escritorio.add(pnNuevo);
             escritorio.revalidate();
             escritorio.repaint();
@@ -99,11 +79,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        menuItemControlProduccion = new javax.swing.JMenu();
         menuItemBitacoraOrdenesTrabajo = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu7 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         menuItemMateriaPrima = new javax.swing.JMenuItem();
         menuItemProductoTerminado = new javax.swing.JMenuItem();
@@ -111,9 +89,8 @@ public class Principal extends javax.swing.JFrame {
         itemMenuBitacoraPedidosCliente = new javax.swing.JMenuItem();
         itemMenuPlaneacion = new javax.swing.JMenuItem();
         jMenu10 = new javax.swing.JMenu();
-        menuItemNuevasRequisiciones = new javax.swing.JMenuItem();
         menuItemControlEntregaMP = new javax.swing.JMenuItem();
-        menuItemAdminRequisiciones = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -155,7 +132,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar2.add(jMenu3);
 
-        jMenu4.setText("Producciòn                             ");
+        menuItemControlProduccion.setText("Producciòn                             ");
 
         menuItemBitacoraOrdenesTrabajo.setText("Bitacora de ordenes de trabajo");
         menuItemBitacoraOrdenesTrabajo.addActionListener(new java.awt.event.ActionListener() {
@@ -163,7 +140,7 @@ public class Principal extends javax.swing.JFrame {
                 menuItemBitacoraOrdenesTrabajoActionPerformed(evt);
             }
         });
-        jMenu4.add(menuItemBitacoraOrdenesTrabajo);
+        menuItemControlProduccion.add(menuItemBitacoraOrdenesTrabajo);
 
         jMenuItem2.setText("Administrar ordenes");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -171,25 +148,13 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem2);
+        menuItemControlProduccion.add(jMenuItem2);
 
-        jMenu7.setText("Seguimiento de produccion");
-
-        jMenuItem3.setText("Seguimiento diario");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
-            }
-        });
-        jMenu7.add(jMenuItem3);
-
-        jMenu4.add(jMenu7);
-
-        jMenuBar2.add(jMenu4);
+        jMenuBar2.add(menuItemControlProduccion);
 
         jMenu5.setText("Almacen                               ");
 
-        menuItemMateriaPrima.setText("MATERIA PRIMA");
+        menuItemMateriaPrima.setText("Materia prima");
         menuItemMateriaPrima.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemMateriaPrimaActionPerformed(evt);
@@ -197,7 +162,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu5.add(menuItemMateriaPrima);
 
-        menuItemProductoTerminado.setText("PRODUCTO TERMINADO");
+        menuItemProductoTerminado.setText("Producto terminado");
         menuItemProductoTerminado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemProductoTerminadoActionPerformed(evt);
@@ -209,7 +174,7 @@ public class Principal extends javax.swing.JFrame {
 
         menuPedidos.setText("Pedidos                        ");
 
-        itemMenuBitacoraPedidosCliente.setText("bitacora de pedidos clientes");
+        itemMenuBitacoraPedidosCliente.setText("bitacora de pedidos");
         itemMenuBitacoraPedidosCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 itemMenuBitacoraPedidosClienteActionPerformed(evt);
@@ -229,15 +194,7 @@ public class Principal extends javax.swing.JFrame {
 
         jMenu10.setText("Requisicion de materiales            ");
 
-        menuItemNuevasRequisiciones.setText("Nuevas requisiciones");
-        menuItemNuevasRequisiciones.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuItemNuevasRequisicionesActionPerformed(evt);
-            }
-        });
-        jMenu10.add(menuItemNuevasRequisiciones);
-
-        menuItemControlEntregaMP.setText("Control de entrega de MP");
+        menuItemControlEntregaMP.setText("Control de requisiciones");
         menuItemControlEntregaMP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemControlEntregaMPActionPerformed(evt);
@@ -245,8 +202,8 @@ public class Principal extends javax.swing.JFrame {
         });
         jMenu10.add(menuItemControlEntregaMP);
 
-        menuItemAdminRequisiciones.setText("Admin. Requisiciones");
-        jMenu10.add(menuItemAdminRequisiciones);
+        jMenu4.setText("Recepcion de materiales");
+        jMenu10.add(jMenu4);
 
         jMenuBar2.add(jMenu10);
 
@@ -273,30 +230,12 @@ public class Principal extends javax.swing.JFrame {
     
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         Escritorio.removeAll();
-        AdminProduccion adminProduccionView = new AdminProduccion();
+        AdminProduccionView adminProduccionView = new AdminProduccionView(this);
         AdminProduccionController adminProduccionController = new AdminProduccionController(adminProduccionView,
         new AdminProduccionModel());
         
-        IntroducirPanle(adminProduccionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+        IntroducirPanle(adminProduccionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2-80));
     }//GEN-LAST:event_jMenuItem2ActionPerformed
-
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        Escritorio.removeAll();
-        
-        SeguimientoProductosModel modeloOrdenesProductos = new SeguimientoProductosModel();
-        SeguimientoProductos vistaOrdenesProductos = new SeguimientoProductos();
-        SeguimientoProductosController controllerOrdenesProductos = new SeguimientoProductosController(vistaOrdenesProductos,modeloOrdenesProductos);
-        
-        SeguimientoOrdenesModel modeloOrdenesTrabajo = new SeguimientoOrdenesModel();
-        SeguimientoOrdenes vistaOrdenesTrabajo = new SeguimientoOrdenes();      
-        SeguimientoOrdenesController controlloerOrdenesTrabajo = new SeguimientoOrdenesController(vistaOrdenesTrabajo
-                ,modeloOrdenesTrabajo
-                ,controllerOrdenesProductos);
-        
-        IntroducirPanle(vistaOrdenesTrabajo, Escritorio,new Point(screenSize.width/7,screenSize.height/2));
-        IntroducirPanle(vistaOrdenesProductos, Escritorio,new Point(screenSize.width/2+200,screenSize.height/2));
-        
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void itemMenuBitacoraPedidosClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuBitacoraPedidosClienteActionPerformed
         BitacoraPedidosClienteView vista = new BitacoraPedidosClienteView(this);
@@ -338,13 +277,6 @@ public class Principal extends javax.swing.JFrame {
         Escritorio.removeAll();
         IntroducirPanle(pTerminadoView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
     }//GEN-LAST:event_menuItemProductoTerminadoActionPerformed
-
-    private void menuItemNuevasRequisicionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemNuevasRequisicionesActionPerformed
-        AgregarRequisiciones AgregarRequisicionView = new AgregarRequisiciones(this);
-        AgregarRequisicinesController controller = new AgregarRequisicinesController(AgregarRequisicionView,new AgregarRequisicionesModel(),this);
-        Escritorio.removeAll();
-        IntroducirPanle(AgregarRequisicionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
-    }//GEN-LAST:event_menuItemNuevasRequisicionesActionPerformed
 
     private void menuItemControlEntregaMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemControlEntregaMPActionPerformed
         ControlEntregasView controlEntrasView = new ControlEntregasView(this);
@@ -406,19 +338,16 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
-    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem menuItemAdminRequisiciones;
     private javax.swing.JMenuItem menuItemBitacoraOrdenesTrabajo;
     private javax.swing.JMenuItem menuItemControlEntregaMP;
+    private javax.swing.JMenu menuItemControlProduccion;
     private javax.swing.JMenuItem menuItemMateriaPrima;
-    private javax.swing.JMenuItem menuItemNuevasRequisiciones;
     private javax.swing.JMenuItem menuItemProductoTerminado;
     private javax.swing.JMenu menuPedidos;
     // End of variables declaration//GEN-END:variables

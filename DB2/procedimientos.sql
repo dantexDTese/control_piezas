@@ -20,7 +20,7 @@ BEGIN
         
         IF @id_contacto IS NOT NULL THEN
 			
-            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'PEDIDOS' AND desc_estados = 'ABIERTO';
+            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'PEDIDOS' AND desc_estado = 'ABIERTO';
             
         
 			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_contacto,id_estado,fecha_entrega) 
@@ -29,7 +29,7 @@ BEGIN
             SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;
 
 			SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'ORDENES DE TRABAJO' AND desc_estados = 'ABIERTO';
+            WHERE desc_tipo_estado = 'ORDENES DE TRABAJO' AND desc_estado = 'PLANEACION';
             	
 				
             INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,@id_estado);
@@ -45,8 +45,6 @@ BEGIN
 
 END //
 DELIMITER ;
-
-
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_produccion(
@@ -69,20 +67,24 @@ BEGIN
         IF @id_producto IS NOT NULL THEN		
 			
             SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estados = 'ABIERTO';           
+            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estado = 'PLANEACION';           
             
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,@id_estado,cantidad_cliente,now());        
 			
-			SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
+            
+			/*ESTO FUE CUANDO TENIA LAS MAQUINAS DEL LADO DE LOS LOTES
+            
+            SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
             
             SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estados = 'PLANEACION';
+            WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estado = 'PLANEACION';
             
             SELECT @id_tipo_proceso := tipos_proceso.id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'MAQUINADO';
             
 			INSERT INTO procesos_produccion(id_orden_produccion,id_tipo_proceso,id_estado) 
             VALUES(@id_orden_p,@id_tipo_proceso,@id_estado);
+            */
             
         END IF;
 	
@@ -90,7 +92,7 @@ BEGIN
 END //
 DELIMITER ;
 
-
+SELECT * FROM ordenes_produccion;
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
@@ -102,58 +104,42 @@ IN desc_maquina				VARCHAR(50),
 IN desc_material			VARCHAR(100),
 IN fecha_montaje_molde		DATE,
 IN fecha_inicio_produccion	DATE,
-IN nuevo_piezas_por_turno	INT,
+IN nuevo_piezas_por_turno	INT, 	
 IN n_orden					INT,
+IN desc_tipo_proceso		VARCHAR(50),
 INOUT resultado				VARCHAR(100)
 )
 BEGIN
-
 	DECLARE id_material INT;
     DECLARE id_maquina INT;
-    DECLARE id_proceso_produccion INT;
-    DECLARE id_nuevo_estado INT;
     DECLARE id_producto INT;
     DECLARE cantidad_por_lote_planeado INT;
-    DECLARE id_orden_trabajo INT;
-    
-	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion)
-    THEN
+	
+	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion) THEN
 		        
         SELECT @id_material := materiales.id_material FROM materiales WHERE materiales.desc_material = desc_material;
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
         SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
-        /*procesos para seleccionar el estado*/
-		SELECT @id_nuevo_estado := todos_los_estados.id_estado 
-        FROM todos_los_estados WHERE  desc_tipo_estado = 'PROCESOS DE PRODUCCION'
-        AND desc_estados = 'EN ESPERA';
-        /*fin seleccion estado*/
-			
-		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,
-					fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
-        
-		SET SQL_SAFE_UPDATES=0;		      
-		UPDATE procesos_produccion 
-        SET 
-        procesos_produccion.id_maquina = @id_maquina,
-        procesos_produccion.id_estado = @id_nuevo_estado
-        WHERE procesos_produccion.id_orden_produccion = id_orden_produccion;
-		SET SQL_SAFE_UPDATES=1;
-		
-		CALL agregar_lotes_planeados(id_orden_produccion,
-        nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker);
         
         IF n_orden = 1 THEN
-			
-            SELECT @id_orden_trabajo := ot.id_orden_trabajo FROM ordenes_trabajo AS ot WHERE ot.id_orden_trabajo = 
-			(SELECT op.id_orden_trabajo FROM ordenes_produccion  AS op WHERE op.id_orden_produccion = id_orden_produccion);
-		
-			INSERT INTO requisiciones(id_orden_trabajo,fecha_creacion) VALUES(@id_orden_trabajo,NOW());
             
-        END IF;
-        
-		 call agregar_material_orden_requerida(id_orden_produccion,@id_material);
-        
-        SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
+            SET SQL_SAFE_UPDATES=0;		      
+			UPDATE ordenes_trabajo AS ot SET ot.id_estado = (SELECT todos_los_estados.id_estado 
+            FROM todos_los_estados WHERE  desc_tipo_estado = 'ORDENES DE TRABAJO'AND desc_estado = 'REQUISICION')
+			WHERE ot.id_orden_trabajo = (SELECT id_orden_trabajo FROM ordenes_produccion AS op WHERE op.id_orden_produccion = id_orden_trabajo);
+			SET SQL_SAFE_UPDATES=1;
+		
+            
+		END IF;
+			
+			
+		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
+			
+		CALL agregar_lotes_planeados(id_orden_produccion,nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker,desc_tipo_proceso,@id_maquina);
+					
+		CALL agregar_material_requerido(id_orden_produccion,@id_material);
+			
+		SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
     
     ELSE
     
@@ -164,48 +150,6 @@ BEGIN
 END //
 DELIMITER ;            
 
-DELIMITER //
-CREATE PROCEDURE agregar_material_orden_requerida(
-IN id_orden_produccion	INT,
-IN id_material			INT
-)
-BEGIN
-	DECLARE id_requisicion INT;    
-    DECLARE id_estado 		INT;
-    DECLARE id_material_requerido INT;
-    DECLARE barras_necesarias FLOAT;
-    
-    SELECT @id_requisicion := max(requisiciones.id_requisicion) FROM requisiciones;	
-    
-    SELECT @barras_necesarias := (SELECT op.cantidad_total FROM ordenes_produccion 
-    AS op WHERE op.id_orden_produccion = id_orden_produccion)/
-	(SELECT pm.piezas_por_barra FROM productos_material AS pm WHERE pm.id_material = id_material 
-	AND pm.id_producto = (SELECT id_producto FROM ordenes_produccion AS op WHERE
-	op.id_orden_produccion = id_orden_produccion));
-    
-    IF NOT EXISTS(SELECT * FROM  materiales_requeridos AS mr 
-    WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion)
-    THEN
-    
-		SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados 
-        WHERE desc_tipo_estado = 'REQUISICIONES' AND desc_estados = 'ABIERTO';
-        
-		INSERT INTO materiales_requeridos(id_material,id_estado,id_requisicion,cantidad_total) 
-		VALUES(id_material,@id_estado,@id_requisicion,@barras_necesarias);    
-    ELSE
-		UPDATE materiales_requeridos AS mr SET mr.cantidado_total = mr.cantidad_total + @barras_necesarias
-        WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
-    
-    END IF;
-    
-    SELECT @id_material_requerido := mr.id_material_requerido 
-    FROM  materiales_requeridos AS mr WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
-
-    INSERT INTO materiales_ordenes_requeridas(id_material_requerido,id_orden_produccion,barras_necesarias)
-    VALUES(@id_material_requerido,id_orden_produccion,@barras_necesarias);    		    
-    
-END	//
-DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE actualizar_orden_produccion(
@@ -226,20 +170,24 @@ BEGIN
     ordenes_produccion.piezas_por_turno = nuevo_piezas_por_turno
     WHERE ordenes_produccion.id_orden_produccion = id_orden_produccion
     AND ordenes_produccion.id_producto = @id_producto;								
-    
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE agregar_lotes_planeados(
-IN id_orden_produccion INT,
-IN nueva_cantidad_total INT,
-IN nuevo_piezas_por_turno INT,
-IN fecha_inicio_produccion DATE,
-IN nuevo_worker FLOAT
+IN id_orden_produccion 			INT,
+IN nueva_cantidad_total 		INT,
+IN nuevo_piezas_por_turno 		INT,
+IN fecha_inicio_produccion 		DATE,
+IN nuevo_worker 				FLOAT,
+IN desc_tipo_proceso 			VARCHAR(50),
+IN id_maquina					INT
 )
 BEGIN
 	DECLARE iterador INT;
+    DECLARE id_tipo_proceso INT;
+    
+    SET id_tipo_proceso = (SELECT tp.id_tipo_proceso  FROM tipos_proceso  AS tp WHERE tp.desc_tipo_proceso = desc_tipo_proceso);
     
 	IF fecha_inicio_produccion IS NOT NULL THEN      
 		IF nuevo_worker >= 1 THEN        
@@ -247,7 +195,7 @@ BEGIN
         END IF;        
         SET iterador = 1;                        
      my_loop: LOOP
-     
+		
         IF nueva_cantidad_total = 0 THEN
 			LEAVE my_loop;
 		END IF;
@@ -259,8 +207,8 @@ BEGIN
                 SET nueva_cantidad_total = 0;
             END IF;
 			
-			INSERT INTO lotes_planeados(id_orden_produccion,cantidad_planeada,fecha_planeada)
-			VALUES(id_orden_produccion,nuevo_piezas_por_turno,fecha_inicio_produccion);        		            
+			INSERT INTO lotes_planeados(id_orden_produccion,id_tipo_proceso,cantidad_planeada,fecha_planeada,id_maquina)
+			VALUES(id_orden_produccion,id_tipo_proceso,nuevo_piezas_por_turno,fecha_inicio_produccion,id_maquina);        		            
 			
             dias_semana_loop: LOOP
             
@@ -280,6 +228,114 @@ BEGIN
 END //
 DELIMITER ;
 
+
+DELIMITER //
+CREATE PROCEDURE agregar_material_requerido(
+IN id_orden_produccion	INT,
+IN id_material			INT
+)
+BEGIN
+    DECLARE id_material_requerido 	INT;
+    DECLARE barras_necesarias 		FLOAT;
+    DECLARE id_orden_trabajo		INT;
+    
+    SELECT @barras_necesarias := (SELECT op.cantidad_total FROM ordenes_produccion AS op WHERE op.id_orden_produccion = id_orden_produccion)/
+	(SELECT pm.piezas_por_barra FROM productos_material AS pm WHERE pm.id_material = id_material AND pm.id_producto = (SELECT id_producto FROM ordenes_produccion AS op WHERE
+	op.id_orden_produccion = id_orden_produccion));
+    
+    SELECT @id_orden_trabajo := op.id_orden_trabajo FROM ordenes_produccion AS  op WHERE op.id_orden_produccion = id_orden_produccion; 
+    
+    IF NOT EXISTS(SELECT * FROM  materiales_requeridos AS mr WHERE mr.id_material = id_material AND mr.id_orden_trabajo = @id_orden_trabajo) THEN
+    
+		INSERT INTO materiales_requeridos(id_material,id_orden_trabajo,cantidad_total) VALUES(id_material,@id_orden_trabajo,@barras_necesarias);    
+    
+    ELSE
+    	SET SQL_SAFE_UPDATES=0;		      
+		UPDATE materiales_requeridos AS mr SET mr.cantidad_total = mr.cantidad_total + @barras_necesarias WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
+		SET SQL_SAFE_UPDATES=0;		      
+	
+    END IF;
+    
+    SELECT @id_material_requerido := mr.id_material_requerido FROM  materiales_requeridos AS mr WHERE mr.id_material = id_material AND mr.id_orden_trabajo = @id_orden_trabajo;
+
+    INSERT INTO materiales_orden(id_orden_produccion,id_material_requerido,barras_necesarias) VALUES(id_orden_produccion,@id_material_requerido,@barras_necesarias);    		    
+    
+END	//
+DELIMITER ;
+
+
+
+
+DELIMITER //
+CREATE PROCEDURE agregar_requisicion(
+IN solicitante	    	VARCHAR(50),
+IN uso_material			VARCHAR(255),
+INOUT id_requisicion	INT
+)
+BEGIN	
+	INSERT INTO requisiciones(fecha_creacion,solicitante,uso_material) VALUES(NOW(),solicitante,uso_material);    
+	SET id_requisicion = (SELECT MAX(rq.id_requisicion) FROM requisiciones AS rq);    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_materiales_solicitados(
+IN	id_requisicion				INT,
+IN	no_partida					INT,
+IN	desc_material				VARCHAR(100),
+IN	cantidad_barras				INT,
+IN	unidad						VARCHAR(10),
+IN	parcialidad					INT,
+IN 	fecha_solicitada			DATE,
+IN	cuenta_cargo				VARCHAR(20),
+INOUT id_material_solicitado	INT
+)
+BEGIN 
+	
+    DECLARE id_material	INT;
+	DECLARE id_estado	INT;
+    
+	IF EXISTS(SELECT * FROM requisiciones AS rq WHERE rq.id_requisicion = id_requisicion) THEN		
+    
+		SELECT @id_material := mt.id_material FROM materiales AS mt WHERE mt.desc_material = desc_material;		
+				
+		SELECT @id_estado := te.id_estado FROM todos_los_estados AS te WHERE te.desc_tipo_estado = 'REQUISICIONES' AND te.desc_estado = 'ABIERTO';
+        
+        INSERT INTO materiales_solicitados(id_requisicion,no_partida,id_material,cantidad,unidad,parcialidad,fecha_solicitud,cuenta_cargo,id_estado)
+		VALUES(id_requisicion,no_partida,@id_material,cantidad_barras,unidad,parcialidad,fecha_solicitada,cuenta_cargo,@id_estado);
+		
+        SET id_material_solicitado = (SELECT MAX(ms.id_material_solicitado) FROM materiales_solicitados AS ms);
+        
+	ELSE 
+		SET id_material_solicitado = 0;
+            
+    END IF;
+
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE agregar_materiales_orden_requisicion(
+IN id_material_solicitado		INT,
+IN id_orden_produccion			INT,
+IN cantidad						INT
+)
+BEGIN
+	DECLARE id_material_orden INT;    
+    SELECT @id_material_orden := mr.id_material_orden FROM materiales_orden AS mr WHERE mr.id_orden_produccion = id_orden_produccion;    
+    
+    IF @id_material_orden IS NOT NULL THEN
+		INSERT INTO materiales_orden_requisicion(id_material_solicitado,id_material_orden,cantidad) VALUES(id_material_solicitado,@id_material_orden,cantidad);	
+    ELSE 
+		SELECT 'MATERIAL NULO';
+    END IF;
+    
+END //
+DELIMITER ;
+
+
+/*
 DELIMITER //
 CREATE PROCEDURE guardar_observacion(
 IN observacion VARCHAR(250),
@@ -298,71 +354,5 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
-CREATE PROCEDURE agregar_parcialidad_requisicion(
-IN desc_proveedor 		VARCHAR(150),
-IN id_orden_trabajo		INT,
-IN solicitante			VARCHAR(50),
-IN terminos 			VARCHAR(100),
-IN lugar_entrega		VARCHAR(100),
-IN comentarios			VARCHAR(255),
-IN sub_total			FLOAT,
-IN IVA					FLOAT,
-IN TOTAL				FLOAT,
-INOUT respuesta			BOOLEAN
-)BEGIN
+*/
 	
-    DECLARE id_proveedor INT;
-	DECLARE id_requisicion INT;
-    
-    SELECT @id_proveedor := pr.id_proveedor FROM proveedores AS pr WHERE pr.desc_proveedor = desc_proveedor;
-	SELECT @id_requisicion := rq.id_requisicion FROM requisiciones AS rq WHERE rq.id_orden_trabajo = id_orden_trabajo;
-    
-    IF @id_proveedor IS NOT NULL AND @id_requisicion IS NOT NULL THEN
-    
-		INSERT parcialidades_requisicion(id_proveedor,id_requisicion,solicitante,fecha_solicitud,terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL) 
-        VALUES(@id_proveedor,@id_requisicion,solicitante,NOW(),terminos,lugar_entrega,comentarios,sub_total,IVA,TOTAL);
-		SET respuesta = TRUE;
-        
-	ELSE SET respuesta = FALSE;
-        
-    END IF;
-	
-END //
-DELIMITER ;
-
-DELIMITER //
-CREATE PROCEDURE agregar_parcialidad_orden_requerida(
-IN desc_material_requerido 	VARCHAR(100),
-IN cantidad					INT,
-IN num_parcialidad			INT,
-IN unidad					VARCHAR(10),
-IN precio_total				FLOAT,
-INOUT respuesta				BOOLEAN
-)BEGIN
-
-	DECLARE id_parcialidad_requisicion  INT;
-    DECLARE id_material_requerido 		INT;
-    
-    SELECT @id_parcialidad_requisicion := MAX(pr.id_parcialidad_requisicion) FROM parcialidades_requisicion AS pr;
-    
-    SELECT @id_material_requerido := mr.id_material_requerido 
-    FROM materiales_requeridos AS mr WHERE mr.id_requisicion = 
-    (SELECT pr.id_requisicion FROM parcialidades_requisicion AS pr WHERE pr.id_parcialidad_requisicion = @id_parcialidad_requisicion)
-    AND mr.id_material = (SELECT id_material FROM materiales WHERE materiales.desc_material = desc_material_requerido);
-    
-	IF @id_material_requerido IS NOT NULL AND @id_parcialidad_requisicion IS NOT NULL THEN 
-		INSERT INTO parcialidades_orden_requerida(
-		id_parcialidad_requisicion,id_material_requerido,cantidad,num_parcialidad,fecha_solicitud,
-        unidad,precio_total) VALUES
-        (@id_parcialidad_requisicion,@id_material_requerido,cantidad,num_parcialidad,NOW(),unidad,precio_total);
-        SET respuesta = TRUE;
-        
-        ELSE SET respuesta = FALSE;
-        
-    END IF;
-    
-END //
-DELIMITER ;
-
-

@@ -19,10 +19,9 @@ public class PlaneacionModel {
     public ArrayList<procedimientoTotal> listaProcedimientoMaquina(String nombreMaquina){
         Connection c = Conexion.getInstance().getConexion();
         ArrayList<procedimientoTotal> lista = new ArrayList<>();
-        String query="SELECT * FROM procedimiento_total WHERE desc_maquina = '"+nombreMaquina+"'";
+        String query="SELECT * FROM procedimiento_total WHERE desc_maquina = '"+nombreMaquina+"' GROUP BY id_orden_trabajo;";
         if(c!=null)
             try {
-                
                Statement st = c.createStatement();
                ResultSet rs = st.executeQuery(query);
                if(rs.first())

@@ -4,7 +4,6 @@ import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.ProductosPendientes;
 import View.Pedidos.AsignarMaquinaAPedido;
-import com.toedter.calendar.JDateChooser;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
@@ -51,6 +49,8 @@ public class AsignacionMaquinaAPedidoController {
         this.vista.getJtOrdenesPendientes().addMouseListener(listenerSeleccionarPendiente);        
         this.vista.getBtnGuardar().addActionListener(listenerGuardarCambiosOrden);           
         this.vista.getCbxMateriales().addActionListener(listenerObtenerPiezasTurno);
+        
+        llenarListaProcesosProduccion();
         llenarTablaPedidosPendientes();        
         
         agregados = new ArrayList<>();
@@ -59,6 +59,7 @@ public class AsignacionMaquinaAPedidoController {
         
         this.vista.getBtnTerminar().addActionListener(listenerTerminarPendientes);
         
+        this.vista.getCbxProcesosProduccion().addActionListener(listenerSeleccionTipoProceso);
         this.vista.getCbxMaquina().addActionListener((ActionEvent e) -> {
             Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());
         });
@@ -71,7 +72,11 @@ public class AsignacionMaquinaAPedidoController {
      * METODOS
      */
      
-    
+    private void llenarListaProcesosProduccion(){
+        ArrayList<String> listaProcesosProduccion = model.listaProcesosProduccion();
+        for(int i = 0;i<listaProcesosProduccion.size();i++)
+            vista.getCbxProcesosProduccion().addItem(listaProcesosProduccion.get(i));
+    }
    
     private void llenarTablaPedidosPendientes(){        
         ArrayList<Pedido> listaPendientes = model.listaPedidosPendientes();
@@ -131,8 +136,7 @@ public class AsignacionMaquinaAPedidoController {
                     obtenerAgregado();
             }
         }
-        
-        
+             
         private void inicializar(){
             pendiente = obtenerPendiente(pendientes,vista.getCbxProducto().getSelectedItem().toString());
             vista.getLbNoOrdenProduccion().setText(pendiente.getNoOrdenProduccion()+"");
@@ -197,7 +201,8 @@ public class AsignacionMaquinaAPedidoController {
             pendiente.setWorker(Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()));
             pendiente.setFechaMontaje(sdf.format(vista.getJdcFechaMontajeMolde().getDate()));
             pendiente.setFechaInicio(sdf.format(vista.getDcrFechaInicioProduccion().getDate()));        
-                                    
+            pendiente.setDescTipoProceso(vista.getCbxProcesosProduccion().getSelectedItem().toString());
+            
             if((index = obtenerIndexAgregado(pendiente.getClaveProducto())) == null)
                 agregados.add(pendiente);
             else 
@@ -226,7 +231,7 @@ public class AsignacionMaquinaAPedidoController {
                 ProductosPendientes pendiente = pendientes.get(i);
                 model.addRow(new Object[]{pendiente.getClaveProducto(),pendiente.getFechaMontaje(),
                 pendiente.getFechaInicio(),pendiente.getQty(),pendiente.getMaquina(),pendiente.getPiecesByShift(),
-                pendiente.getMaterial(),pendiente.getWorker()});
+                pendiente.getMaterial(),pendiente.getWorker(),pendiente.getDescTipoProceso()});
             }
         
         }
@@ -379,5 +384,13 @@ public class AsignacionMaquinaAPedidoController {
         
 
         
+    };
+    
+    private final ActionListener listenerSeleccionTipoProceso = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+        
+            
+        }
     };
 }

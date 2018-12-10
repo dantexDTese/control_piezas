@@ -129,7 +129,7 @@ public class PlaneacionView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "NO. ORDEN TRABAJO", "NO. PARTE", "QTY", "NO. ORDEN COMPRA", "ORDEN PRODUCCION", "PIECES BY SHIFT", "MATERIAL", "WORKER", "OPERACION"
+                "NO. PEDIDO", "NO. PARTE", "QTY", "NO. ORDEN COMPRA", "ORDEN PRODUCCION", "PIECES BY SHIFT", "MATERIAL", "WORKER", "OPERACION"
             }
         ) {
             Class[] types = new Class [] {

@@ -4,6 +4,10 @@ package Model.PedidosModel;
 
 public class ProductosPendientes {
 
+    
+    /**
+     * ATRIBUTOS
+     */
     private String noOrdenCompra;
     private int noOrdenProduccion;
     private final String claveProducto;
@@ -15,12 +19,28 @@ public class ProductosPendientes {
     private float worker;
     private String fechaMontaje;
     private String fechaInicio;
-
+    private float barrasNecesarias;
+    private int barrasSeleccionadas;
+    private String descTipoProceso;
+    /**
+     * CONSTRUCTOR
+     * @param noOrdenProduccion
+     * @param claveProducto
+     */
+    
     public ProductosPendientes(int noOrdenProduccion, String claveProducto) {
         this.noOrdenProduccion = noOrdenProduccion;
         this.claveProducto = claveProducto;
     }
     
+    
+    /**
+     * CONSTRUCTUR
+     * @param noOrdenCompra
+     * @param noOrdenProduccion
+     * @param claveProducto
+     * @param cantidadCliente
+     */
     
 
     public ProductosPendientes(String noOrdenCompra, int noOrdenProduccion, String claveProducto, int cantidadCliente){
@@ -29,7 +49,17 @@ public class ProductosPendientes {
         this.claveProducto = claveProducto;
         this.cantidadCliente = cantidadCliente;
     }
-
+    
+    /**
+     * CONSTRUCTOR
+     * @param claveProducto
+     * @param qty
+     * @param noOrdenCompra
+     * @param noOrdenProduccion
+     * @param piecesByShift
+     * @param material
+     * @param worker
+     */
   
     public ProductosPendientes(String claveProducto,int qty,String noOrdenCompra, int noOrdenProduccion,int piecesByShift,
      String material,float worker) {
@@ -41,16 +71,45 @@ public class ProductosPendientes {
         this.worker = worker;
         this.piecesByShift = piecesByShift;
     }
+    
+    /**
+     * CONSTRUCTOR
+     * @param noOrdenProduccion
+     * @param claveProducto
+     * @param qty
+     * @param material
+     * @param barrasNecesarias
+     * @param fecha_inicio
+     */
 
-    public ProductosPendientes(String claveProducto,int qty,String material ,String fecha_inicio){
+    public ProductosPendientes(int noOrdenProduccion,String claveProducto,int qty,String material, float barrasNecesarias, String fecha_inicio) {
+        this.noOrdenProduccion = noOrdenProduccion;
         this.claveProducto = claveProducto;
         this.qty = qty;
         this.material = material;
+        this.barrasNecesarias = barrasNecesarias;
         this.fechaInicio = fecha_inicio;
     }
 
+    public String getDescTipoProceso() {
+        return descTipoProceso;
+    }
+
+    public void setDescTipoProceso(String descTipoProceso) {
+        this.descTipoProceso = descTipoProceso;
+    }
     
-    
+    public void setBarrasSeleccionadas(int barrasSeleccionadas) {
+        this.barrasSeleccionadas = barrasSeleccionadas;
+    }
+
+    public int getBarrasSeleccionadas() {
+        return barrasSeleccionadas;
+    }
+
+    public float getBarrasNecesarias() {
+        return barrasNecesarias;
+    }
         
     public String getNoOrdenCompra() {
         return noOrdenCompra;

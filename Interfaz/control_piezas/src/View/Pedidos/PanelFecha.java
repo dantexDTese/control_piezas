@@ -12,15 +12,17 @@ package View.Pedidos;
 public class PanelFecha extends javax.swing.JPanel {
 
     
-    public PanelFecha(int dia, int noOrden, int cantidad) {
+    public PanelFecha(int dia, int noOrden, int cantidad,String descTipoProceso) {
         initComponents();
         lbFecha.setText(dia+"");
         if(noOrden > 0){
             lbOP.setText(noOrden+"");
             lbCantidad.setText(cantidad+"");
+            lbTipoProceso.setText(descTipoProceso);
         }else{
             lbNameCANT.setText("");
             lbNameOP.setText("");
+            lbtituloProceso.setText("");
         }
             
     }
@@ -30,6 +32,7 @@ public class PanelFecha extends javax.swing.JPanel {
         lbFecha.setText(dia+"");
         lbNameCANT.setText("");
         lbNameOP.setText("");
+        lbtituloProceso.setText("");
     }
 
     /**
@@ -46,50 +49,33 @@ public class PanelFecha extends javax.swing.JPanel {
         lbNameOP = new javax.swing.JLabel();
         lbCantidad = new javax.swing.JLabel();
         lbNameCANT = new javax.swing.JLabel();
+        lbtituloProceso = new javax.swing.JLabel();
+        lbTipoProceso = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(null);
+        add(lbOP);
+        lbOP.setBounds(65, 4, 43, 19);
+        add(lbFecha);
+        lbFecha.setBounds(3, 4, 32, 17);
 
         lbNameOP.setText("OP");
+        add(lbNameOP);
+        lbNameOP.setBounds(32, 4, 30, 19);
+        add(lbCantidad);
+        lbCantidad.setBounds(42, 36, 66, 17);
 
         lbNameCANT.setText("CANT");
+        add(lbNameCANT);
+        lbNameCANT.setBounds(3, 36, 32, 16);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbNameOP)
-                            .addComponent(lbNameCANT))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lbCantidad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbOP, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbOP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbNameOP, javax.swing.GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 20, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lbNameCANT)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+        lbtituloProceso.setText("PROCESO");
+        add(lbtituloProceso);
+        lbtituloProceso.setBounds(3, 60, 105, 16);
+
+        lbTipoProceso.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        add(lbTipoProceso);
+        lbTipoProceso.setBounds(3, 83, 102, 16);
     }// </editor-fold>//GEN-END:initComponents
 
 
@@ -99,5 +85,7 @@ public class PanelFecha extends javax.swing.JPanel {
     private javax.swing.JLabel lbNameCANT;
     private javax.swing.JLabel lbNameOP;
     private javax.swing.JLabel lbOP;
+    private javax.swing.JLabel lbTipoProceso;
+    private javax.swing.JLabel lbtituloProceso;
     // End of variables declaration//GEN-END:variables
 }

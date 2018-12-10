@@ -34,8 +34,7 @@ public class CalendarioController {
     
     private void agregarCalendario(PanelFecha [] fechas){                
         DefaultTableModel model = (DefaultTableModel) vista.getJtCalendario().getModel();
-        vista.getJtCalendario().setRowHeight(90);        
-        
+        vista.getJtCalendario().setRowHeight(120);                
         model.addRow(fechas);        
     }
    
@@ -47,8 +46,6 @@ public class CalendarioController {
     
     private void llenarTabla(){
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtCalendario().getModel());
-        
-        
         int anio = vista.getJycAnioCalendario().getValue();
         int mes = vista.getJmtMesCalendario().getMonth()+1;
         int dias = diasMes(anio, mes);
@@ -66,7 +63,7 @@ public class CalendarioController {
             CalendarioModel.OrdenPlaneada orden = obtenerOrden(i+1, listOrdenesMes);
             
             if(orden != null)
-                fechas[diaSemana] = new PanelFecha(i+1,orden.getNoOrden(),orden.getCantidad());
+                fechas[diaSemana] = new PanelFecha(i+1,orden.getNoOrden(),orden.getCantidad(),orden.getDescTipoProceso());
             else 
                 fechas[diaSemana] = new PanelFecha(i+1);
         
