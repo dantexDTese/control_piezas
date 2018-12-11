@@ -27,7 +27,7 @@ public class AdminProduccionController {
      */
     private final AdminProduccionView vista;
     private final AdminProduccionModel model;
-    
+    private OrdenProduccionGuardada ordenSeleccionada;
     
     /**
      * CONSTRUCTOR
@@ -87,7 +87,7 @@ public class AdminProduccionController {
         
         private void mostrarSeguimientoProduccion(){
             SeguimientoProduccionDialogView vistaSeguimiento = new SeguimientoProduccionDialogView(vista.getPrincipal(), true);
-            SeguimientoProduccionController controllerSeguimiento = new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel());
+            SeguimientoProduccionController controllerSeguimiento = new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel(),ordenSeleccionada);
             vistaSeguimiento.setVisible(true);
         }
         
@@ -135,25 +135,25 @@ public class AdminProduccionController {
         }
         
         private void llenarOrdenProduccion(Integer noOrdenProduccion){
-            OrdenProduccionGuardada orden = model.obtenerOrdenProduccion(noOrdenProduccion);
-            if(orden!= null){
-                vista.getLbNoOP().setText(orden.getOrdenProduccion()+"");
-                vista.getLbProducto().setText(orden.getClaveProducto());
-                vista.getLbCliente().setText(orden.getNombreCliente());
-                vista.getLbOrdenCompra().setText(orden.getNoOrdenCompra());
-                vista.getLbCantidad().setText(orden.getCantidadCliente()+"");
-                vista.getLbPiezasPorTurno().setText(orden.getPiezasPorTurno()+"");
-                vista.getLbMaterial().setText(orden.getDescMaterial());
-                vista.getLbMaquina().setText(orden.getDescMaquina());
-                vista.getLbCantidadProduccir().setText(orden.getCantidadTotal()+"");
-                vista.getLbBarrasNecesarias().setText(orden.getBarrasNecesarias()+"");
-                vista.getLbFechaMontajeMolde().setText(orden.getFechaMontaje());
-                vista.getLbFechaArranqueProceso().setText(orden.getFechaInicioOP());
-                vista.getLbInicioProduccion().setText(orden.getFechaInicioOP());
-                vista.getLbFechaEntrega().setText(orden.getFechaEntregaPedido());
+            ordenSeleccionada = model.obtenerOrdenProduccion(noOrdenProduccion);
+            if(ordenSeleccionada!= null){
+                vista.getLbNoOP().setText(ordenSeleccionada.getOrdenProduccion()+"");
+                vista.getLbProducto().setText(ordenSeleccionada.getClaveProducto());
+                vista.getLbCliente().setText(ordenSeleccionada.getNombreCliente());
+                vista.getLbOrdenCompra().setText(ordenSeleccionada.getNoOrdenCompra());
+                vista.getLbCantidad().setText(ordenSeleccionada.getCantidadCliente()+"");
+                vista.getLbPiezasPorTurno().setText(ordenSeleccionada.getPiezasPorTurno()+"");
+                vista.getLbMaterial().setText(ordenSeleccionada.getDescMaterial());
+                vista.getLbMaquina().setText(ordenSeleccionada.getDescMaquina());
+                vista.getLbCantidadProduccir().setText(ordenSeleccionada.getCantidadTotal()+"");
+                vista.getLbBarrasNecesarias().setText(ordenSeleccionada.getBarrasNecesarias()+"");
+                vista.getLbFechaMontajeMolde().setText(ordenSeleccionada.getFechaMontaje());
+                vista.getLbFechaArranqueProceso().setText(ordenSeleccionada.getFechaInicioOP());
+                vista.getLbInicioProduccion().setText(ordenSeleccionada.getFechaInicioOP());
+                vista.getLbFechaEntrega().setText(ordenSeleccionada.getFechaEntregaPedido());
                 
-                if(orden.getFechaDesmontaje() != null && !"".equals(orden.getFechaDesmontaje()))
-                    vista.getJdcDesmontajeMolde().setDate(new Date(orden.getFechaDesmontaje()));
+                if(ordenSeleccionada.getFechaDesmontaje() != null && !"".equals(ordenSeleccionada.getFechaDesmontaje()))
+                    vista.getJdcDesmontajeMolde().setDate(new Date(ordenSeleccionada.getFechaDesmontaje()));
                 
             }
             else

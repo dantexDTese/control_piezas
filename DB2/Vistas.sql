@@ -97,9 +97,8 @@ from pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido
 JOIN ordenes_produccion AS op ON op.id_orden_trabajo = ot.id_orden_trabajo
 JOIN productos AS pr ON pr.id_producto = op.id_producto
 JOIN estados AS st ON st.id_estado = op.id_estado;
+*/
 
-
-/*
 CREATE VIEW ver_ordenes_produccion
 AS
 SELECT 
@@ -129,7 +128,7 @@ FROM bitacoraPedidos AS bp JOIN procedimiento_total AS pt ON bp.id_orden_trabajo
 JOIN ordenes_produccion AS op ON pt.id_orden_produccion = op.id_orden_produccion 
 JOIN materiales_orden AS mo ON mo.id_orden_produccion = op.id_orden_produccion
 GROUP BY pt.id_orden_produccion;
-*/
+
 
 CREATE VIEW fechas_planeadas
 AS

@@ -24,9 +24,8 @@ INSERT INTO tipos_estado(desc_tipo_estado) VALUES('REQUISICIONES');
 insert into estados(id_tipo_estado,desc_estado) VALUES(1,'ABIERTO');
 insert into estados(id_tipo_estado,desc_estado) VALUES(1,'CERRADO');
 
-insert into estados(id_tipo_estado,desc_estado) VALUES(2,'PLANEACION');
-insert into estados(id_tipo_estado,desc_estado) VALUES(2,'REQUISICION');
-insert into estados(id_tipo_estado,desc_estado) VALUES(2,'PRODUCCION');	
+insert into estados(id_tipo_estado,desc_estado) VALUES(2,'ABIERTO');
+insert into estados(id_tipo_estado,desc_estado) VALUES(2,'CERRADO');
 
 insert into estados(id_tipo_estado,desc_estado) VALUES(3,'PLANEACION');
 insert into estados(id_tipo_estado,desc_estado) VALUES(3,'REQUISICION MATERIAL');

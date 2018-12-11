@@ -45,7 +45,7 @@ public class AdminProduccionModel {
                         "FROM ordenes_trabajo AS ot JOIN procedimiento_total " +
                         "AS pt ON ot.id_orden_trabajo = pt.id_orden_trabajo " +
                         "JOIN todos_los_estados  AS ts ON ot.id_estado = ts.id_estado "
-                        +"WHERE ot.id_orden_trabajo = "+noOrdenTrabajo+" ;";
+                        +"WHERE ot.id_orden_trabajo = "+noOrdenTrabajo+" GROUP BY pt.id_orden_produccion ;";
          if(c!=null)
              try {                 
                  Statement st = c.createStatement();
@@ -101,7 +101,7 @@ public class AdminProduccionModel {
                 
                 c.close();
             } catch (SQLException e) {
-                
+                System.err.println("error: paquete:ProduccionModel class: AdminProduccionModel Method:obtenerOrdenProduccion "+e.getMessage());
             }
         
         

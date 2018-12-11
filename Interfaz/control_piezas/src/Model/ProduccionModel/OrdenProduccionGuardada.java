@@ -1,31 +1,37 @@
 
 package Model.ProduccionModel;
 
-
 public class OrdenProduccionGuardada {
 
-    private final int ordenTrabajo;
-    private final  String noOrdenCompra;
-    private final  String fechaEntregaPedido;
-    private final  String fechaConfirmacionEntregaPedido;
-    private final  String fechaRecepcionPedido;
-    private final  String descContacto;
-    private final  String nombreCliente;
-    private final  int cantidadCliente;
-    private final  String claveProducto;
-    private final  int cantidadTotal;
-    private final  int ordenProduccion;
-    private final  String descMaterial;
-    private final  String descMaquina;
-    private final  int barrasNecesarias;
-    private final  int piezasPorTurno;
-    private final  String fechaRegistroOP;
-    private final  String fechaMontaje;
-    private final  String fechaDesmontaje;
-    private final  String fechaInicioOP;
-    private final  String fechaFinOP;
-    private final  String observacionesOP;
+    private   int ordenTrabajo;
+    private   String noOrdenCompra;
+    private   String fechaEntregaPedido;
+    private   String fechaConfirmacionEntregaPedido;
+    private   String fechaRecepcionPedido;
+    private   String descContacto;
+    private   String nombreCliente;
+    private   int cantidadCliente;
+    private   String claveProducto;
+    private   int cantidadTotal;
+    private   int ordenProduccion;
+    private   String descMaterial;
+    private   String descMaquina;
+    private   int barrasNecesarias;
+    private   int piezasPorTurno;
+    private   String fechaRegistroOP;
+    private   String fechaMontaje;
+    private   String fechaDesmontaje;
+    private   String fechaInicioOP;
+    private   String fechaFinOP;
+    private   String observacionesOP;
 
+    
+    
+    public OrdenProduccionGuardada(int ordenTrabajo,int ordenProduccion,String descMaquina){
+        this.ordenTrabajo = ordenTrabajo;
+        this.ordenProduccion = ordenProduccion;
+        this.descMaquina = descMaquina;
+    }
     /**
      * CONSTRUCTOR
      * 
