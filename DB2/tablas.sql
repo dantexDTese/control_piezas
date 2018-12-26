@@ -36,14 +36,9 @@ id_maquina          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 desc_maquina        VARCHAR (50) NOT NULL    
 );
 
-CREATE TABLE tipos_estado(
-id_tipo_estado 				INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-desc_tipo_estado		VARCHAR(100) NOT NULL
-);
 
 CREATE TABLE estados(
 id_estado           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_tipo_estado		INT NOT NULL REFERENCES tipos_estado (id_tipo_estado),
 desc_estado         VARCHAR (50) NOT NULL
 );
 
@@ -69,7 +64,7 @@ IVA				FLOAT
 /** TABLAS DEBILES*/
 CREATE TABLE pedidos(
 id_pedido					INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_estado					INT NOT NULL REFERENCES estados	(id_estado),
+id_estado					INT NOT NULL REFERENCES estados	(id_estado)	,
 id_contacto					INT NOT NULL REFERENCES contactos (id_contacto),
 fecha_recepcion				DATE NOT NULL,
 no_orden_compra				VARCHAR(50) NOT NULL,
@@ -98,42 +93,12 @@ piezas_por_turno		INT,
 turnos_necesarios       INT,
 turnos_reales           INT,
 fecha_registro          DATE NOT NULL,
-fecha_montaje           DATE,
+	fecha_montaje           DATE,
 fecha_desmontaje        DATE,
 fecha_inicio            DATE,
 fecha_fin               DATE,
 observaciones			VARCHAR(250)      
 );
-
-CREATE TABLE lotes_planeados(
-id_lote_planeado 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_orden_produccion 	INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
-id_tipo_proceso			INT NOT NULL REFERENCES tipos_proceso(id_tipo_proceso),
-cantidad_planeada		INT NOT NULL,
-fecha_planeada			DATE ,
-id_maquina				INT NOT NULL REFERENCES maquinas(id_maquina)
-);
-
-CREATE TABLE procesos_produccion(
-id_proceso_produccion       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_lote_planeado			INT NOT NULL REFERENCES lotes_planeados(id_lote_planeado),
-id_estado					INT	NOT NULL REFERENCES estados(id_estado),
-fecha_inicio_proceso        DATE,
-fecha_fin_proceso           DATE    
-);
-
-CREATE TABLE lotes_produccion(
-id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-id_proceso_produccion      INT NOT NULL REFERENCES procesos_produccion (id_proceso_produccion),
-desc_lote                   VARCHAR(50),
-fecha_trabajo				DATETIME,
-cantidad_operador           INT ,
-cantidad_administrador      INT ,
-scrap_operador              INT ,
-scrap_administrador         INT ,
-merma                       FLOAT,
-tiempo_muerto               TIME
-); 
 
 CREATE TABLE requisiciones(
 id_requisicion 					INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -161,7 +126,7 @@ CREATE TABLE materiales_orden(
 id_material_orden			 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_orden_produccion				INT REFERENCES ordenes_produccion(id_orden_produccion),
 id_material_requerido           INT REFERENCES materiales_requeridos(id_material_requerido),
-barras_necesarias				FLOAT DEFAULT 0
+barras_necesarias				FLOAT DEFAULT 0.0
 );
 
 CREATE TABLE materiales_solicitados(
@@ -179,13 +144,35 @@ precio_total				FLOAT,
 id_estado					INT NOT NULL REFERENCES estados(id_estado)	
 );
 
-
 CREATE TABLE materiales_orden_requisicion(
 id_material_orden_requisicion		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 id_material_solicitado				INT NOT NULL REFERENCES	materiales_solicitados(id_material_solicitado),
 id_material_orden					INT NOT NULL REFERENCES materiales_orden(id_material_orden),
-cantidad							INT NOT NULL
+cantidad							INT NOT NULL DEFAULT 0
 );
+
+CREATE TABLE lotes_planeados(
+id_lote_planeado 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_orden_produccion 	INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
+id_tipo_proceso			INT NOT NULL REFERENCES tipos_proceso(id_tipo_proceso),
+cantidad_planeada		INT NOT NULL,
+fecha_planeada			DATE ,
+id_maquina				INT NOT NULL REFERENCES maquinas(id_maquina),
+id_estado				INT NOT NULL REFERENCES estados(id_estado)
+);
+
+CREATE TABLE lotes_produccion(
+id_lote_produccion          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_lote_planeado			INT NOT NULL REFERENCES lotes_planeados(id_lote_planeado),
+desc_lote                   VARCHAR(50),
+fecha_trabajo				DATETIME,
+cantidad_operador           INT ,
+cantidad_administrador      INT ,
+scrap_operador              INT ,
+scrap_administrador         INT ,
+merma                       FLOAT,
+tiempo_muerto               TIME
+); 
 /**FIN TABLAS DEBILES 1*/
 
 /**TABLAS RELACIONALES*/

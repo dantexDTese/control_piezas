@@ -114,7 +114,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
 
         btnGuardar.setText("GUARDAR");
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel3.setOpaque(false);
 
         tbListaProductos.setModel(new javax.swing.table.DefaultTableModel(
@@ -146,8 +146,21 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
             new String [] {
                 "CLAVE PRODUCTO", "CANTIDAD"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbListaPedido.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(tbListaPedido);
+        if (tbListaPedido.getColumnModel().getColumnCount() > 0) {
+            tbListaPedido.getColumnModel().getColumn(0).setResizable(false);
+            tbListaPedido.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -205,6 +218,8 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
                         .addGap(132, 132, 132))))
         );
 
+        jLabel4.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("NUEVO PEDIDO");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

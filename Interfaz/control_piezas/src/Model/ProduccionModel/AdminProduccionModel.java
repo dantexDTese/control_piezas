@@ -17,10 +17,10 @@ public class AdminProduccionModel {
     public ArrayList<OrdenTrabajo> listaOrdenesTrabajo(){
          ArrayList<OrdenTrabajo> lista = new ArrayList<>();
          Connection c = Conexion.getInstance().getConexion();
-         String query = "SELECT ot.id_orden_trabajo,ts.desc_estado " +
+         String query = "SELECT ot.id_orden_trabajo,es.desc_estado " +
                         "FROM ordenes_trabajo AS ot JOIN procedimiento_total " +
                         "AS pt ON ot.id_orden_trabajo = pt.id_orden_trabajo " +
-                        "JOIN todos_los_estados  AS ts ON ot.id_estado = ts.id_estado " + 
+                        "JOIN estados  AS es ON es.id_estado = es.id_estado " + 
                         "GROUP BY ot.id_orden_trabajo;";
          if(c!=null)
              try {                 
@@ -44,7 +44,7 @@ public class AdminProduccionModel {
          String query = "SELECT pt.id_orden_produccion,pt.clave_producto " +
                         "FROM ordenes_trabajo AS ot JOIN procedimiento_total " +
                         "AS pt ON ot.id_orden_trabajo = pt.id_orden_trabajo " +
-                        "JOIN todos_los_estados  AS ts ON ot.id_estado = ts.id_estado "
+                        "JOIN estados  AS es ON ot.id_estado = es.id_estado "
                         +"WHERE ot.id_orden_trabajo = "+noOrdenTrabajo+" GROUP BY pt.id_orden_produccion ;";
          if(c!=null)
              try {                 

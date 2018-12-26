@@ -4,9 +4,11 @@ package Model.PedidosModel;
 import Model.Conexion;
 import Model.Estructuras;
 import Model.productoModel;
+import java.awt.HeadlessException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class nuevoPedidoClienteModel {
                 }
                 
                 c.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error class:nuevoPedidoClienteModel,"
                         + "method:listaContacto->"+e.getMessage());
             }
@@ -63,7 +65,7 @@ public class nuevoPedidoClienteModel {
                     }while(rs.next());
                 
                 c.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.print("Error class:nuevoPedidoClienteModel,"
                         + "method: listaProductos "+e.getMessage());
             }
@@ -90,7 +92,7 @@ public class nuevoPedidoClienteModel {
                 JOptionPane.showMessageDialog(null,cs.getString(5));
                 res = cs.getInt(6);
                 c.close();
-            } catch (Exception e) {
+            } catch (HeadlessException | SQLException e) {
                 System.err.println("error clase:NuevoPedidoClienteModel method:agregarPedido :"+e.getMessage());
             }
                 
@@ -108,7 +110,7 @@ public class nuevoPedidoClienteModel {
                 cs.setInt(3, cantidadCliente);
                 cs.execute();
                 cs.close();               
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error clase: nuevoPedidoClienteModel,"
                         + " method: agregarOrdenProduccion:"+e.getMessage());
             }

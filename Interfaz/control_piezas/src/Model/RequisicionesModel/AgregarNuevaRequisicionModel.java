@@ -23,8 +23,7 @@ public class AgregarNuevaRequisicionModel {
     public ArrayList<Pedido> listaOrdenesPendientes(){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "select id_orden_trabajo AS num_pedido,no_orden_compra"
-                + " FROM requisicion_ordenes WHERE desc_estado = 'REQUISICION'";  
+        String query = "SELECT id_pedido,no_orden_compra FROM faltantes_requisicion GROUP BY id_pedido;";  
         
         if(c!=null)
             try {
@@ -43,10 +42,8 @@ public class AgregarNuevaRequisicionModel {
     
     public ArrayList<ProductosPendientes> listaProductosPendientes(int noOrdenTrabajo){
         ArrayList<ProductosPendientes> productosPendientes = new ArrayList<>();
-        String query =  "select ro.id_orden_produccion,ro.clave_producto,ro.cantidad_total,ro.desc_material,"
-                + "ro.barras_necesarias,op.fecha_inicio FROM requisicion_ordenes AS ro " +
-                "JOIN ordenes_produccion AS op ON op.id_orden_produccion = ro.id_orden_produccion "
-                + "WHERE ro.id_orden_trabajo = "+noOrdenTrabajo+";";
+        String query =  "select id_orden_produccion,clave_producto,cantidad_total,desc_material,barras_necesarias"
+                + ",fecha_inicio FROM faltantes_requisicion WHERE id_orden_trabajo = "+noOrdenTrabajo+";";
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
             try {
@@ -55,7 +52,8 @@ public class AgregarNuevaRequisicionModel {
                 if(rs.first())
                     do {                        
                         productosPendientes.add(new ProductosPendientes(
-                                rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4),rs.getFloat(5),rs.getString(6)));
+                                rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4)
+                                ,rs.getFloat(5),rs.getString(6)));
                     } while (rs.next());
                 c.close();
             } catch (SQLException e) {
@@ -124,5 +122,4 @@ public class AgregarNuevaRequisicionModel {
                 System.err.println("error: paquete:requisicionesModel class:agregarNuevaRequisicion metodo:agregarMaterialesOrdenRequisicion "+e.getMessage());
             }
     }
-     
 }

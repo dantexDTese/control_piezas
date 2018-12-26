@@ -75,7 +75,7 @@ public class Pedido {
     /**
      * Constructor 5
      */
-    Pedido(String noOrdenCompra,int noOrdenTrabajo, String fechaRecepcion) {
+    Pedido(int noOrdenTrabajo,String noOrdenCompra, String fechaRecepcion) {
         this.noOrdenCompra = noOrdenCompra;
         this.fechaRecepcion = fechaRecepcion;
         this.noOrdenTrabajo = noOrdenTrabajo;

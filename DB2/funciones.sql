@@ -1,13 +1,23 @@
 DELIMITER //
-CREATE FUNCTION CantidadRestanteRequisicion(desc_material INT) RETURNS INT
+CREATE FUNCTION obtenerSumaMateriales(id_orden_produccion INT) RETURNS INT
 BEGIN
-	DECLARE suma_barras_necesarias INT;
-    DECLARE barras_restantes INT;
-    
-	SELECT @suma_barras_necesarias := SUM(barras_necesarias) AS barras_necesarias ,desc_material FROM 
-    requisicion_ordenes AS ro WHERE ro.desc_material = desc_material GROUP BY desc_material;
+	DECLARE suma INT;
+	SET suma = (SELECT SUM(cantidad) FROM materiales_orden_requisicion AS mor JOIN materiales_orden AS mo ON mor.id_material_orden = mo.id_material_orden
+				WHERE mo.id_orden_produccion = id_orden_produccion);
 	
-    SELECT @barras_restantes := @suma_barras_necesarias - SUM(cantidad) from requisicion_ordenes AS ro 
-	JOIN parcialidades_orden_requerida AS por ON ro.id_material_orden_requerida = por.id_material_orden_requerida 
-    WHERE ro.desc_material = desc_material GROUP BY desc_material; 
-END ; //
+    RETURN suma;
+END //
+DELIMITER ;
+
+
+
+DELIMITER //
+CREATE FUNCTION obtenerIdRequisicion(id_orden_produccion INT) RETURNS INT
+BEGIN
+	DECLARE id_res INT;
+	SET id_res = (SELECT id_requisicion from requisiciones WHERE id_requisicion = (SELECT id_requisicion FROM materiales_solicitados WHERE id_material_solicitado = 
+	(SELECT id_material_solicitado FROM materiales_orden_requisicion WHERE id_material_orden = (SELECT mo.id_material_orden FROM 
+	materiales_orden AS mo WHERE mo.id_orden_produccion = id_orden_produccion))));
+    return id_res;
+END //
+DELIMITER ;

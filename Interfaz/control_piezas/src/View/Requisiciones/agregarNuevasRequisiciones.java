@@ -149,7 +149,7 @@ public class agregarNuevasRequisiciones extends javax.swing.JDialog {
 
             },
             new String [] {
-                "NO. ORDEN", "NO. COMPRA"
+                "NO. ORDEN", "ORDEN COMPRA"
             }
         ) {
             Class[] types = new Class [] {

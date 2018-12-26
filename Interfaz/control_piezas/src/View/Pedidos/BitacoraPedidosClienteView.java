@@ -9,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -24,7 +25,10 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         this.principal = principal;
         
     }
-    
+
+    public JLabel getLbAnio() {
+        return lbAnio;
+    }
     
     public JFrame getPrincipal() {
         return principal;
@@ -70,7 +74,7 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        lbAnio = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jmcMes = new com.toedter.calendar.JMonthChooser();
@@ -93,13 +97,14 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jPanel2.setOpaque(false);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("BITACORA DE PEDIDOS DE CLIENTE, AÑO ");
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 0, -1, 41));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, -1, 41));
 
-        jLabel2.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 79, 41));
+        lbAnio.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        lbAnio.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(lbAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, 79, 41));
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel7.setOpaque(false);
@@ -219,15 +224,12 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,7 +265,6 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNuevaOrden;
     private javax.swing.JButton btnVertodo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -272,6 +273,7 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private com.toedter.calendar.JMonthChooser jmcMes;
     private com.toedter.calendar.JYearChooser jycAnio;
+    private javax.swing.JLabel lbAnio;
     private javax.swing.JTable tbPedidosClientes;
     private javax.swing.JTextField txtOrdenCompra;
     // End of variables declaration//GEN-END:variables

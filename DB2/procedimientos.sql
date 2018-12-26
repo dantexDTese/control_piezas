@@ -18,19 +18,13 @@ BEGIN
 		SELECT @id_contacto := contactos.id_contacto FROM contactos JOIN clientes ON contactos.id_cliente = clientes.id_cliente
         WHERE clientes.nombre_cliente = desc_cliente AND contactos.desc_contacto = desc_contacto;
         
-        IF @id_contacto IS NOT NULL THEN
-			
-            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados WHERE desc_tipo_estado = 'PEDIDOS' AND desc_estado = 'ABIERTO';
+        IF @id_contacto IS NOT NULL THEN			
+            SELECT @id_estado := es.id_estado FROM estados AS es WHERE  es.desc_estado = 'ABIERTO';
             
-        
 			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_contacto,id_estado,fecha_entrega) 
             VALUES (now(),desc_orden_compra,@id_contacto,@id_estado,fecha_entrega);
             
-            SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;
-
-			SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'ORDENES DE TRABAJO' AND desc_estado = 'PLANEACION';
-            	
+            SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;            	
 				
             INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,@id_estado);
 			
@@ -66,33 +60,17 @@ BEGIN
 		
         IF @id_producto IS NOT NULL THEN		
 			
-            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'ORDENES DE PRODUCCION' AND desc_estado = 'PLANEACION';           
+            SELECT @id_estado := es.id_estado FROM estados AS es WHERE  es.desc_estado = 'ABIERTO';
             
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,@id_estado,cantidad_cliente,now());        
 			
-            
-			/*ESTO FUE CUANDO TENIA LAS MAQUINAS DEL LADO DE LOS LOTES
-            
-            SELECT @id_orden_p := max(id_orden_produccion) FROM ordenes_produccion;
-            
-            SELECT @id_estado := todos_los_estados.id_estado FROM todos_los_estados
-            WHERE desc_tipo_estado = 'PROCESOS DE PRODUCCION' AND desc_estado = 'PLANEACION';
-            
-            SELECT @id_tipo_proceso := tipos_proceso.id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'MAQUINADO';
-            
-			INSERT INTO procesos_produccion(id_orden_produccion,id_tipo_proceso,id_estado) 
-            VALUES(@id_orden_p,@id_tipo_proceso,@id_estado);
-            */
-            
         END IF;
 	
 	END IF;	
 END //
 DELIMITER ;
 
-SELECT * FROM ordenes_produccion;
 
 DELIMITER //
 CREATE PROCEDURE agregar_orden_maquina(
@@ -121,21 +99,9 @@ BEGIN
         SELECT @id_maquina := maquinas.id_maquina FROM maquinas WHERE maquinas.desc_maquina = desc_maquina;
         SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
         
-        IF n_orden = 1 THEN
-            
-            SET SQL_SAFE_UPDATES=0;		      
-			UPDATE ordenes_trabajo AS ot SET ot.id_estado = (SELECT todos_los_estados.id_estado 
-            FROM todos_los_estados WHERE  desc_tipo_estado = 'ORDENES DE TRABAJO'AND desc_estado = 'REQUISICION')
-			WHERE ot.id_orden_trabajo = (SELECT id_orden_trabajo FROM ordenes_produccion AS op WHERE op.id_orden_produccion = id_orden_trabajo);
-			SET SQL_SAFE_UPDATES=1;
-		
-            
-		END IF;
-			
-			
 		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
 			
-		CALL agregar_lotes_planeados(id_orden_produccion,nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker,desc_tipo_proceso,@id_maquina);
+		#CALL agregar_lotes_planeados(id_orden_produccion,nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker,desc_tipo_proceso,@id_maquina);
 					
 		CALL agregar_material_requerido(id_orden_produccion,@id_material);
 			
@@ -162,6 +128,7 @@ IN id_orden_produccion		INT,
 IN id_producto				INT
 )
 BEGIN
+
     UPDATE ordenes_produccion SET 
     ordenes_produccion.worker = nuevo_worker,
     ordenes_produccion.cantidad_total = nueva_cantidad_total,
@@ -251,7 +218,7 @@ BEGIN
     
     ELSE
     	SET SQL_SAFE_UPDATES=0;		      
-		UPDATE materiales_requeridos AS mr SET mr.cantidad_total = mr.cantidad_total + @barras_necesarias WHERE mr.id_material = id_material AND mr.id_requisicion = @id_requisicion;
+			UPDATE materiales_requeridos AS mr SET mr.cantidad_total = mr.cantidad_total + @barras_necesarias WHERE mr.id_material = id_material AND mr.id_orden_trabajo = @id_orden_trabajo;
 		SET SQL_SAFE_UPDATES=0;		      
 	
     END IF;
@@ -291,26 +258,21 @@ IN	cuenta_cargo				VARCHAR(20),
 INOUT id_material_solicitado	INT
 )
 BEGIN 
-	
     DECLARE id_material	INT;
-	DECLARE id_estado	INT;
+	DECLARE id_estado	INT;    
     
 	IF EXISTS(SELECT * FROM requisiciones AS rq WHERE rq.id_requisicion = id_requisicion) THEN		
-    
-		SELECT @id_material := mt.id_material FROM materiales AS mt WHERE mt.desc_material = desc_material;		
-				
-		SELECT @id_estado := te.id_estado FROM todos_los_estados AS te WHERE te.desc_tipo_estado = 'REQUISICIONES' AND te.desc_estado = 'ABIERTO';
+		SELECT @id_material := mt.id_material FROM materiales AS mt WHERE mt.desc_material = desc_material;						
+		
+        SELECT @id_estado := es.id_estado FROM estados AS es WHERE  es.desc_estado = 'ABIERTO';
         
         INSERT INTO materiales_solicitados(id_requisicion,no_partida,id_material,cantidad,unidad,parcialidad,fecha_solicitud,cuenta_cargo,id_estado)
-		VALUES(id_requisicion,no_partida,@id_material,cantidad_barras,unidad,parcialidad,fecha_solicitada,cuenta_cargo,@id_estado);
-		
-        SET id_material_solicitado = (SELECT MAX(ms.id_material_solicitado) FROM materiales_solicitados AS ms);
         
+		VALUES(id_requisicion,no_partida,@id_material,cantidad_barras,unidad,parcialidad,fecha_solicitada,cuenta_cargo,@id_estado);		
+        SET id_material_solicitado = (SELECT MAX(ms.id_material_solicitado) FROM materiales_solicitados AS ms);        
 	ELSE 
-		SET id_material_solicitado = 0;
-            
+		SET id_material_solicitado = 0;            
     END IF;
-
 END //
 DELIMITER ;
 
@@ -355,4 +317,3 @@ END //
 DELIMITER ;
 
 */
-	

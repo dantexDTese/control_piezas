@@ -1,4 +1,3 @@
-
 package Controller.PedidosController;
 
 import Model.Estructuras;
@@ -11,9 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -23,15 +25,25 @@ public class nuevoPedidoClienteController implements ActionListener{
     private final nuevoPedidoClienteModel modelNuevoPedido;
     
     
-    nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido,
-            nuevoPedidoClienteModel modelNuevoPedido) {
+    nuevoPedidoClienteController(NuevoPedidoCliente vistaNuevoPedido,nuevoPedidoClienteModel modelNuevoPedido) {
+        //INICIALIZAR
         this.vistaNuevoPedido = vistaNuevoPedido;
         this.modelNuevoPedido = modelNuevoPedido;
         llenarListaClientes();
         llenarListaProductos();
+        
+        //ASIGNAR EVENTOS
         this.vistaNuevoPedido.getCbxDescCliente().addActionListener(this);
         this.vistaNuevoPedido.getTbListaProductos().addMouseListener(listenerAgregarProducto);
-       this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
+        this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
+        this.vistaNuevoPedido.getDcFechaEntrega().addPropertyChangeListener((PropertyChangeEvent evt) -> {
+            if(!Estructuras.validarFecha(vistaNuevoPedido.getDcFechaEntrega().getDate()))
+                vistaNuevoPedido.getDcFechaEntrega().setCalendar(null);
+        });
+        
+        this.vistaNuevoPedido.getTbListaPedido().addMouseListener(listenerQuitar);
+        
+        
     }
     
     private void llenarListaClientes(){
@@ -71,12 +83,19 @@ public class nuevoPedidoClienteController implements ActionListener{
             llenarListaContactos(this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString());
     
         
-        else if(e.getSource() == this.vistaNuevoPedido.getBtnGuardar())
-            guardarListaProductos();
+        else if(e.getSource() == this.vistaNuevoPedido.getBtnGuardar()){
+            int res = JOptionPane.showConfirmDialog(null, "¿Esta seguro de guardar esta orden?",
+                    "Guardar orden",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+            if(res == JOptionPane.YES_OPTION)
+                guardarListaProductos();
+        }
+            
     }
     
     
     private void guardarListaProductos(){
+        
+        
         ArrayList<ordenProducto> productos = obtenerListaProductos();
         
         if(productos.size()>0){           
@@ -115,6 +134,25 @@ public class nuevoPedidoClienteController implements ActionListener{
         return lista;
     }
     
+    private final MouseListener listenerQuitar = new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(e.getClickCount() == 2){
+              if(JOptionPane.showConfirmDialog(null,"¿Desea quitar este producto de la lista?","Quitar productos",
+                      JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                int fila = vistaNuevoPedido.getTbListaPedido().rowAtPoint(e.getPoint());
+                 eliminarFila(fila, vistaNuevoPedido.getTbListaPedido());
+              }
+            }
+        }
+
+        private void eliminarFila(int fila,JTable tabla){
+            DefaultTableModel modelTabla = (DefaultTableModel) tabla.getModel();
+            modelTabla.removeRow(fila);
+        }
+    };
+    
     private final MouseListener listenerAgregarProducto = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -143,5 +181,7 @@ public class nuevoPedidoClienteController implements ActionListener{
             model.addRow(new Object[]{claveProducto,cantidad});
         }
     };
+    
+    
     
 }

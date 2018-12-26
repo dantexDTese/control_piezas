@@ -29,28 +29,22 @@ public class AsignacionMaquinaAPedidoModel {
     public ArrayList<Pedido> listaPedidosPendientes(){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        
         if(c!=null)
             try {
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT pd.no_orden_compra,ot.id_orden_trabajo," +
-                "pd.fecha_entrega FROM pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido " +
-                "JOIN estados ON ot.id_estado = estados.id_estado WHERE estados.desc_estado = 'PLANEACION' "
-                + "GROUP BY pd.no_orden_compra;");
+                ResultSet rs = st.executeQuery("SELECT * FROM ordenes_por_planear;");
                 
                 if(rs.first())
-                    do {                        
-                        Pedido pedido = new Pedido(rs.getString(1),rs.getInt(2),rs.getString(3));
+                    do {                         
+                        Pedido pedido = new Pedido(rs.getInt(1),rs.getString(2),rs.getString(3));
                         pedidos.add(pedido);
                     } while (rs.next());
                c.close(); 
             } catch (SQLException e) {
-                System.err.println("error: class: AsignacionMaquinaAPedidoModel, Method:listaPedidosPendientes"+e.getMessage());
-            }
-        
+                System.err.println("error: class: AsignacionMaquinaAPedidoModel, Method:listaPedidosPendientes "+e.getMessage());
+            }        
         return pedidos;
     }
-    
     
     public ArrayList<ProductosPendientes> listaProductosPendientes(String noOrdenTrabajo){
         ArrayList<ProductosPendientes> listaProductos = new ArrayList<>();
@@ -59,16 +53,20 @@ public class AsignacionMaquinaAPedidoModel {
         if(c!=null)
             try {       
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT ot.id_orden_trabajo,op.id_orden_produccion,pr.clave_producto," +
-                "op.cantidad_cliente FROM ordenes_trabajo AS ot JOIN ordenes_produccion "
-              + "AS op ON ot.id_orden_trabajo = op.id_orden_trabajo " +
-                "JOIN productos AS pr ON pr.id_producto = op.id_producto "
-                        + "WHERE ot.id_orden_trabajo = "+noOrdenTrabajo+" "
-              + "GROUP BY op.id_orden_produccion,pr.clave_producto,op.cantidad_cliente;");
+                ResultSet rs = st.executeQuery("SELECT op.id_orden_trabajo,op.id_orden_produccion"
+                                    + ",pr.clave_producto,op.cantidad_cliente FROM ordenes_produccion_abiertas AS op " +
+                                      " INNER JOIN productos AS pr ON op.id_producto = pr.id_producto " +
+                                      " LEFT JOIN lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion " +
+                                      "WHERE (lp.id_lote_planeado IS NULL OR lp.id_estado = "
+                                      + "(SELECT id_estado FROM estados WHERE desc_estado = 'CERRADO')) " +
+                                      "AND op.id_orden_trabajo ="+noOrdenTrabajo+";");
                 if(rs.first())
                     do {                        
-                        listaProductos.add(new ProductosPendientes(rs.getString(1),
-                                rs.getInt(2), rs.getString(3), rs.getInt(4)));                        
+                        listaProductos.add(new ProductosPendientes(
+                                rs.getString(1), //id_orden_trabajo
+                                rs.getInt(2),  //id_orden_produccion
+                                rs.getString(3), //clave_producto
+                                rs.getInt(4)));  //cantidad_cliente                      
                     } while (rs.next());
             } catch (SQLException e) {
                 System.err.println("mensaje: class:AsignacionMaquinaAPedido"

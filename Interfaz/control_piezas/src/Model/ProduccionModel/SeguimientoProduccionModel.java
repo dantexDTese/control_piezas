@@ -36,35 +36,31 @@ public class SeguimientoProduccionModel {
         return listaProcesosProduccion;
     }
     
-    public ArrayList<lotesProduccion> listaLotesProduccion(){
+    public ArrayList<loteProduccion> listaLotesProduccion(int noOrdenProduccion,String procesoSeleccionado){
+        ArrayList<loteProduccion> listaLotes = new ArrayList<>();
+        Connection c = Conexion.getInstance().getConexion();
+        String query = "SELECT * FROM lotes_produccion AS lpr "
+                + "WHERE lpr.id_lote_planeado = (SELECT id_lote_planeado FROM "
+                + "lotes_planeados AS lp WHERE lp.id_orden_produccion = " + noOrdenProduccion +
+                " AND lp.id_tipo_proceso = (SELECT id_tipo_proceso "
+                + "FROM tipos_proceso WHERE desc_tipo_proceso = '"+procesoSeleccionado+"'));";
         
-    }
-    
-    public class  loteProduccion{
-        
-        private final int noLote;
-        private final String descLote;
-        private final int cantidadOperados;
-        private final int scrapOperador;
-        private final float merma;
-        private final String tiempoMuerto;
-        private final int rechazo;
-        private final int cantidadAdmin;
-        private final int scrapAdmin;
+        if(c!= null)
+            try {
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                if(rs.first())
+                    do{
+                        listaLotes.add(new loteProduccion(rs.getInt(1),rs.getString(2),
+                                rs.getInt(3), rs.getInt(4), rs.getFloat(5),rs.getString(6),
+                                rs.getInt(7),rs.getInt(8), rs.getInt(9)));
+                    }while(rs.next());
+                
+            } catch (SQLException e) {
+                System.err.println("error: paquete:ProduccionModel, class:SeguimientoProduccionModel. method:listaLotesProduccion "+e.getMessage());
+            }
 
-        public loteProduccion(int noLote, String descLote, int cantidadOperados, int scrapOperador, float merma, String tiempoMuerto, int rechazo, int cantidadAdmin, int scrapAdmin) {
-            this.noLote = noLote;
-            this.descLote = descLote;
-            this.cantidadOperados = cantidadOperados;
-            this.scrapOperador = scrapOperador;
-            this.merma = merma;
-            this.tiempoMuerto = tiempoMuerto;
-            this.rechazo = rechazo;
-            this.cantidadAdmin = cantidadAdmin;
-            this.scrapAdmin = scrapAdmin;
-        }
-        
-        
-    }
+        return listaLotes;
+    }    
     
 }

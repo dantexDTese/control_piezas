@@ -7,7 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 public class AsignarMaquinaAPedido extends javax.swing.JDialog {
 
@@ -51,12 +50,12 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         jLabel11 = new javax.swing.JLabel();
         cbxMaquina = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
-        jpCalendario = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lbOrdenCompra = new javax.swing.JLabel();
         PRODUCTO = new javax.swing.JLabel();
         cbxProducto = new javax.swing.JComboBox<>();
+        jpCalendario = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,7 +69,7 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
 
             },
             new String [] {
-                "PEDIDO", "ORDEN TRABAJO", "FECHA ENTRADA"
+                "NO. PEDIDO", "ORDEN COMPRA", "FECHA ENTRADA"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -99,7 +98,7 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
         );
 
         jtbProductosAgregados.setModel(new javax.swing.table.DefaultTableModel(
@@ -324,20 +323,6 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                 .addContainerGap())
         );
 
-        jpCalendario.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
-        jpCalendario.setOpaque(false);
-
-        javax.swing.GroupLayout jpCalendarioLayout = new javax.swing.GroupLayout(jpCalendario);
-        jpCalendario.setLayout(jpCalendarioLayout);
-        jpCalendarioLayout.setHorizontalGroup(
-            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
-        );
-        jpCalendarioLayout.setVerticalGroup(
-            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 353, Short.MAX_VALUE)
-        );
-
         jLabel1.setFont(new java.awt.Font("Impact", 0, 14)); // NOI18N
         jLabel1.setText("ORDEN DE COMPRA");
 
@@ -382,6 +367,20 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jpCalendario.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
+        jpCalendario.setOpaque(false);
+
+        javax.swing.GroupLayout jpCalendarioLayout = new javax.swing.GroupLayout(jpCalendario);
+        jpCalendario.setLayout(jpCalendarioLayout);
+        jpCalendarioLayout.setHorizontalGroup(
+            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 690, Short.MAX_VALUE)
+        );
+        jpCalendarioLayout.setVerticalGroup(
+            jpCalendarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 353, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -396,9 +395,9 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jpCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1))
+                        .addGap(7, 7, 7))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1149, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 1, Short.MAX_VALUE))
@@ -416,9 +415,9 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jpCalendario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -456,6 +455,16 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public JPanel getJpCalendario() {
+        return jpCalendario;
+    }
+
+    public void setJpCalendario(JPanel jpCalendario) {
+        this.jpCalendario = jpCalendario;
+    }
+
+    
+    
     public void setDcrFechaInicioProduccion(JDateChooser dcrFechaInicioProduccion) {
         this.dcrFechaInicioProduccion = dcrFechaInicioProduccion;
     }
@@ -472,14 +481,6 @@ public class AsignarMaquinaAPedido extends javax.swing.JDialog {
     
     public JButton getBtnTerminar() {
         return btnTerminar;
-    }
-    
-    public JPanel getJpCalendario() {
-        return jpCalendario;
-    }
-
-    public void setJpCalendario(JPanel jpCalendario) {
-        this.jpCalendario = jpCalendario;
     }
     
     public JComboBox<String> getCbxMateriales() {

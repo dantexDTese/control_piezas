@@ -93,6 +93,8 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         lbNoOrdenTrabajo = new javax.swing.JLabel();
 
+        setBorder(null);
+
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(0, 0, 102))); // NOI18N
@@ -271,6 +273,7 @@ public class BitacoraOrdenesTrabajoView extends javax.swing.JInternalFrame {
         jLabel5.setText("NO. ORDEN DE TRABAJO:");
 
         lbNoOrdenTrabajo.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        lbNoOrdenTrabajo.setForeground(new java.awt.Color(255, 255, 255));
         lbNoOrdenTrabajo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbNoOrdenTrabajo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 

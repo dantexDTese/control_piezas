@@ -40,30 +40,27 @@ public class AsignacionMaquinaAPedidoController {
      * @param vista
      * @param model
      */
-    
     public AsignacionMaquinaAPedidoController(AsignarMaquinaAPedido vista,AsignacionMaquinaAPedidoModel model){     
+        //INICIALIZAR
         this.vista = vista;
         this.model = model;                
         llenarListaMaquinas();
-        llenarListaMateriales();        
-        this.vista.getJtOrdenesPendientes().addMouseListener(listenerSeleccionarPendiente);        
-        this.vista.getBtnGuardar().addActionListener(listenerGuardarCambiosOrden);           
-        this.vista.getCbxMateriales().addActionListener(listenerObtenerPiezasTurno);
-        
+        llenarListaMateriales();         
         llenarListaProcesosProduccion();
         llenarTablaPedidosPendientes();        
         
         agregados = new ArrayList<>();
+        
         if(this.vista.getCbxMaquina().getSelectedItem() != null)
             Estructuras.obtenerCalendario(this.vista.getJpCalendario(),this.vista.getCbxMaquina().getSelectedItem().toString());
         
+        //EVENTOS
+        this.vista.getJtOrdenesPendientes().addMouseListener(listenerSeleccionarPendiente);        
+        this.vista.getBtnGuardar().addActionListener(listenerGuardarCambiosOrden);           
+        this.vista.getCbxMateriales().addActionListener(listenerObtenerPiezasTurno);  
         this.vista.getBtnTerminar().addActionListener(listenerTerminarPendientes);
-        
         this.vista.getCbxProcesosProduccion().addActionListener(listenerSeleccionTipoProceso);
-        this.vista.getCbxMaquina().addActionListener((ActionEvent e) -> {
-            Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());
-        });
-        
+        this.vista.getCbxMaquina().addActionListener((ActionEvent e) -> {Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());});
         this.vista.getJdcFechaMontajeMolde().addPropertyChangeListener(listenerValidacionFecha);
         this.vista.getDcrFechaInicioProduccion().addPropertyChangeListener(listenerValidacionFecha);
     }
@@ -84,13 +81,13 @@ public class AsignacionMaquinaAPedidoController {
         Estructuras.limpiarTabla(modelT);
         for(int i = 0;i<listaPendientes.size();i++){
             Pedido ped = listaPendientes.get(i);
-            modelT.addRow(new Object[]{ped.getNoOrdenCompra(),
-                ped.getNoOrdenTrabajo(),ped.getFechaRecepcion()});
+            modelT.addRow(new Object[]{ped.getNoOrdenTrabajo(),ped.getNoOrdenCompra(),ped.getFechaRecepcion()});
         }
     }
     
     private void llenarListaMaquinas(){
         ArrayList<String> maquinas = model.listaMaquinas();
+                
         for(int i = 0;i<maquinas.size();i++)
             vista.getCbxMaquina().addItem(maquinas.get(i));
     }
@@ -120,8 +117,7 @@ public class AsignacionMaquinaAPedidoController {
     
     /**
      * EVENTOS
-     */
-        
+     */  
     private final ActionListener listenerCbxProducto = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {            
@@ -251,8 +247,8 @@ public class AsignacionMaquinaAPedidoController {
             
             private void seleccionarOrdenTrabajo(Point pFila){
                 int fila = vista.getJtOrdenesPendientes().rowAtPoint(pFila);
-                ordenTrabajo = vista.getJtOrdenesPendientes().getValueAt(fila,1)+"";
-                vista.getLbOrdenCompra().setText(vista.getJtOrdenesPendientes().getValueAt(fila,0).toString());
+                ordenTrabajo = vista.getJtOrdenesPendientes().getValueAt(fila,0)+"";
+                vista.getLbOrdenCompra().setText(vista.getJtOrdenesPendientes().getValueAt(fila,1).toString());
                 pendientes = model.listaProductosPendientes(ordenTrabajo);
             }
     };
@@ -262,8 +258,7 @@ public class AsignacionMaquinaAPedidoController {
         public void actionPerformed(ActionEvent e) {
             if(pendientes != null){
                 for(int i = 0;i<pendientes.size();i++)
-                    if(model.agregarProductoPendiente(pendientes.get(i),i+1)==null)
-                        break;                
+                    if(model.agregarProductoPendiente(pendientes.get(i),i+1)==null) break;                
               llenarTablaPedidosPendientes();  
               Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbProductosAgregados().getModel());     
               vista.getCbxProducto().removeAllItems();
@@ -377,7 +372,7 @@ public class AsignacionMaquinaAPedidoController {
         private int obtenerFilaOrdenTrabajo(String ordenTrabajo) {
             DefaultTableModel model = (DefaultTableModel) vista.getJtOrdenesPendientes().getModel();
             int fila = 0;
-                while(!model.getValueAt(fila,1).toString().equals(ordenTrabajo)) fila++;
+                while(!model.getValueAt(fila,0).toString().equals(ordenTrabajo)) fila++;
             return fila;
         }
 

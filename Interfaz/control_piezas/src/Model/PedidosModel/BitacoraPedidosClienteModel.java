@@ -9,10 +9,16 @@ import java.util.ArrayList;
 
 public class BitacoraPedidosClienteModel {
     
-    public ArrayList<Pedido> listaPedidos(){
+    public ArrayList<Pedido> listaPedidos(String noOrdenCompra,Integer anio,Integer mes){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT * FROM bitacoraPedidos";
+        String query;
+        if("".equals(noOrdenCompra))
+            query = "SELECT * FROM bitacoraPedidos WHERE MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
+    
+        else 
+            query = "SELECT * FROM bitacoraPedidos WHERE no_orden_compra = '"+noOrdenCompra+"' AND "
+                    + " MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
         if(c!=null)
             try {
                 Statement st = c.createStatement();

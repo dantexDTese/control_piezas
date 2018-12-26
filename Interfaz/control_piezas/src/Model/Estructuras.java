@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Model;
 
 import Controller.PedidosController.CalendarioController;
@@ -15,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -68,9 +64,7 @@ public class Estructuras {
                 tablaModificar.setRowHeight(alto);
 
     }
-    
-    
-    
+       
     public static void obtenerCalendario(JPanel contenedor,String descMaquina){    
         Calendario calendarioView = new Calendario();
         CalendarioController calendarioController = new CalendarioController(calendarioView, new CalendarioModel(),descMaquina);        
@@ -130,6 +124,14 @@ public class Estructuras {
         return sdf.format(fecha);
     }
     
-    
+    public static boolean validarFecha(Date fecha){
+        if(fecha != null){
+            if(new Date().after(fecha)){
+                JOptionPane.showMessageDialog(null, "La fecha no es valida","fecha invalida",JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+        return true;
+    }
     
 }

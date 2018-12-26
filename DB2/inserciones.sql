@@ -10,37 +10,23 @@ INSERT INTO contactos(id_cliente,desc_contacto) VALUES(2,'Martha Figueroa');
 insert into productos(clave_producto) values('6613-8');
 insert into productos(clave_producto) values('81432-8');	
 insert into productos(clave_producto) values('331A2452P7');	
-
+	
 SELECT * FROM ordenes_trabajo;
 SELECT * FROM estados;
 
-INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PEDIDOS');
+/*INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PEDIDOS');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE TRABAJO');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('ORDENES DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('PROCESOS DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('LOTES DE PRODUCCION');
 INSERT INTO tipos_estado(desc_tipo_estado) VALUES('REQUISICIONES');
+*/
 
-insert into estados(id_tipo_estado,desc_estado) VALUES(1,'ABIERTO');
-insert into estados(id_tipo_estado,desc_estado) VALUES(1,'CERRADO');
+insert into estados(desc_estado) VALUES('ABIERTO');
+insert into estados(desc_estado) VALUES('CERRADO');
+insert into estados(desc_estado) VALUES('PROCESANDO');
+insert into estados(desc_estado) VALUES('CANCELADO');
 
-insert into estados(id_tipo_estado,desc_estado) VALUES(2,'ABIERTO');
-insert into estados(id_tipo_estado,desc_estado) VALUES(2,'CERRADO');
-
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'PLANEACION');
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'REQUISICION MATERIAL');
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'APROBACION MATERAIL');
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'RECEPCION MATERIAL');
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'CERRADO');
-insert into estados(id_tipo_estado,desc_estado) VALUES(3,'CANCELADO');
-
-insert into estados(id_tipo_estado,desc_estado) VALUES(4,'PLANEACION');
-INSERT INTO estados(id_tipo_estado,desc_estado) VALUES(4,'EN ESPERA');
-INSERT INTO estados(id_tipo_estado,desc_estado) VALUES(4,'PRODUCCION');
-
-INSERT INTO estados(id_tipo_estado,desc_estado) VALUES(6,'ABIERTO');
-INSERT INTO estados(id_tipo_estado,desc_estado) VALUES(6,'CERRADO');
-INSERT INTO estados(id_tipo_estado,desc_estado) VALUES(6,'CANCELADA');
 	
 INSERT INTO tipos_proceso(desc_tipo_proceso) VALUE('MAQUINADO');
 

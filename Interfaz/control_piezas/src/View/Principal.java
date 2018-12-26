@@ -9,6 +9,7 @@ import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
 import Controller.ProduccionController.AdminProduccionController;
 import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
+import Controller.RequisicionesController.RegistroEntradaMaterialesController;
 import Model.AlmacenModel.MateriaPrimaModel;
 import Model.AlmacenModel.ProductoTerminadoModel;
 import Model.RequisicionesModel.controlEntregasModel;
@@ -16,10 +17,12 @@ import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
+import Model.RequisicionesModel.RegistroEntradaMaterialesModel;
 import View.Requisiciones.ControlEntregasView;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.PlaneacionView;
 import View.Produccion.BitacoraOrdenesTrabajoView;
+import View.Requisiciones.RegistroEntradaMateriales;
 import View.almacenView.MateriaPrimaView;
 import View.almacenView.ProductoTerminadoView;
 import java.awt.Dimension;
@@ -91,6 +94,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu10 = new javax.swing.JMenu();
         menuItemControlEntregaMP = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
+        menuItemEntradasMateriales = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -203,6 +207,15 @@ public class Principal extends javax.swing.JFrame {
         jMenu10.add(menuItemControlEntregaMP);
 
         jMenu4.setText("Recepcion de materiales");
+
+        menuItemEntradasMateriales.setText("Registro entrada materiales");
+        menuItemEntradasMateriales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemEntradasMaterialesActionPerformed(evt);
+            }
+        });
+        jMenu4.add(menuItemEntradasMateriales);
+
         jMenu10.add(jMenu4);
 
         jMenuBar2.add(jMenu10);
@@ -290,6 +303,15 @@ public class Principal extends javax.swing.JFrame {
             dispose();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void menuItemEntradasMaterialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemEntradasMaterialesActionPerformed
+        RegistroEntradaMateriales entradaMaterialesView = new RegistroEntradaMateriales(this);
+        RegistroEntradaMaterialesController entradaMaterialController = 
+                new RegistroEntradaMaterialesController(entradaMaterialesView,new RegistroEntradaMaterialesModel());
+        Escritorio.removeAll();
+        IntroducirPanle(entradaMaterialesView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+        
+    }//GEN-LAST:event_menuItemEntradasMaterialesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -347,6 +369,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemBitacoraOrdenesTrabajo;
     private javax.swing.JMenuItem menuItemControlEntregaMP;
     private javax.swing.JMenu menuItemControlProduccion;
+    private javax.swing.JMenuItem menuItemEntradasMateriales;
     private javax.swing.JMenuItem menuItemMateriaPrima;
     private javax.swing.JMenuItem menuItemProductoTerminado;
     private javax.swing.JMenu menuPedidos;
