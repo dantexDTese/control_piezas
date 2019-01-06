@@ -10,29 +10,39 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
 
 
 public class AsignacionMaquinaAPedidoModel {
 
+    
+    public final int LISTA_MAQUINAS = 1;
+    public final int LISTA_MATERAILES = 2;
+    
+    
     public AsignacionMaquinaAPedidoModel() {
      
     }
     
-    public ArrayList<String> listaProcesosProduccion(){
-        return Estructuras.obtenerlistaDatos("SELECT desc_tipo_proceso FROM tipos_proceso");
-    }
-    
-    public ArrayList<String> listaMaquinas(){
-        return Estructuras.obtenerlistaDatos("SELECT desc_maquina FROM maquinas");
+    public JComboBox obtenerLista(JComboBox combo,int numLista){
+        switch(numLista){
+            case LISTA_MAQUINAS:
+                return Estructuras.llenaCombo(combo,"SELECT desc_maquina FROM maquinas");
+            case LISTA_MATERAILES:
+                return Estructuras.llenaCombo(combo,"SELECT desc_material FROM materiales");
+        } 
+        return combo;
     }
     
     public ArrayList<Pedido> listaPedidosPendientes(){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        if(c!=null)
+        if(c!=null) 
             try {
                 Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM ordenes_por_planear;");
+                ResultSet rs = st.executeQuery("SELECT pd.id_pedido,pd.no_orden_compra,pd.fecha_entrega FROM pedidos AS pd JOIN " +
+                                                "ordenes_trabajo AS ot ON  pd.id_pedido = ot.id_pedido " +
+                                                "JOIN ordenes_por_planear AS opp ON ot.id_orden_trabajo = opp.id_orden_trabajo GROUP BY pd.id_pedido;");
                 
                 if(rs.first())
                     do {                         
@@ -51,15 +61,13 @@ public class AsignacionMaquinaAPedidoModel {
         Connection c = Conexion.getInstance().getConexion();
         
         if(c!=null)
-            try {       
+            try {        
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery("SELECT op.id_orden_trabajo,op.id_orden_produccion"
-                                    + ",pr.clave_producto,op.cantidad_cliente FROM ordenes_produccion_abiertas AS op " +
-                                      " INNER JOIN productos AS pr ON op.id_producto = pr.id_producto " +
-                                      " LEFT JOIN lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion " +
-                                      "WHERE (lp.id_lote_planeado IS NULL OR lp.id_estado = "
-                                      + "(SELECT id_estado FROM estados WHERE desc_estado = 'CERRADO')) " +
-                                      "AND op.id_orden_trabajo ="+noOrdenTrabajo+";");
+                                                + ",op.clave_producto,op.cantidad_cliente FROM ordenes_produccion_abiertas AS op " +
+                                                " LEFT JOIN lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion " +
+                                                "WHERE (lp.id_lote_planeado IS NULL OR lp.id_estado = (SELECT id_estado FROM estados WHERE desc_estado = 'CERRADO')) " +
+                                                "AND op.id_orden_trabajo ="+noOrdenTrabajo+";");
                 if(rs.first())
                     do {                        
                         listaProductos.add(new ProductosPendientes(
@@ -73,10 +81,6 @@ public class AsignacionMaquinaAPedidoModel {
                         + "Method:listaProductosPendientes"+e.getMessage());
             }
         return listaProductos;        
-    }
-    
-    public ArrayList<String> listaMateriales(){
-        return Estructuras.obtenerlistaDatos("SELECT desc_material FROM materiales");
     }
     
     public String agregarProductoPendiente(ProductosPendientes pendiente,int nOrden) {
@@ -97,7 +101,7 @@ public class AsignacionMaquinaAPedidoModel {
                 cs.setString(8, pendiente.getFechaInicio());
                 cs.setInt(9, pendiente.getPiecesByShift());
                 cs.setInt(10, nOrden);
-                cs.setString(11, pendiente.getDescTipoProceso());
+                cs.setInt(11, pendiente.getDiasTrabajar());
                 cs.registerOutParameter(12, Types.VARCHAR);
                 cs.execute();
                 res = cs.getString(12);

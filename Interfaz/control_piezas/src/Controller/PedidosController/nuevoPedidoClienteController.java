@@ -1,9 +1,9 @@
 package Controller.PedidosController;
 
+import Model.Constructores;
 import Model.Estructuras;
 import Model.PedidosModel.nuevoPedidoClienteModel;
-import Model.ordenProducto;
-import Model.productoModel;
+import Model.ordenProduccion;
 import View.Pedidos.NuevoPedidoCliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,7 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 
-public class nuevoPedidoClienteController implements ActionListener{
+public class nuevoPedidoClienteController implements ActionListener,Constructores{
 
     private final NuevoPedidoCliente vistaNuevoPedido;
     private final nuevoPedidoClienteModel modelNuevoPedido;
@@ -29,21 +28,28 @@ public class nuevoPedidoClienteController implements ActionListener{
         //INICIALIZAR
         this.vistaNuevoPedido = vistaNuevoPedido;
         this.modelNuevoPedido = modelNuevoPedido;
+        llenarComponentes();
+        asignarEventos();
+        
+    }
+    
+    @Override
+    public void llenarComponentes() {
         llenarListaClientes();
         llenarListaProductos();
-        
-        //ASIGNAR EVENTOS
+    }
+
+    @Override
+    public void asignarEventos() {
+       //ASIGNAR EVENTOS
         this.vistaNuevoPedido.getCbxDescCliente().addActionListener(this);
-        this.vistaNuevoPedido.getTbListaProductos().addMouseListener(listenerAgregarProducto);
         this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
+        this.vistaNuevoPedido.getTbListaProductos().addMouseListener(listenerAgregarProducto);
         this.vistaNuevoPedido.getDcFechaEntrega().addPropertyChangeListener((PropertyChangeEvent evt) -> {
             if(!Estructuras.validarFecha(vistaNuevoPedido.getDcFechaEntrega().getDate()))
                 vistaNuevoPedido.getDcFechaEntrega().setCalendar(null);
         });
-        
-        this.vistaNuevoPedido.getTbListaPedido().addMouseListener(listenerQuitar);
-        
-        
+        this.vistaNuevoPedido.getTbListaPedido().addMouseListener(listenerQuitar);        
     }
     
     private void llenarListaClientes(){
@@ -69,10 +75,10 @@ public class nuevoPedidoClienteController implements ActionListener{
     
     private void llenarListaProductos(){
         DefaultTableModel  model = (DefaultTableModel) vistaNuevoPedido.getTbListaProductos().getModel();
-        ArrayList<productoModel> productos = this.modelNuevoPedido.listaProductos();
+        ArrayList<String> productos = this.modelNuevoPedido.listaProductos();
         
         for(int i = 0;i<productos.size();i++)
-            model.addRow(new Object[]{i+1,productos.get(i).getClaveProducto()});
+            model.addRow(new Object[]{i+1,productos.get(i)});
         
         
     }
@@ -96,22 +102,20 @@ public class nuevoPedidoClienteController implements ActionListener{
     private void guardarListaProductos(){
         
         
-        ArrayList<ordenProducto> productos = obtenerListaProductos();
+        ArrayList<ordenProduccion> productos = obtenerListaProductos();
         
         if(productos.size()>0){           
             int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
                     this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
                     ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
                     ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
-                    ,Estructuras.convertirFecha(vistaNuevoPedido.getDcFechaEntrega().getDate()));
+                    ,Estructuras.convertirFechaGuardar(vistaNuevoPedido.getDcFechaEntrega().getDate()));
 
             if(idPedidoAgregado > 0){
-            
                 for(int i = 0;i<productos.size();i++){
-                    ordenProducto producto = productos.get(i);
+                    ordenProduccion producto = productos.get(i);
                 modelNuevoPedido.agregarOrdenProduccion(idPedidoAgregado,
-                        producto.getCodProducto(), producto.getCantidadSolicitada());
-
+                        producto.getCodProducto(), producto.getCantidadCliente());
                 }
                
                 this.vistaNuevoPedido.dispose();
@@ -126,7 +130,7 @@ public class nuevoPedidoClienteController implements ActionListener{
         DefaultTableModel tableModel = (DefaultTableModel) this.vistaNuevoPedido.getTbListaPedido().getModel();
         
         for(int i = 0;i<tableModel.getRowCount();i++){
-            ordenProducto producto = new ordenProducto(tableModel.getValueAt(i, 0).toString()
+            ordenProduccion producto = new ordenProduccion(tableModel.getValueAt(i, 0).toString()
                     ,Integer.parseInt( tableModel.getValueAt(i, 1).toString()));
             lista.add(producto);
         }
@@ -181,7 +185,6 @@ public class nuevoPedidoClienteController implements ActionListener{
             model.addRow(new Object[]{claveProducto,cantidad});
         }
     };
-    
     
     
 }

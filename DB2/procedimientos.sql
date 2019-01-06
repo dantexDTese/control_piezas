@@ -84,7 +84,7 @@ IN fecha_montaje_molde		DATE,
 IN fecha_inicio_produccion	DATE,
 IN nuevo_piezas_por_turno	INT, 	
 IN n_orden					INT,
-IN desc_tipo_proceso		VARCHAR(50),
+IN dias_trabajo				INT,
 INOUT resultado				VARCHAR(100)
 )
 BEGIN
@@ -101,8 +101,15 @@ BEGIN
         
 		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
 			
-		#CALL agregar_lotes_planeados(id_orden_produccion,nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker,desc_tipo_proceso,@id_maquina);
-					
+		CALL agregar_lotes_planeados(
+        id_orden_produccion
+        ,nueva_cantidad_total,
+        nuevo_piezas_por_turno,
+        fecha_inicio_produccion,
+        nuevo_worker,
+        @id_maquina,
+        dias_trabajo);
+						
 		CALL agregar_material_requerido(id_orden_produccion,@id_material);
 			
 		SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
@@ -115,6 +122,7 @@ BEGIN
 
 END //
 DELIMITER ;            
+
 
 
 DELIMITER //
@@ -147,47 +155,49 @@ IN nueva_cantidad_total 		INT,
 IN nuevo_piezas_por_turno 		INT,
 IN fecha_inicio_produccion 		DATE,
 IN nuevo_worker 				FLOAT,
-IN desc_tipo_proceso 			VARCHAR(50),
-IN id_maquina					INT
+IN id_maquina					INT,
+IN dias_trabajo					INT
 )
 BEGIN
-	DECLARE iterador INT;
+	DECLARE id_estado INT;
     DECLARE id_tipo_proceso INT;
     
-    SET id_tipo_proceso = (SELECT tp.id_tipo_proceso  FROM tipos_proceso  AS tp WHERE tp.desc_tipo_proceso = desc_tipo_proceso);
-    
-	IF fecha_inicio_produccion IS NOT NULL THEN      
+    SET id_tipo_proceso = (SELECT tp.id_tipo_proceso  FROM tipos_proceso  AS tp WHERE tp.desc_tipo_proceso = 'MAQUINADO');
+    SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'ABIERTO');
+	
+    IF fecha_inicio_produccion IS NOT NULL THEN      
 		IF nuevo_worker >= 1 THEN        
 			SET nuevo_piezas_por_turno = nuevo_piezas_por_turno * 2;        
         END IF;        
-        SET iterador = 1;                        
+        
      my_loop: LOOP
 		
-        IF nueva_cantidad_total = 0 THEN
+        IF nueva_cantidad_total = 0 OR dias_trabajo = 0 THEN
 			LEAVE my_loop;
 		END IF;
 		
-			IF nueva_cantidad_total >= nuevo_piezas_por_turno THEN
-				SET nueva_cantidad_total = nueva_cantidad_total - nuevo_piezas_por_turno;  
-            ELSE
-				SET nuevo_piezas_por_turno = nueva_cantidad_total;
-                SET nueva_cantidad_total = 0;
-            END IF;
+		IF nueva_cantidad_total >= nuevo_piezas_por_turno THEN
+			SET nueva_cantidad_total = nueva_cantidad_total - nuevo_piezas_por_turno;  
+		ELSE
+			SET nuevo_piezas_por_turno = nueva_cantidad_total;
+			SET nueva_cantidad_total = 0;
+		END IF;
+			            
+		INSERT INTO lotes_planeados(id_orden_produccion,id_tipo_proceso,cantidad_planeada,fecha_planeada,id_maquina,id_estado)
+        VALUES(id_orden_produccion,id_tipo_proceso,nuevo_piezas_por_turno,fecha_inicio_produccion,id_maquina,id_estado);        		            
 			
-			INSERT INTO lotes_planeados(id_orden_produccion,id_tipo_proceso,cantidad_planeada,fecha_planeada,id_maquina)
-			VALUES(id_orden_produccion,id_tipo_proceso,nuevo_piezas_por_turno,fecha_inicio_produccion,id_maquina);        		            
-			
-            dias_semana_loop: LOOP
+		#parte para obtener los dias de la semana que no sean domingos.
+		dias_semana_loop: LOOP
             
-				SET fecha_inicio_produccion = ADDDATE(fecha_inicio_produccion,INTERVAL 1 DAY);
+			SET fecha_inicio_produccion = ADDDATE(fecha_inicio_produccion,INTERVAL 1 DAY);
 				
-				IF WEEKDAY(fecha_inicio_produccion) < 6 THEN
-					LEAVE dias_semana_loop;
-				END IF;
+			IF WEEKDAY(fecha_inicio_produccion) < 6 THEN
+				LEAVE dias_semana_loop;
+			END IF;
             
-            END LOOP dias_semana_loop;
+		END LOOP dias_semana_loop;
 			
-        SET iterador = iterador + 1;        			
+        SET dias_trabajo = dias_trabajo - 1;        			
         
       END LOOP my_loop;
       
@@ -219,7 +229,7 @@ BEGIN
     ELSE
     	SET SQL_SAFE_UPDATES=0;		      
 			UPDATE materiales_requeridos AS mr SET mr.cantidad_total = mr.cantidad_total + @barras_necesarias WHERE mr.id_material = id_material AND mr.id_orden_trabajo = @id_orden_trabajo;
-		SET SQL_SAFE_UPDATES=0;		      
+		SET SQL_SAFE_UPDATES=1;		      
 	
     END IF;
     
@@ -315,5 +325,206 @@ BEGIN
     
 END //
 DELIMITER ;
-
 */
+
+DELIMITER //
+CREATE PROCEDURE agregar_entrada_material(
+IN desc_proveedor		VARCHAR(150),
+IN desc_material  		VARCHAR(100),
+IN cantidad				INT,
+IN codigo				VARCHAR(50),
+IN certificado			VARCHAR(50),
+IN orden_compra			VARCHAR(50),
+IN inspector			VARCHAR(50),
+INOUT respuesta			VARCHAR(250) 
+)
+BEGIN
+	DECLARE id_material INT;
+    DECLARE id_proveedor INT;
+	DECLARE id_estado INT;	
+        
+    SET id_proveedor = (SELECT pr.id_proveedor FROM proveedores AS pr WHERE pr.desc_proveedor = desc_proveedor);
+    SET id_material = (SELECT mt.id_material FROM materiales AS mt WHERE mt.desc_material = desc_material);
+	SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'ABIERTO');
+    
+	IF NOT EXISTS(SELECT * FROM entradas_materiales AS em WHERE em.codigo = codigo) AND id_material IS NOT NULL AND id_proveedor IS NOT NULL THEN
+    
+		INSERT INTO entradas_materiales(fecha_registro,id_material,id_proveedor,cantidad,codigo,certificado,orden_compra,inspector,id_estado) 
+        VALUES(NOW(),id_material,id_proveedor,cantidad,codigo,certificado,orden_compra,inspector,id_estado);
+		
+        SET respuesta = 'SE HA GUARDADO CORRECTAMENTE';
+    
+    ELSE 
+		
+        SET respuesta = 'NO SE HA PODIDO GUARDAR CORRECTAMENTE';
+    
+    END IF;
+
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE actualizar_entrada_material(
+IN id_entrada_material		INT,
+IN noParte					VARCHAR(150),
+IN factura					VARCHAR(150),
+IN comentarios				VARCHAR(300),
+IN desc_estado				VARCHAR(100),
+INOUT respuesta 			VARCHAR(255)
+)
+BEGIN
+	DECLARE id_estado INT;	
+    IF EXISTS(SELECT * FROM entradas_materiales AS em WHERE em.id_entrada_material = id_entrada_material) THEN
+	
+		SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = desc_estado);
+		
+        SET SQL_SAFE_UPDATES = 0;
+			
+			UPDATE entradas_materiales AS em SET em.factura = factura, em.no_parte=noParte,em.comentarios = comentarios, em.id_estado = id_estado 
+			WHERE em.id_entrada_material = id_entrada_material;
+            
+        SET SQL_SAFE_UPDATES = 1;
+        
+        SET respuesta = 'SE HA REGISTRADO CORRECTAMENTE';
+        
+    ELSE      
+		SET respuesta = 'NO SE HA PODIDO REGISTRAR CORRECTAMENTE';
+        
+    END IF;
+	
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE registrar_entrada_almacen(
+IN cantidad_registrar					INT,
+IN id_almacen_producto_terminado		INT,
+INOUT respuesta 						VARCHAR(255)
+)
+BEGIN
+	DECLARE id_tipo_operacion_almacen INT;
+    DECLARE total_almacenado	      INT;
+    IF EXISTS (SELECT * FROM almacen_productos_terminados AS apt WHERE apt.id_almacen_producto_terminado = id_almacen_producto_terminado ) THEN
+		
+        SET id_tipo_operacion_almacen = (SELECT toa.id_tipo_operacion_almacen FROM tipos_operaciones_almacenes AS toa WHERE toa.desc_tipo_operacion = 'ENTRADA');
+        SET total_almacenado = (SELECT apt.total FROM almacen_productos_terminados AS apt WHERE apt.id_almacen_producto_terminado = id_almacen_producto_terminado) + cantidad_registrar;
+        
+        INSERT INTO registros_entradas_salidas(id_almacen_producto_terminado,id_tipo_operacion_almacen,fecha_registro,cantidad,total_registrado)
+        VALUES(id_almacen_producto_terminado,id_tipo_operacion_almacen,NOW(),cantidad_registrar,total_almacenado);
+		
+        SET SQL_SAFE_UPDATES = 0;
+		
+        UPDATE almacen_productos_terminados AS apt SET apt.total = total_almacenado WHERE apt.id_almacen_producto_terminado = id_almacen_producto_terminado;
+        
+        SET SQL_SAFE_UPDATES = 1;
+        
+        SET respuesta = 'EL PRODUCTO SE HA REGISTRADO CORRECTAMENTE';
+        
+    ELSE SET respuesta = 'OCURRIO UN ERROR AL REGISTRAR ESTE PRODUCTO';
+    END IF;
+    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_inventario(
+IN responsable 		VARCHAR(255),
+INOUT respuesta				INT
+)
+BEGIN
+
+	INSERT INTO inventarios(fecha_inventario,persona_responsable) VALUES(NOW(),responsable);
+	SET respuesta = (SELECT MAX(inv.id_inventario) FROM inventarios AS inv);
+    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_producto_inventario(
+IN id_inventario			INT,
+IN clave_producto			VARCHAR(50),
+IN cantidad					INT
+)
+BEGIN
+	DECLARE id_producto INT;
+    SET id_producto = (SELECT pr.id_producto FROM productos AS pr WHERE pr.clave_producto = clave_producto);
+    
+    IF id_producto > 0 AND id_inventario > 0 THEN
+		
+        INSERT INTO productos_inventario(id_inventario,id_producto,cantidad) VALUES(id_inventario,id_producto,cantidad);
+        
+    END IF;
+    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_parcialidad(
+IN id_pedido		INT,
+IN fecha_entrega	DATE,
+INOUT respuesta		INT
+)
+BEGIN
+	INSERT INTO parcialidades_pedido(fecha_parcialidad,id_pedido,fecha_entrega) VALUES(NOW(),id_pedido,fecha_entrega);
+    
+    SET respuesta = (SELECT MAX(pp.id_parcialidad_pedido) FROM parcialidades_pedido AS pp);
+
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE registrar_salida_producto(
+IN clave_producto		VARCHAR(50),
+IN nombre_cliente		VARCHAR(20),
+IN cantidad_salida		INT,
+INOUT respuesta			INT
+)
+BEGIN
+	DECLARE id_almacen_producto_terminado INT;
+    DECLARE id_tipo_operacion_almacen INT;
+    DECLARE total_almacenado	      INT;
+    
+    
+	
+    SET id_almacen_producto_terminado = (SELECT pc.id_almacen_producto_terminado FROM productos_clientes AS pc WHERE pc.nombre_cliente = nombre_cliente AND pc.clave_producto = clave_producto);
+    
+    IF id_almacen_producto_terminado IS NOT NULL THEN
+    
+		SET id_tipo_operacion_almacen = (SELECT toa.id_tipo_operacion_almacen FROM tipos_operaciones_almacenes AS toa WHERE toa.desc_tipo_operacion = 'SALIDA');
+		SET total_almacenado = (SELECT apt.total FROM almacen_productos_terminados AS apt WHERE apt.id_almacen_producto_terminado = id_almacen_producto_terminado) - cantidad_salida;
+			
+		INSERT INTO registros_entradas_salidas(id_almacen_producto_terminado,id_tipo_operacion_almacen,fecha_registro,cantidad,total_registrado)
+		VALUES(id_almacen_producto_terminado,id_tipo_operacion_almacen,NOW(),cantidad_salida,total_almacenado);
+			
+			SET SQL_SAFE_UPDATES = 0;
+			
+			UPDATE almacen_productos_terminados AS apt SET apt.total = total_almacenado WHERE apt.id_almacen_producto_terminado = id_almacen_producto_terminado;
+			
+			SET SQL_SAFE_UPDATES = 1;
+			
+		SET respuesta = (SELECT MAX(res.id_registro_entrada_salida) FROM registros_entradas_salidas AS res);
+	
+    ELSE SET respuesta = 0;
+	
+    END IF;
+        
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE registrar_parcialidad_entrega(
+IN id_orden_produccion						INT,
+IN id_registro_entrada_salida				INT,
+IN id_parcialidad_pedido					INT
+)
+BEGIN
+	INSERT INTO parcialidades_entrega(id_orden_produccion,id_registro_entrada_salida,id_parcialidad_pedido) VALUES(id_orden_produccion,id_registro_entrada_salida,id_parcialidad_pedido);
+END //
+DELIMITER ;
+
+SELECT * FROM parcialidades_pedido;
+SELECT * FROM registros_entradas_salidas;
+SELECT * FROM almacen_productos_terminados;
+SELECT * FROM 

@@ -20,8 +20,10 @@ public class FechaCalendario extends DefaultTableCellRenderer{
             boolean isSelected, boolean hasFocus, int row, int column) {
         
         if(value instanceof PanelFecha){
+            
             PanelFecha panelFecha = (PanelFecha)value;
             return panelFecha;
+            
         }
         
         return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);

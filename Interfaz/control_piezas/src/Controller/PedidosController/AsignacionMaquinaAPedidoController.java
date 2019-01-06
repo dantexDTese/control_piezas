@@ -1,4 +1,5 @@
 package Controller.PedidosController;
+import Model.Constructores;
 import Model.Estructuras;
 import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
 import Model.PedidosModel.Pedido;
@@ -20,20 +21,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 
-public class AsignacionMaquinaAPedidoController {
+public final class AsignacionMaquinaAPedidoController implements Constructores{
 
     /**
-     * ATRIBUTOS
-     */
+    * ATRIBUTOS
+    */
     private final AsignarMaquinaAPedido vista;
     private final AsignacionMaquinaAPedidoModel model;
+    
+    private String ordenTrabajo;
+    
     private ArrayList<ProductosPendientes> pendientes;
     private final ArrayList<ProductosPendientes> agregados;
-    private ProductosPendientes pendiente=null;                
-    private String ordenTrabajo;
+    private ProductosPendientes pendiente = null;                
+    
     
     /**
      * CONSTRUCTOR
@@ -41,61 +47,48 @@ public class AsignacionMaquinaAPedidoController {
      * @param model
      */
     public AsignacionMaquinaAPedidoController(AsignarMaquinaAPedido vista,AsignacionMaquinaAPedidoModel model){     
-        //INICIALIZAR
         this.vista = vista;
         this.model = model;                
-        llenarListaMaquinas();
-        llenarListaMateriales();         
-        llenarListaProcesosProduccion();
-        llenarTablaPedidosPendientes();        
-        
         agregados = new ArrayList<>();
-        
+        llenarComponentes();
+        asignarEventos();
+    }
+    
+    @Override
+    public void llenarComponentes() {
+        vista.setCbxMaquina(model.obtenerLista(vista.getCbxMaquina(), model.LISTA_MAQUINAS));
+        vista.setCbxMateriales(model.obtenerLista(vista.getCbxMateriales(),model.LISTA_MATERAILES));
+        llenarTablaPedidosPendientes();        
         if(this.vista.getCbxMaquina().getSelectedItem() != null)
             Estructuras.obtenerCalendario(this.vista.getJpCalendario(),this.vista.getCbxMaquina().getSelectedItem().toString());
-        
-        //EVENTOS
-        this.vista.getJtOrdenesPendientes().addMouseListener(listenerSeleccionarPendiente);        
-        this.vista.getBtnGuardar().addActionListener(listenerGuardarCambiosOrden);           
-        this.vista.getCbxMateriales().addActionListener(listenerObtenerPiezasTurno);  
-        this.vista.getBtnTerminar().addActionListener(listenerTerminarPendientes);
-        this.vista.getCbxProcesosProduccion().addActionListener(listenerSeleccionTipoProceso);
-        this.vista.getCbxMaquina().addActionListener((ActionEvent e) -> {Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());});
-        this.vista.getJdcFechaMontajeMolde().addPropertyChangeListener(listenerValidacionFecha);
-        this.vista.getDcrFechaInicioProduccion().addPropertyChangeListener(listenerValidacionFecha);
     }
+
+    @Override
+    public void asignarEventos() {
+        vista.getJtOrdenesPendientes().addMouseListener(listenerSeleccionarPendiente);        
+        vista.getBtnGuardar().addActionListener(listenerGuardarCambiosOrden);           
+        vista.getCbxMateriales().addActionListener(listenerObtenerPiezasTurno);  
+        vista.getBtnTerminar().addActionListener(listenerTerminarPendientes);
+        vista.getCbxMaquina().addActionListener((ActionEvent e) -> {Estructuras.obtenerCalendario(vista.getJpCalendario(),vista.getCbxMaquina().getSelectedItem().toString());});
+        vista.getJdcFechaMontajeMolde().addPropertyChangeListener(listenerValidacionFecha);
+        vista.getDcrFechaInicioProduccion().addPropertyChangeListener(listenerValidacionFecha);
+        vista.getCheckOrdenCompleta().addChangeListener(listenerCheckTodosDidas);
+    }
+    
     
     /**
      * METODOS
      */
-     
-    private void llenarListaProcesosProduccion(){
-        ArrayList<String> listaProcesosProduccion = model.listaProcesosProduccion();
-        for(int i = 0;i<listaProcesosProduccion.size();i++)
-            vista.getCbxProcesosProduccion().addItem(listaProcesosProduccion.get(i));
-    }
-   
-    private void llenarTablaPedidosPendientes(){        
+    private void llenarTablaPedidosPendientes(){
+        
         ArrayList<Pedido> listaPendientes = model.listaPedidosPendientes();
-        DefaultTableModel modelT = (DefaultTableModel) vista.getJtOrdenesPendientes().getModel();
+        DefaultTableModel modelT = (DefaultTableModel)vista.getJtOrdenesPendientes().getModel();
         Estructuras.limpiarTabla(modelT);
         for(int i = 0;i<listaPendientes.size();i++){
             Pedido ped = listaPendientes.get(i);
             modelT.addRow(new Object[]{ped.getNoOrdenTrabajo(),ped.getNoOrdenCompra(),ped.getFechaRecepcion()});
         }
-    }
-    
-    private void llenarListaMaquinas(){
-        ArrayList<String> maquinas = model.listaMaquinas();
-                
-        for(int i = 0;i<maquinas.size();i++)
-            vista.getCbxMaquina().addItem(maquinas.get(i));
-    }
-    
-    private void llenarListaMateriales(){
-        ArrayList<String> materiales = model.listaMateriales();
-        for(int i = 0;i<materiales.size();i++)
-            vista.getCbxMateriales().addItem(materiales.get(i));
+        
     }
     
     private void llenarListaProductos(){
@@ -112,12 +105,36 @@ public class AsignacionMaquinaAPedidoController {
         vista.getSprPiecesByShift().setValue(0);
         vista.getJdcFechaMontajeMolde().setDate(null);
         vista.getDcrFechaInicioProduccion().setDate(null);
+        vista.getSprDiasTrabajar().setValue(0);
     
     }
     
     /**
      * EVENTOS
      */  
+    private final ChangeListener listenerCheckTodosDidas = new ChangeListener() {
+        @Override
+        public void stateChanged(ChangeEvent e) {
+                if(vista.getCheckOrdenCompleta().isSelected()){
+                    vista.getSprDiasTrabajar().setValue(
+                            obtenerNumDiasOrden(Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()),
+                                    Integer.parseInt(vista.getSprCantidadProducir().getValue().toString()),
+                                    Integer.parseInt(vista.getSprPiecesByShift().getValue().toString())));
+                    vista.getSprDiasTrabajar().setEnabled(false);
+                }else{
+                    vista.getSprDiasTrabajar().setValue(0);
+                    vista.getSprDiasTrabajar().setEnabled(true);
+                }
+        }
+        
+        private int obtenerNumDiasOrden(float worker,int cantidadProducir,int piezasTurno){
+            if(cantidadProducir>0 && piezasTurno > 0){
+                piezasTurno = (int)Math.ceil((float)piezasTurno / (worker*2));
+                return (int)Math.ceil((float)cantidadProducir/(float)piezasTurno);
+            }else return 0;
+        }
+    };
+    
     private final ActionListener listenerCbxProducto = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {            
@@ -144,6 +161,7 @@ public class AsignacionMaquinaAPedidoController {
             vista.getSprCantidadProducir().setValue(pendiente.getQty());
             if(pendiente.getWorker()==1)
                vista.getCbxWorker().setSelectedIndex(1);
+            
             vista.getSprPiecesByShift().setValue(pendiente.getPiecesByShift());
             vista.getCbxMateriales().setSelectedIndex(obtenerIndex(vista.getCbxMateriales(),pendiente.getMaterial()));
             vista.getJdcFechaMontajeMolde().setDate(new Date(pendiente.getFechaMontaje()));
@@ -151,7 +169,7 @@ public class AsignacionMaquinaAPedidoController {
             vista.getCbxMaquina().setSelectedIndex(obtenerIndex(vista.getCbxMaquina(),pendiente.getMaquina()));
             vista.getLbNoOrdenProduccion().setText(pendiente.getNoOrdenProduccion()+"");
             vista.getLbCantidadCliente().setText(pendiente.getCantidadCliente()+"");
-            vista.getSprCantidadProducir().setValue(pendiente.getCantidadCliente());
+            vista.getSprCantidadProducir().setValue(pendiente.getCantidadCliente()); 
         }
         
         private ProductosPendientes obtenerPendiente(ArrayList<ProductosPendientes> lista,String claveProductos){
@@ -182,11 +200,13 @@ public class AsignacionMaquinaAPedidoController {
     private final ActionListener listenerGuardarCambiosOrden = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            AgregarPendiente();
+            agregarPendiente();
             limpiar();            
         }
+
         
-        private void AgregarPendiente(){        
+        private void agregarPendiente(){
+            
             SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");            
             Integer index;
             
@@ -197,14 +217,14 @@ public class AsignacionMaquinaAPedidoController {
             pendiente.setWorker(Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()));
             pendiente.setFechaMontaje(sdf.format(vista.getJdcFechaMontajeMolde().getDate()));
             pendiente.setFechaInicio(sdf.format(vista.getDcrFechaInicioProduccion().getDate()));        
-            pendiente.setDescTipoProceso(vista.getCbxProcesosProduccion().getSelectedItem().toString());
+            pendiente.setDiasTrabajar(vista.getSprDiasTrabajar().getValue());
             
-            if((index = obtenerIndexAgregado(pendiente.getClaveProducto())) == null)
-                agregados.add(pendiente);
-            else 
-                agregados.set(index, pendiente);
+            if((index = obtenerIndexAgregado(pendiente.getClaveProducto())) == null) agregados.add(pendiente);
+            
+            else agregados.set(index, pendiente);
             
             llenarTablaAgregados(agregados);            
+            
         }
         
         
@@ -227,7 +247,7 @@ public class AsignacionMaquinaAPedidoController {
                 ProductosPendientes pendiente = pendientes.get(i);
                 model.addRow(new Object[]{pendiente.getClaveProducto(),pendiente.getFechaMontaje(),
                 pendiente.getFechaInicio(),pendiente.getQty(),pendiente.getMaquina(),pendiente.getPiecesByShift(),
-                pendiente.getMaterial(),pendiente.getWorker(),pendiente.getDescTipoProceso()});
+                pendiente.getMaterial(),pendiente.getWorker(),pendiente.getDiasTrabajar()});
             }
         
         }
@@ -299,13 +319,13 @@ public class AsignacionMaquinaAPedidoController {
                         vista.getDcrFechaInicioProduccion().getDate());
         }
         
-        private void validarFechaInicio(Date fechaMontaje, Date fechaInicio) {
+        private void validarFechaInicio(Date fechaMontaje, Date fechaInicio) { 
                 if(fechaMontaje == null && fechaInicio != null){
                     JOptionPane.showMessageDialog(null,"por favor antes seleccione una fecha de montaje");
                     vista.getDcrFechaInicioProduccion().setCalendar(null);
                 }else if(fechaInicio != null && fechaMontaje!=null){
                     validarTodasFechas(vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(ordenTrabajo), 2).toString(),
-                    Estructuras.convertirFecha(fechaMontaje),Estructuras.convertirFecha(fechaInicio));   
+                    Estructuras.convertirFechaGuardar(fechaMontaje),Estructuras.convertirFechaGuardar(fechaInicio));   
                 }
         }
         
@@ -358,7 +378,7 @@ public class AsignacionMaquinaAPedidoController {
                 int diasSeleccionado=(int) ((dateEntrega.getTime()-fechaSeleccionada.getTime())/86400000);
                 
                 if(diasSeleccionado < 0 || diasSeleccionado+1 < diasNecesarios ||
-                        Estructuras.convertirFecha(dateEntrega).equals(Estructuras.convertirFecha(fechaSeleccionada))){
+                        Estructuras.convertirFechaGuardar(dateEntrega).equals(Estructuras.convertirFechaGuardar(fechaSeleccionada))){
                      JOptionPane.showMessageDialog(null, "la fecha seleccionada no es valida","fecha no valida",JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
@@ -374,18 +394,7 @@ public class AsignacionMaquinaAPedidoController {
             int fila = 0;
                 while(!model.getValueAt(fila,0).toString().equals(ordenTrabajo)) fila++;
             return fila;
-        }
-
-        
-
-        
+        }  
     };
-    
-    private final ActionListener listenerSeleccionTipoProceso = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-        
-            
-        }
-    };
+
 }

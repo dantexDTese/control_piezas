@@ -59,6 +59,26 @@ desc_proveedor	VARCHAR(150),
 direccion		VARCHAR(150),
 IVA				FLOAT
 );
+
+CREATE TABLE turnos(
+id_turno 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_turno		VARCHAR(2) NOT NULL
+);
+
+CREATE TABLE tipos_inspeccion(
+id_tipo_inspeccion INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_tipo_inspeccion VARCHAR(150)
+);
+
+CREATE TABLE resultados_inspeccion(
+id_resultado_inspeccion		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_resultado_inspeccion		VARCHAR(5)
+);
+
+CREATE TABLE tipos_operaciones_almacenes(
+id_tipo_operacion_almacen			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+desc_tipo_operacion					VARCHAR(20)  CHECK (desc_tipo_operacion	 = 'ENTRADA' OR desc_tipo_operacion = 'SALIDA')
+);
 /**FIN DE CATALOGOS CONTROL_PIEZAS*/
 
 /** TABLAS DEBILES*/
@@ -93,7 +113,7 @@ piezas_por_turno		INT,
 turnos_necesarios       INT,
 turnos_reales           INT,
 fecha_registro          DATE NOT NULL,
-	fecha_montaje           DATE,
+fecha_montaje           DATE,
 fecha_desmontaje        DATE,
 fecha_inicio            DATE,
 fecha_fin               DATE,
@@ -171,8 +191,45 @@ cantidad_administrador      INT ,
 scrap_operador              INT ,
 scrap_administrador         INT ,
 merma                       FLOAT,
-tiempo_muerto               TIME
+tiempo_muerto               TIME,
+turno						INT NOT NULL REFERENCES turnos(id_turno)
 ); 
+
+CREATE TABLE entradas_materiales(
+id_entrada_material 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+fecha_registro			DATETIME NOT NULL,
+id_material				INT NOT NULL REFERENCES materiales(id_material),
+id_proveedor			INT NOT NULL REFERENCES proveedores(id_proveedor),
+cantidad				INT NOT NULL,
+codigo					VARCHAR(50) NOT NULL,
+certificado				VARCHAR(50) NOT NULL,
+orden_compra			VARCHAR(50) NOT NULL,
+inspector				VARCHAR(50) NOT NULL,
+id_estado				INT NOT NULL REFERENCES estados(id_estado),
+comentarios				VARCHAR(300),
+factura					VARCHAR(255),
+no_parte				VARCHAR(255)
+);
+
+CREATE TABLE inventarios(
+id_inventario 			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+fecha_inventario		DATE NOT NULL,
+persona_responsable		VARCHAR(255)
+);
+
+CREATE TABLE parcialidades_entrega(
+id_parcialidad_entrega			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_registro_entrada_salida		INT NOT NULL REFERENCES registros_entradas_salidas(id_registro_entrada_salida),
+id_orden_produccion				INT NOT NULL REFERENCES	ordenes_produccion(id_orden_produccion)
+);
+
+CREATE TABLE parcialidades_pedido(
+id_parcialidad_pedido		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+fecha_parcialidad			DATE,
+id_pedido					INT NOT NULL REFERENCES pedidos(id_pedido),
+fecha_entrega				DATE
+);
+
 /**FIN TABLAS DEBILES 1*/
 
 /**TABLAS RELACIONALES*/
@@ -204,5 +261,57 @@ id_producto				INT NOT NULL REFERENCES productos(id_producto),
 piezas_por_turno		INT NOT NULL,
 piezas_por_barra		INT NOT NULL
 );
+
+CREATE TABLE inspeccion_entradas(
+id_inspeccion_entradas 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_entrada_material			INT NOT NULL REFERENCES entradas_materiales(id_entrada_material),
+id_tipo_inspeccion			INT NOT NULL REFERENCES tipos_inspeccion(id_tipo_inspeccion),
+id_resultado_inspeccion		INT NOT NULL REFERENCES resultados_inspeccion(id_resultado_inspeccion)	
+);
+
+CREATE TABLE inspeccion_dimenciones(
+id_inspeccion_dimencion			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_tipo_inspeccion				INT NOT NULL REFERENCES tipos_inspeccion(id_tipo_inspeccion),
+id_entrada_material				INT NOT NULL REFERENCES entradas_materiales(id_entrada_material),
+resultado_inspeccion			FLOAT NOT NULL
+);
+
+CREATE TABLE productos_cliente(
+id_producto_cliente 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_cliente				INT NOT NULL REFERENCES clientes(id_cliente),
+id_producto				INT NOT NULL REFERENCES productos(id_producto)
+);
+
+CREATE TABLE almacen_productos_terminados(
+id_almacen_producto_terminado 		INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_producto_cliente					INT NOT NULL REFERENCES productos_cliente(id_producto_cliente),
+total								INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE registros_entradas_salidas(
+id_registro_entrada_salida 			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_almacen_producto_terminado		INT NOT NULL REFERENCES almacen_productos_terminados(id_almacen_producto_terminado),
+id_tipo_operacion_almacen			INT NOT NULL REFERENCES tipos_operaciones_almacenes(id_tipo_operacion_almacen),
+fecha_registro						DATE NOT NULL,
+cantidad							INT NOT NULL,
+total_registrado					INT NOT NULL
+);
+
+
+CREATE TABLE productos_inventario(
+id_producto_inventario 			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_inventario					INT NOT NULL REFERENCES inventarios(id_inventario),
+id_producto						INT NOT NULL REFERENCES productos(id_producto),
+cantidad						INT NOT NULL
+);
+
+CREATE TABLE parcialidades_entrega(
+id_parcialidad_entrega			INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+id_orden_produccion				INT NOT NULL REFERENCES ordenes_produccion(id_orden_produccion),
+id_registro_entrada_salida		INT NOT NULL REFERENCES registros_entradas_salidas(id_registro_entrada_salida),
+id_parcialidad_pedido			INT NOT NULL REFERENCES parcialides_pedido(id_parcialidad_pedido)
+);
 /**FIN TABLAS RELACIONALES*/
+
+
 

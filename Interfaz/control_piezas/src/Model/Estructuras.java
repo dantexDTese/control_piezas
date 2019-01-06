@@ -2,6 +2,7 @@ package Model;
 
 import Controller.PedidosController.CalendarioController;
 import Model.PedidosModel.CalendarioModel;
+import Model.ProduccionModel.LoteProduccion;
 import View.Pedidos.Calendario;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,9 +24,16 @@ import javax.swing.table.TableColumn;
 public class Estructuras {
 
     
+    
+    
+    public static String obtenerFechaActual(){
+        Date fecha = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+        return sdf.format(fecha);
+    }
+    
     public static JComboBox llenaCombo(JComboBox selector,String query){
         Connection conexion = Conexion.getInstance().getConexion();       
-        selector.removeAll();
         if(conexion != null){
             try {
                 Statement st = conexion.createStatement();
@@ -48,8 +56,6 @@ public class Estructuras {
     public static void modificarAnchoTabla(JTable tablaModificar,Integer[] listaTamanos){
         //pasar a estructuras
         tablaModificar.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
-            
             for(int i = 0;i<listaTamanos.length;i++){
                 TableColumn columna = tablaModificar.getColumnModel().getColumn(i);
                 columna.setPreferredWidth(listaTamanos[i]);
@@ -119,7 +125,7 @@ public class Estructuras {
          return model;
     }
     
-    public static String convertirFecha(Date fecha){
+    public static String convertirFechaGuardar(Date fecha){
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY/MM/dd");
         return sdf.format(fecha);
     }

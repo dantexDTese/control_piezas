@@ -3,7 +3,6 @@ package Model.PedidosModel;
 
 import Model.Conexion;
 import Model.Estructuras;
-import Model.productoModel;
 import java.awt.HeadlessException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -51,26 +50,8 @@ public class nuevoPedidoClienteModel {
         return listaContactos;
     }
     
-    public ArrayList<productoModel> listaProductos(){
-        Connection c = Conexion.getInstance().getConexion();
-        ArrayList<productoModel> productos = new ArrayList<>();
-        if(c!=null)
-            try {
-                Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery("SELECT clave_producto FROM productos");
-                if(rs.first())
-                    do{
-                        productoModel producto = new productoModel(rs.getString(1));
-                        productos.add(producto);
-                    }while(rs.next());
-                
-                c.close();
-            } catch (SQLException e) {
-                System.err.print("Error class:nuevoPedidoClienteModel,"
-                        + "method: listaProductos "+e.getMessage());
-            }
-        
-        return productos;
+    public ArrayList<String> listaProductos(){
+        return Estructuras.obtenerlistaDatos("SELECT clave_producto FROM productos");
     }
     
     public int agregarPedido(String descOrdenCompra, String descCliente,

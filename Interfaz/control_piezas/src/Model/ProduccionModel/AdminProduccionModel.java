@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 public class AdminProduccionModel {
                
-    public ArrayList<OrdenTrabajo> listaOrdenesTrabajo(){
-         ArrayList<OrdenTrabajo> lista = new ArrayList<>();
+    public ArrayList<Pedido> listaOrdenesTrabajo(){
+         ArrayList<Pedido> lista = new ArrayList<>();
          Connection c = Conexion.getInstance().getConexion();
          String query = "SELECT ot.id_orden_trabajo,es.desc_estado " +
                         "FROM ordenes_trabajo AS ot JOIN procedimiento_total " +
@@ -28,7 +28,7 @@ public class AdminProduccionModel {
                  ResultSet rs = st.executeQuery(query);
                  if(rs.first())
                      do{
-                         lista.add(new OrdenTrabajo(rs.getInt(1),rs.getString(2)));
+                         lista.add(new Pedido(rs.getInt(1),rs.getString(2)));
                      }while(rs.next());
                  c.close();
              } catch (SQLException e) {
@@ -73,8 +73,7 @@ public class AdminProduccionModel {
                 ResultSet rs = st.executeQuery(query);
                 
                 if(rs.first())
-                    do {                        
-                       
+                    do {                            
                         orden = new OrdenProduccionGuardada(
                                 rs.getInt(1),       //ordenTrabajo
                                 rs.getString(2),    //ordenCompra
@@ -98,13 +97,10 @@ public class AdminProduccionModel {
                                 rs.getString(20),   //fechaFin
                                 rs.getString(21));  //observaciones
                     } while (rs.next());
-                
                 c.close();
             } catch (SQLException e) {
                 System.err.println("error: paquete:ProduccionModel class: AdminProduccionModel Method:obtenerOrdenProduccion "+e.getMessage());
             }
-        
-        
         return orden;
     }
 

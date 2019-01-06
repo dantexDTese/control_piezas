@@ -218,7 +218,7 @@ public class AgregarNuevaRequisicionController {
                         Integer.parseInt(vista.getSpParcialidad().getValue().toString()),vista.getLbMaterial().getText());
                         
                 materialSeleccionado.setCantidad(numBarras);
-                materialSeleccionado.setFechaSolicitadaParcialidadMaterial(Estructuras.convertirFecha(vista.getJdcFechaSolicitada().getDate()));
+                materialSeleccionado.setFechaSolicitadaParcialidadMaterial(Estructuras.convertirFechaGuardar(vista.getJdcFechaSolicitada().getDate()));
                 materialSeleccionado.setCuentaCargo(vista.getCbxCuentaCargo().getSelectedItem().toString());
                 materialSeleccionado.setUnidad(vista.getLbUnidad().getText());        
                 materialSeleccionado.setListaOrdenesProduccion(listaOrdenesProduccion);            

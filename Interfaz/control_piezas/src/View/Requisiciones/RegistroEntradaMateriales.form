@@ -229,7 +229,8 @@
                 <Component class="javax.swing.JTable" name="jtbEntradaMateriales">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="9" rowCount="0">
+                      <Table columnCount="10" rowCount="0">
+                        <Column editable="false" title="NO.REGISTRO" type="java.lang.Object"/>
                         <Column editable="false" title="FECHA" type="java.lang.Object"/>
                         <Column editable="false" title="MATERIAL" type="java.lang.Object"/>
                         <Column editable="false" title="CODIGO" type="java.lang.Object"/>
@@ -237,12 +238,17 @@
                         <Column editable="false" title="CANTIDAD" type="java.lang.Object"/>
                         <Column editable="false" title="ORDEN COMPRA" type="java.lang.Object"/>
                         <Column editable="false" title="INSPECTOR" type="java.lang.Object"/>
-                        <Column editable="false" title="LIBERACION" type="java.lang.Object"/>
                         <Column editable="false" title="CERTIFICADO" type="java.lang.Object"/>
+                        <Column editable="false" title="LIBERACION" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
                           <Title/>
                           <Editor/>

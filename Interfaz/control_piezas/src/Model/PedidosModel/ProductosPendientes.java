@@ -9,7 +9,7 @@ public class ProductosPendientes {
      * ATRIBUTOS
      */
     private String noOrdenCompra;
-    private int noOrdenProduccion;
+    private final int noOrdenProduccion;
     private final String claveProducto;
     private  int cantidadCliente;
     private int qty;
@@ -22,12 +22,12 @@ public class ProductosPendientes {
     private float barrasNecesarias;
     private int barrasSeleccionadas;
     private String descTipoProceso;
+    private int diasTrabajar;
     /**
      * CONSTRUCTOR
      * @param noOrdenProduccion
      * @param claveProducto
      */
-    
     public ProductosPendientes(int noOrdenProduccion, String claveProducto) {
         this.noOrdenProduccion = noOrdenProduccion;
         this.claveProducto = claveProducto;
@@ -41,8 +41,6 @@ public class ProductosPendientes {
      * @param claveProducto
      * @param cantidadCliente
      */
-    
-
     public ProductosPendientes(String noOrdenCompra, int noOrdenProduccion, String claveProducto, int cantidadCliente){
         this.noOrdenCompra = noOrdenCompra;
         this.noOrdenProduccion = noOrdenProduccion;
@@ -60,7 +58,6 @@ public class ProductosPendientes {
      * @param material
      * @param worker
      */
-  
     public ProductosPendientes(String claveProducto,int qty,String noOrdenCompra, int noOrdenProduccion,int piecesByShift,
      String material,float worker) {
          this.noOrdenCompra = noOrdenCompra;
@@ -89,6 +86,14 @@ public class ProductosPendientes {
         this.material = material;
         this.barrasNecesarias = barrasNecesarias;
         this.fechaInicio = fecha_inicio;
+    }
+
+    public int getDiasTrabajar() {
+        return diasTrabajar;
+    }
+
+    public void setDiasTrabajar(int diasTrabajar) {
+        this.diasTrabajar = diasTrabajar;
     }
 
     public String getDescTipoProceso() {

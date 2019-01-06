@@ -1,6 +1,7 @@
 
 package Controller.PedidosController;
 
+import Model.Constructores;
 import Model.Estructuras;
 import Model.PedidosModel.CalendarioModel;
 import View.Pedidos.Calendario;
@@ -12,28 +13,37 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 
-public class CalendarioController {
+public class CalendarioController implements Constructores{
 
     private final Calendario vista;
     private final CalendarioModel model;
     private final String descMaquina;
     public CalendarioController(Calendario vista,CalendarioModel model,String descMaquina) {           
+     
      this.vista = vista;
      this.model = model;
      this.descMaquina = descMaquina;
-     this.vista.getJtCalendario().setDefaultRenderer(Object.class,new FechaCalendario());   
-     this.vista.getJycAnioCalendario().addPropertyChangeListener(listenerFechas);
-     this.vista.getJmtMesCalendario().addPropertyChangeListener(listenerFechas);  
+     
+     
+    }
+    
+    @Override
+    public void llenarComponentes() {
+        this.vista.getJtCalendario().setDefaultRenderer(Object.class,new FechaCalendario());   
+    }
+
+    @Override
+    public void asignarEventos() {
+        this.vista.getJycAnioCalendario().addPropertyChangeListener(listenerFechas);
+        this.vista.getJmtMesCalendario().addPropertyChangeListener(listenerFechas);  
     }
         
     private final PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {
-    
         llenarTabla();
-        
     };    
     
     private void agregarCalendario(PanelFecha [] fechas){                
-        DefaultTableModel model = (DefaultTableModel) vista.getJtCalendario().getModel();
+        DefaultTableModel model = (DefaultTableModel)vista.getJtCalendario().getModel();
         vista.getJtCalendario().setRowHeight(120);                
         model.addRow(fechas);        
     }

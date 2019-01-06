@@ -1,27 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller.AlmacenController;
 
 import Model.AlmacenModel.MateriaPrimaModel;
+import Model.Constructores;
 import View.almacenView.MateriaPrimaView;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
  * @author cesar
  */
-public class MateriaPrimaController {
+public final class MateriaPrimaController implements Constructores{
 
     
-    private MateriaPrimaView mPrimaView;
-    private MateriaPrimaModel mPrimaModel;
+    private MateriaPrimaView vista;
+    private MateriaPrimaModel modelo;
     
     public MateriaPrimaController(MateriaPrimaView mPrimaView, MateriaPrimaModel mPrimaModel) {
-        this.mPrimaView = mPrimaView;
-        this.mPrimaModel = mPrimaModel;
+        
+        this.vista = mPrimaView;
+        this.modelo = mPrimaModel;
+        llenarComponentes();
+        asignarEventos();
     }
+
+    @Override
+    public void llenarComponentes() {
+        
+    }
+
+    @Override
+    public void asignarEventos() {
+        
+    }
+    
+    
     
     
     

@@ -46,8 +46,6 @@ public class ParcialidadesPedidos extends javax.swing.JDialog {
     public void setLbProducto(JLabel lbProducto) {
         this.lbProducto = lbProducto;
     }
-    
-    
 
     public String getNoOrden() {
         return noOrden;

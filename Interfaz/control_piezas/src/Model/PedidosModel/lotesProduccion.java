@@ -3,6 +3,7 @@ package Model.PedidosModel;
 
 
 public class lotesProduccion {
+
     private final String fechaTrabaho;
     private final int CantidadTrabajada;
 

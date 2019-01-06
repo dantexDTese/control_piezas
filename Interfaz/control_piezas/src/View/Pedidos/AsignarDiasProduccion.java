@@ -16,6 +16,8 @@ public class AsignarDiasProduccion extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
+    
+    
 
     public JComboBox<String> getCbxProducto() {
         return cbxProducto;
@@ -131,7 +133,7 @@ public class AsignarDiasProduccion extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
-        jpCalendario.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
+        jpCalendario.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jpCalendario.setOpaque(false);
 
         javax.swing.GroupLayout jpCalendarioLayout = new javax.swing.GroupLayout(jpCalendario);

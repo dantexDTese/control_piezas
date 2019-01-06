@@ -2,6 +2,7 @@
 package Controller.ProduccionController;
 
 import Model.Estructuras;
+import Model.PedidosModel.Pedido;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.ControlProduccionModel;
 import Model.ProduccionModel.OrdenProduccionGuardada;
@@ -14,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -60,7 +63,7 @@ public class AdminProduccionController {
      */
     private void llenarTablaOrdenesTrabajo(){
         
-        ArrayList<AdminProduccionModel.OrdenTrabajo> listaOrdenesTrabajo =  model.listaOrdenesTrabajo();
+        ArrayList<Pedido> listaOrdenesTrabajo =  model.listaOrdenesTrabajo();
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel());
         DefaultTableModel modelTabla = (DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel();
         
@@ -89,6 +92,7 @@ public class AdminProduccionController {
             SeguimientoProduccionDialogView vistaSeguimiento = new SeguimientoProduccionDialogView(vista.getPrincipal(), true);
             SeguimientoProduccionController controllerSeguimiento = new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel(),ordenSeleccionada);
             vistaSeguimiento.setVisible(true);
+            
         }
         
         private void mostrarControlProduccion(){

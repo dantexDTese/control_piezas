@@ -4,7 +4,7 @@ package View;
 import View.Produccion.AdminProduccionView;
 import Controller.AlmacenController.MateriaPrimaController;
 import Controller.AlmacenController.ProductoTerminadoController;
-import Controller.RequisicionesController.controlEntregasController;
+import Controller.RequisicionesController.ControlEntregasController;
 import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
 import Controller.ProduccionController.AdminProduccionController;
@@ -12,9 +12,10 @@ import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
 import Controller.RequisicionesController.RegistroEntradaMaterialesController;
 import Model.AlmacenModel.MateriaPrimaModel;
 import Model.AlmacenModel.ProductoTerminadoModel;
-import Model.RequisicionesModel.controlEntregasModel;
+import Model.RequisicionesModel.ControlEntregasModel;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
+import Model.ProcesosProduccion;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
 import Model.RequisicionesModel.RegistroEntradaMaterialesModel;
@@ -39,6 +40,7 @@ public class Principal extends javax.swing.JFrame {
 
         
     Dimension screenSize;
+    public static ProcesosProduccion procesos = new ProcesosProduccion();
     
     public Principal() {
         initComponents();
@@ -46,9 +48,7 @@ public class Principal extends javax.swing.JFrame {
         setExtendedState(MAXIMIZED_BOTH); 
         Toolkit t = Toolkit.getDefaultToolkit();
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
-        
-        
+        procesos.start();
     }
     
 
@@ -293,7 +293,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuItemControlEntregaMPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemControlEntregaMPActionPerformed
         ControlEntregasView controlEntrasView = new ControlEntregasView(this);
-        controlEntregasController entregasController = new controlEntregasController(controlEntrasView,new controlEntregasModel());
+        ControlEntregasController entregasController = new ControlEntregasController(controlEntrasView,new ControlEntregasModel());
         Escritorio.removeAll();
         IntroducirPanle(controlEntrasView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
             

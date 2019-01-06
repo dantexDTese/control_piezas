@@ -132,11 +132,11 @@ public class RegistroEntradaMateriales extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "FECHA", "MATERIAL", "CODIGO", "PROVEEDOR", "CANTIDAD", "ORDEN COMPRA", "INSPECTOR", "LIBERACION", "CERTIFICADO"
+                "NO.REGISTRO", "FECHA", "MATERIAL", "CODIGO", "PROVEEDOR", "CANTIDAD", "ORDEN COMPRA", "INSPECTOR", "CERTIFICADO", "LIBERACION"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -155,6 +155,7 @@ public class RegistroEntradaMateriales extends javax.swing.JInternalFrame {
             jtbEntradaMateriales.getColumnModel().getColumn(6).setResizable(false);
             jtbEntradaMateriales.getColumnModel().getColumn(7).setResizable(false);
             jtbEntradaMateriales.getColumnModel().getColumn(8).setResizable(false);
+            jtbEntradaMateriales.getColumnModel().getColumn(9).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
