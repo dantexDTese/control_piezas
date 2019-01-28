@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,7 @@ public final class RegistroEntradaMaterialesController implements Constructores{
     RegistroEntradaMateriales entradaMaterialesView;
     RegistroEntradaMaterialesModel entradaMaterialesModel;
     private ArrayList<EntradaMaterial> listaEntradaMateriales;
+    
     public RegistroEntradaMaterialesController(RegistroEntradaMateriales entradaMaterialesView,
             RegistroEntradaMaterialesModel entradaMaterialesModel) {
         
@@ -47,10 +50,19 @@ public final class RegistroEntradaMaterialesController implements Constructores{
     public void asignarEventos() {
         entradaMaterialesView.getBtnRegistrarNuevaEntrada().addActionListener(listenerBotones);
         entradaMaterialesView.getJtbEntradaMateriales().addMouseListener(listenerTablaEntradas);
+        
+        
+        PropertyChangeListener listenerFecha = (PropertyChangeEvent evt) -> {llenarTablaRegistroEntradaMateriales();};
+        entradaMaterialesView.getJdcAnio().addPropertyChangeListener(listenerFecha);
+        entradaMaterialesView.getJdcMes().addPropertyChangeListener(listenerFecha);
+        
     }
     
+    
+    
+    
     private void llenarTablaRegistroEntradaMateriales(){
-        listaEntradaMateriales = entradaMaterialesModel.listaRegistroEntradaMateriales();
+        listaEntradaMateriales = entradaMaterialesModel.listaRegistroEntradaMateriales(entradaMaterialesView.getJdcAnio().getValue(),entradaMaterialesView.getJdcMes().getMonth()+1);
         Estructuras.limpiarTabla((DefaultTableModel) entradaMaterialesView.getJtbEntradaMateriales().getModel());
         DefaultTableModel modelTabla = (DefaultTableModel) entradaMaterialesView.getJtbEntradaMateriales().getModel();
         for(int i = 0;i<listaEntradaMateriales.size();i++){
@@ -70,6 +82,9 @@ public final class RegistroEntradaMaterialesController implements Constructores{
         }
             
     }
+    
+    
+    
     
     private final ActionListener listenerBotones = new ActionListener() {
         @Override
@@ -102,7 +117,12 @@ public final class RegistroEntradaMaterialesController implements Constructores{
             if(e.getClickCount() == 2){
                 if( e.getSource() == entradaMaterialesView.getJtbEntradaMateriales()){
                     int fila = entradaMaterialesView.getJtbEntradaMateriales().rowAtPoint(e.getPoint());
-                    mostrarPlanInspeccion(listaEntradaMateriales.get(fila));
+                    int planInspeccion = 0,asignarMaterial = 1;
+                    int seleccion = JOptionPane.showOptionDialog(null,"SELECCIONE UNA OPCION", "SELECTOR DE OPCIONES",JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,null, new Object[]{"PLAN DE INSPECCION"}, "PLAN DE INSPECCION");
+                      
+                    if(seleccion == planInspeccion)
+                        mostrarPlanInspeccion(listaEntradaMateriales.get(fila));
                     
                 }
             }
@@ -110,10 +130,15 @@ public final class RegistroEntradaMaterialesController implements Constructores{
         
         private void mostrarPlanInspeccion(EntradaMaterial materialSeleccionado){
             
+            
             PlanInspeccionMateriales viewInspeccion = new PlanInspeccionMateriales(entradaMaterialesView.getPrincipal(), true);
             PlanInspeccionMaterialesController controllerInspeccion = new PlanInspeccionMaterialesController(viewInspeccion,new PlanInspeccionMaterialesModel(),
             materialSeleccionado);
             viewInspeccion.setVisible(true);
+            
+        }
+        
+        private void asignarMaterial(){
             
         }
         

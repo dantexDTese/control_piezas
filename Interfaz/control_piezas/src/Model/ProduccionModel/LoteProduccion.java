@@ -1,6 +1,6 @@
 package Model.ProduccionModel;
 
-import Model.PedidosModel.LotePlaneado;
+import Model.LotePlaneado;
 import java.util.Date;
 
 public class LoteProduccion extends LotePlaneado{
@@ -14,33 +14,104 @@ public class LoteProduccion extends LotePlaneado{
     private int cantidadAdmin;
     private int scrapAdmin;
     private String tiempoMuerto;
-    
+    private String descTurno;
     private boolean activacion = true;
+    private String codOperador;
+    private int cantidadRechazoLiberado;
+    private int scrapAjustable;
+    private float barrasUtilizadas;
+    private int numLote;
     
     private reloj tiempoTranscurridoR;
     private float piezasSegundoR;
     private reloj tiempoMuertoR;
     private float cantidadProducidaR;
+    
+    private boolean aviso1 = false;
+    private boolean  aviso2 = false;
+    private boolean  aviso3 = false;
         
     public LoteProduccion(){
         super();            
     }
-        
-    public LoteProduccion(int noLote, String descLote, int cantidadOperados,
-                int scrapOperador, float merma, String tiempoMuerto, int rechazo, int cantidadAdmin, int scrapAdmin) {
-            
-        super();
-        this.noLote = noLote;
-        this.descLote = descLote;
-        this.cantidadOperados = cantidadOperados;
-        this.scrapOperador = scrapOperador;
-        this.merma = merma;
-        this.tiempoMuerto = tiempoMuerto;
-        this.rechazo = rechazo;
-        this.cantidadAdmin = cantidadAdmin;
-        this.scrapAdmin = scrapAdmin;
-            
+
+    public boolean isAviso1() {
+        return aviso1;
     }
+
+    public void setAviso1(boolean aviso1) {
+        this.aviso1 = aviso1;
+    }
+
+    public boolean isAviso2() {
+        return aviso2;
+    }
+
+    public void setAviso2(boolean aviso2) {
+        this.aviso2 = aviso2;
+    }
+
+    public boolean isAviso3() {
+        return aviso3;
+    }
+
+    public void setAviso3(boolean aviso3) {
+        this.aviso3 = aviso3;
+    }
+    
+    
+
+    public int getNumLote() {
+        return numLote;
+    }
+
+    public void setNumLote(int numLote) {
+        this.numLote = numLote;
+    }
+
+    public int getCantidadRechazoLiberado() {
+        return cantidadRechazoLiberado;
+    }
+
+    public void setCantidadRechazoLiberado(int cantidadRechazoLiberado) {
+        this.cantidadRechazoLiberado = cantidadRechazoLiberado;
+    }
+
+    public int getScrapAjustable() {
+        return scrapAjustable;
+    }
+
+    public void setScrapAjustable(int scrapAjustable) {
+        this.scrapAjustable = scrapAjustable;
+    }
+
+    public float getBarrasUtilizadas() {
+        return barrasUtilizadas;
+    }
+
+    public void setBarrasUtilizadas(float barrasUtilizadas) {
+        this.barrasUtilizadas = barrasUtilizadas;
+    }
+    
+       
+    public String getDescTurno() {
+        return descTurno;
+    }
+
+    public void setDescTurno(String descTurno) {
+        this.descTurno = descTurno;
+    }
+
+    public String getCodOperador() {
+        return codOperador;
+    }
+
+    public void setCodOperador(String codOperador) {
+        this.codOperador = codOperador;
+    }
+    
+    
+    
 
     public boolean isActivacion() {
         return activacion;
@@ -206,8 +277,10 @@ public class LoteProduccion extends LotePlaneado{
                     }
                 
                 }
+                
                 if(activacion)
                     cantidadProducidaR+=piezasSegundoR;
+                
             }
             
             public void avanzar(Date fecha){

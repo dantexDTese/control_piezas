@@ -1,6 +1,7 @@
 
 package View.Produccion;
 
+import java.awt.Frame;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -10,11 +11,18 @@ import javax.swing.JTable;
 
 public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
 
-
+    Frame principal;
+    
     public SeguimientoProduccionDialogView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.principal = parent;
     }
+
+    public Frame getPrincipal() {
+        return principal;
+    }
+    
 
     public JButton getBtnIniciarSiguienteLote() {
         return btnIniciarSiguienteLote;
@@ -50,10 +58,6 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
 
     public JTable getJtbLotesProduccion() {
         return jtbLotesProduccion;
-    }
-
-    public JButton getBtnActualizarEstado() {
-        return btnActualizarEstado;
     }
 
     public JButton getBtnDetener() {
@@ -120,7 +124,6 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
         jPanel8 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         lbEstado = new javax.swing.JLabel();
-        btnActualizarEstado = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         lbLote = new javax.swing.JLabel();
@@ -296,7 +299,7 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
 
         jtbTotalesLotesProduccion.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "CANTIDAD OPER", "SCRAP OPER", "MERMA", "TIEMPO MUERTO", "RECHAZO", "CANTIDAD ADMIN", "SCRAP ADMIN"
@@ -407,20 +410,14 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
         lbEstado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbEstado.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 204, 204), null));
 
-        btnActualizarEstado.setText("ACTUALIZAR");
-        btnActualizarEstado.setToolTipText("");
-        btnActualizarEstado.setBorder(null);
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnActualizarEstado, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE))
+                .addComponent(lbEstado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
@@ -430,8 +427,6 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnActualizarEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -450,7 +445,6 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
         lbTiempoTranscurrido.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 204, 204), null));
 
         prbProgresoLote.setForeground(new java.awt.Color(0, 204, 204));
-        prbProgresoLote.setValue(20);
         prbProgresoLote.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 204, 204), null));
 
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -645,7 +639,6 @@ public class SeguimientoProduccionDialogView extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizarEstado;
     private javax.swing.JButton btnDetener;
     private javax.swing.JButton btnIniciarSiguienteLote;
     private javax.swing.JButton btnPausar;

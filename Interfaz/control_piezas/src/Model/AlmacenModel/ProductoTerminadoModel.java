@@ -4,7 +4,6 @@ package Model.AlmacenModel;
 import Model.AlmacenProductoTerminado;
 import Model.Conexion;
 import Model.Estructuras;
-import Model.ProductoCliente;
 import Model.RegistroEntradaSalida;
 import java.awt.HeadlessException;
 import java.sql.CallableStatement;
@@ -18,74 +17,40 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 
-
-
-
 public class ProductoTerminadoModel {
 
-    public final int LISTA_CLIENTES=1;
-    public final int LISTA_PRODUCTOS = 2;
-    
-    public JComboBox llenarCombo(JComboBox combo,String nombreCliente, int numLista){
-        
+
+    public JComboBox llenarCombo(JComboBox combo){
         combo.removeAllItems();
-        combo.addItem("cualquiera");
-        
-        switch(numLista){
-            case LISTA_CLIENTES:
-                combo = Estructuras.llenaCombo(combo, " SELECT nombre_cliente FROM productos_clientes GROUP BY nombre_cliente");
-                break;
-            case LISTA_PRODUCTOS:
-                String query = "SELECT clave_producto FROM productos_clientes ";
-                if(!"cualquiera".equals(nombreCliente))
-                    query += "WHERE nombre_cliente = '"+nombreCliente+"'";
-                combo = Estructuras.llenaCombo(combo,query);
-                break;
-        }
-       
+        String query = "SELECT clave_producto FROM productos_clientes ";
+        combo = Estructuras.llenaCombo(combo,query);
        return combo;
     }
         
-    public ArrayList<AlmacenProductoTerminado> listaMaterialesClientes(String nomCliente,String descMaterial){
+    public ArrayList<AlmacenProductoTerminado> listaMaterialesClientes(){
         ArrayList<AlmacenProductoTerminado> lista = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = queryMaterialesCliente(nomCliente, descMaterial);
+        String query = "SELECT clave_producto,id_almacen_producto_terminado,total FROM productos_almacen ";
         if(c!=null)
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);           
                 if(rs.first())
                     do {                        
-                        lista.add(new AlmacenProductoTerminado(rs.getInt(4),rs.getInt(1), rs.getString(2), rs.getString(3)));
+                        lista.add(new AlmacenProductoTerminado(rs.getInt(2),rs.getInt(3), rs.getString(1)));
                     } while (rs.next());            
             } catch (SQLException e) {
                 System.err.println("error: paquete:AlmacenModel, Class:ProductoTerminadoModel, metodo:listaMaterialesClientes "+e.getMessage());
             }
-        return lista;
+        return lista;   
     }
     
-    private String queryMaterialesCliente(String nomCliente,String claveProducto){
-        String query = "SELECT * FROM productos_clientes ";
-        
-        if(!"cualquiera".equals(nomCliente) && "cualquiera".equals(claveProducto)){
-            query += "WHERE nombre_cliente = '" +nomCliente + "'";
-        }
-        
-        else if("cualquiera".equals(nomCliente) && !"cualquiera".equals(claveProducto)){
-            query += "WHERE clave_producto = '" + claveProducto + "'";
-        }
-        
-        else if(!"cualquiera".equals(nomCliente) && !"cualquiera".equals(claveProducto)){
-            query += "WHERE nombre_cliente = '" +nomCliente + "' AND clave_producto = '"+claveProducto+"'";
-        }
-        
-        return query;
-    }
  
-    public ArrayList<RegistroEntradaSalida> listaRegistrosEntradasSalidas(int noAlmacenProductoTerminado) {
+    public ArrayList<RegistroEntradaSalida> listaRegistrosEntradasSalidas(int noAlmacenProductoTerminado,int anio,int mes) {
         ArrayList<RegistroEntradaSalida> lista = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT * FROM entradas_salidas WHERE id_almacen_producto_terminado = "+noAlmacenProductoTerminado+";";
+        String query = "SELECT * FROM entradas_salidas WHERE id_almacen_producto_terminado = "+noAlmacenProductoTerminado+""
+                + " AND MONTH(fecha_registro) = "+mes+"  AND YEAR(fecha_registro) = "+anio+";";
         if(c!=null)
             try {
                 Statement st = c.createStatement();
@@ -119,4 +84,37 @@ public class ProductoTerminadoModel {
             }
     }
     
+    public ArrayList<String> listaInventarios(int anio, int mes){
+        return Estructuras.obtenerlistaDatos("SELECT fecha_inventario FROM inventarios WHERE MONTH(fecha_inventario) = "+mes+"  AND YEAR(fecha_inventario) = "+anio+";");
+    }
+
+    public ArrayList<ProductoInventario> obtenerProductosInventario(int noInventario, String fecha) {
+        Connection c = Conexion.getInstance().getConexion();
+        ArrayList<ProductoInventario> listaProductosInventario = new ArrayList<>();
+        
+        if(c!=null)
+            try {
+                String query = "SELECT pi.id_inventario,pr.clave_producto,pi.cantidad FROM productos_inventario AS pi " +
+                                " INNER JOIN inventarios AS inv ON pi.id_inventario = inv.id_inventario " +
+                                " INNER JOIN productos AS pr ON pr.id_producto = pi.id_inventario " +
+                                " WHERE pi.id_inventario = "+noInventario+";";
+                
+                Statement st = c.createStatement();
+                ResultSet rs = st.executeQuery(query);
+                
+                if(rs.first())
+                    do {                        
+                        ProductoInventario productoInventario = new ProductoInventario();
+                        productoInventario.setNoInventario(rs.getInt(1));
+                        productoInventario.setCodProducto(rs.getString(2));
+                        productoInventario.setCantidad(rs.getInt(3));
+                        listaProductosInventario.add(productoInventario);
+                    } while (rs.next());
+                
+            } catch (SQLException e) {
+                 System.err.println("error: paquete:AlmacenModel, Class:ProductoTerminadoModel, metodo:obtenerProductosInventario "+e.getMessage());
+            }
+        
+        return listaProductosInventario;
+    }
 }

@@ -1,0 +1,44 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 26/01/2019, 11:43:15 PM
+    Author     : cesar
+*/
+
+.contenedor{
+    
+    width: 330px;
+    height: 200px;
+    
+}
+
+
+.campos_cliente{
+    width: 250px;
+    position: absolute;
+    font-size: 8pt;
+    margin-top: 50px;   
+    margin-left: 50px;
+}
+
+
+
+.campos_producto_cantidad{
+    width: 320px;
+    margin-top: 6px;
+    font-size: 8pt;
+    
+}
+
+.campos_descripcion{
+    width: 330px;
+    font-size: 8pt;
+    margin-top: 8px;  
+    margin-left: 65px;
+}
+
+
+

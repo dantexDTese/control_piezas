@@ -6,10 +6,12 @@ import Model.ProduccionModel.LoteProduccion;
 import View.Pedidos.Calendario;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.StringTokenizer;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,14 +25,13 @@ import javax.swing.table.TableColumn;
  */
 public class Estructuras {
 
-    
-    
-    
     public static String obtenerFechaActual(){
         Date fecha = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
         return sdf.format(fecha);
     }
+    
+    
     
     public static JComboBox llenaCombo(JComboBox selector,String query){
         Connection conexion = Conexion.getInstance().getConexion();       
@@ -46,7 +47,7 @@ public class Estructuras {
                 }
                     
                 conexion.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error:"+e.getMessage());
             }
         }
@@ -63,9 +64,11 @@ public class Estructuras {
     }
     
     public static void modificarAltoTabla(JTable tablaModificar,int alto){
+        
         //pasar a estructuras
+        
         tablaModificar.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
+        Integer[] listaTamanos = {80,100,130,100,130,100,100,120,120,160};
             
                 tablaModificar.setRowHeight(alto);
 
@@ -119,6 +122,7 @@ public class Estructuras {
     }
     
     public static DefaultTableModel limpiarTabla(DefaultTableModel model){
+        
         while(model.getRowCount()>0)
             model.removeRow(0);
     
@@ -140,4 +144,42 @@ public class Estructuras {
         return true;
     }
     
+    public static Date formateFecha(String fecha){
+        if(fecha != null && !"".equals(fecha)){
+            fecha = fecha.replace('-', '/');
+            return new Date(fecha);
+        }
+        return null;
+    }
+    
+    public static String sumarHoras(String tiempo1,String tiempo2){
+        StringTokenizer tkTiempo1 = new StringTokenizer(tiempo1,":");
+        StringTokenizer tkTiempo2 = new StringTokenizer(tiempo2,":");
+        
+        long horasR,minutosR;
+        String resultado = "";
+        
+        long segundos = ((Integer.parseInt(tkTiempo2.nextToken())*3600)
+                +(Integer.parseInt(tkTiempo2.nextToken())*60)
+                +(Integer.parseInt(tkTiempo2.nextToken())))
+                +
+                ((Integer.parseInt(tkTiempo1.nextToken())*3600)
+                +(Integer.parseInt(tkTiempo1.nextToken())*60)
+                +(Integer.parseInt(tkTiempo1.nextToken())));
+        
+        horasR = segundos/3600;
+        
+        segundos -= horasR*3600;
+        
+        minutosR = segundos/60;
+        
+        segundos -= minutosR*60;
+        
+        
+        resultado= (horasR < 10)? "0"+horasR+":":horasR+":";
+        resultado+=(minutosR < 10)? "0"+minutosR+":":minutosR+":";
+        resultado+=(segundos < 10)?"0"+segundos:segundos;
+        
+        return resultado;
+    }
 }

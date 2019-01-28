@@ -2,12 +2,12 @@ package Controller.ProduccionController;
 
 import Model.Constructores;
 import Model.Estructuras;
+import Model.LotePlaneado;
 import Model.ProcesosProduccion;
-import Model.ProduccionModel.OrdenProduccionGuardada;
 import Model.ProduccionModel.SeguimientoProduccionModel;
 import Model.ProduccionModel.LoteProduccion;
 import View.Produccion.SeguimientoProduccionDialogView;
-import java.awt.Color;
+import View.Produccion.TurnoOperador;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -22,11 +22,11 @@ public final class SeguimientoProduccionController implements Constructores{
     
     private final SeguimientoProduccionDialogView vistaSeguimiento;
     private final SeguimientoProduccionModel seguimientoProduccionModel;
-    private final OrdenProduccionGuardada ordenSeleccionada;     
+    private final LotePlaneado ordenSeleccionada;     
     private LoteProduccion loteProduccion;
     private Timer tiempo;
     
-    SeguimientoProduccionController(SeguimientoProduccionDialogView vistaSeguimiento, SeguimientoProduccionModel seguimientoProduccionModel,OrdenProduccionGuardada ordenSeleccionada) {
+    SeguimientoProduccionController(SeguimientoProduccionDialogView vistaSeguimiento, SeguimientoProduccionModel seguimientoProduccionModel,LotePlaneado ordenSeleccionada) {
         
         //INICIALIZAR
         this.vistaSeguimiento = vistaSeguimiento;
@@ -41,19 +41,28 @@ public final class SeguimientoProduccionController implements Constructores{
     @Override
     public void llenarComponentes(){
         
-        vistaSeguimiento.getLbCliente().setText(ordenSeleccionada.getNombreCliente());
-        vistaSeguimiento.getLbParte().setText(ordenSeleccionada.getClaveProducto());
+        vistaSeguimiento.getLbCliente().setText(ordenSeleccionada.getDescCliente());
+        vistaSeguimiento.getLbParte().setText(ordenSeleccionada.getCodProducto());
         vistaSeguimiento.getLbCantidadTotal().setText(ordenSeleccionada.getCantidadTotal()+"");
         vistaSeguimiento.getLbMaquina().setText(ordenSeleccionada.getDescMaquina());   
+        vistaSeguimiento.getLbEstado().setText(ordenSeleccionada.getDescEstadoOrdenProduccion());
+        
+        ArrayList <String> procesosProduccion = seguimientoProduccionModel.obtenerProcesosProduccion(ordenSeleccionada.getNoOrdenProduccion());
+        for(int i = 0;i<procesosProduccion.size();i++)
+           vistaSeguimiento.getCbxProcesosProduccion().addItem(procesosProduccion.get(i));
+        
+        llenarTablaLotes();
+        
+        if(ordenSeleccionada.getDescEstadoOrdenProduccion().equals("CERRADO"))
+            vistaSeguimiento.getBtnIniciarSiguienteLote().setEnabled(false);
+        
+        
         
         tiempo = new Timer(1000, (ActionEvent e) -> {
             
             loteProduccion.getTiempoTranscurridoR().avanzar();
-            
-            if(!loteProduccion.isActivacion()){
-                loteProduccion.getTiempoMuertoR().avanzar();
-            }
-                
+            if(!loteProduccion.isActivacion())
+                loteProduccion.getTiempoMuertoR().avanzar();    
             
             llenarCampos();
             if(!vistaSeguimiento.isVisible()){
@@ -62,43 +71,27 @@ public final class SeguimientoProduccionController implements Constructores{
             }
         });
         
-        ArrayList <String> procesosProduccion = seguimientoProduccionModel.obtenerProcesosProduccion(ordenSeleccionada.getOrdenProduccion());
         
-        for(int i = 0;i<procesosProduccion.size();i++)
-           vistaSeguimiento.getCbxProcesosProduccion().addItem(procesosProduccion.get(i));
-        
-        if((loteProduccion = ProcesosProduccion.obtenerProceso(ordenSeleccionada.getOrdenProduccion())) == null){
-
-            loteProduccion = seguimientoProduccionModel.obtenerOrdenPlaneada(ordenSeleccionada.getOrdenProduccion());
-            
+        if((loteProduccion = ProcesosProduccion.obtenerProceso(ordenSeleccionada.getNoOrdenProduccion())) == null){
+            loteProduccion = seguimientoProduccionModel.obtenerOrdenPlaneada(ordenSeleccionada.getNoOrdenProduccion());
             if(loteProduccion!=null){
-                
                 loteProduccion.setPiezasPorTurno(ordenSeleccionada.getPiezasPorTurno());
                 loteProduccion.setPiezasSegundoR(loteProduccion.calcularPiezasSegundo(loteProduccion.getPiezasPorTurno()));
                 vistaSeguimiento.getPrbProgresoLote().setMaximum(loteProduccion.getCantidadPlaneada());
-                
-            }
-                
-            
+            }            
         }else{
             
             ProcesosProduccion.loteMostrado = loteProduccion;
-            
             vistaSeguimiento.getBtnIniciarSiguienteLote().setEnabled(false);
             if (loteProduccion.isActivacion())
                 vistaSeguimiento.getBtnPausar().setText("PAUSAR");
             else
                 vistaSeguimiento.getBtnPausar().setText("CONTINUAR");
-                    
-                    
+            
             vistaSeguimiento.getBtnPausar().setEnabled(true);
             vistaSeguimiento.getBtnDetener().setEnabled(true);
-            
             tiempo.start();     
-            
         }
-        
-        
     }
     
     @Override
@@ -107,7 +100,8 @@ public final class SeguimientoProduccionController implements Constructores{
         this.vistaSeguimiento.getCbxProcesosProduccion().addActionListener(listenerSeleccionProceso);
         this.vistaSeguimiento.getBtnIniciarSiguienteLote().addActionListener(listenerInizializarProceso);   
         this.vistaSeguimiento.getBtnPausar().addActionListener(listenerPauseDetener);
-        this.vistaSeguimiento.getBtnDetener().addActionListener(listenerPauseDetener);
+        this.vistaSeguimiento.getBtnDetener().addActionListener(listenerDetenerProceso);
+        
     }
 
     public SeguimientoProduccionModel getSeguimientoProduccionModel() {
@@ -121,37 +115,58 @@ public final class SeguimientoProduccionController implements Constructores{
         @Override
         public void actionPerformed(ActionEvent e) {
             
-            if(loteProduccion!= null){                      
-                iniciarLoteProduccion();
-                llenarCampos();
-                vistaSeguimiento.getBtnIniciarSiguienteLote().setEnabled(false);
-                vistaSeguimiento.getBtnDetener().setEnabled(true);
-                vistaSeguimiento.getBtnPausar().setEnabled(true);
-                ProcesosProduccion.loteMostrado = loteProduccion;
-                ProcesosProduccion.listaProcesando.add(loteProduccion);
-                tiempo.start();
+            if(loteProduccion != null){ 
                 
+                if(iniciarLoteProduccion()){
+                    llenarCampos();
+                    vistaSeguimiento.getBtnIniciarSiguienteLote().setEnabled(false);
+                    vistaSeguimiento.getBtnDetener().setEnabled(true);
+                    vistaSeguimiento.getBtnPausar().setEnabled(true);
+                    ProcesosProduccion.loteMostrado = loteProduccion;
+                    ProcesosProduccion.listaProcesando.add(loteProduccion);
+                    tiempo.start();
+                }else JOptionPane.showMessageDialog(null, "NO SE HA PODIDO INICIAR LA PRODUCCION PORQUE NO HA COMPLETADO LOS CAMPOS");
             }else JOptionPane.showMessageDialog(null, "ESTA ORDEN NO ESTA PLANEADA PARA HOY","PLANEACION",JOptionPane.INFORMATION_MESSAGE);
             
         }
         
-        private void iniciarLoteProduccion(){
+        private boolean iniciarLoteProduccion(){
             loteProduccion.setTiempoMuerto("00:00:00");
             loteProduccion.setCantidadProducidaR(0);
             vistaSeguimiento.getPrbProgresoLote().setMaximum(loteProduccion.getCantidadPlaneada());
             
-            loteProduccion.setDescLote(obtenerDescripcionLote());
+            String descLote = obtenerDescripcionLote();
+            
+            if(descLote != null){
+                loteProduccion.setDescLote(descLote);
+                return true;
+            }
+            else return false;
         }
          
         private String obtenerDescripcionLote(){
             String descLote="";
-            Date fecha = new Date();
-            SimpleDateFormat sdf = new SimpleDateFormat("ddMMYY");
-            descLote = sdf.format(fecha);
-            descLote+=(fecha.getHours()>15)? "V":"M";
-            descLote+=ordenSeleccionada.getDescMaquina();
-            return descLote;
+            
+            String[] turnoOperador = TurnoOperador.seleccionarOperadorTurno(vistaSeguimiento.getPrincipal());
+            
+            if(turnoOperador != null){
+           
+                loteProduccion.setCodOperador(turnoOperador[1]);
+                loteProduccion.setDescTurno(turnoOperador[0]);
+
+                Date fecha = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("ddMMYY");
+                descLote = sdf.format(fecha);
+                descLote+=turnoOperador[0];
+                descLote+=ordenSeleccionada.getDescMaquina();
+                descLote+=turnoOperador[1];                
+                
+                return descLote;
+            }
+            
+            return null;
         }
+        
         
     };
     
@@ -174,11 +189,18 @@ public final class SeguimientoProduccionController implements Constructores{
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            ArrayList<LoteProduccion> listaLotes = obtenerLotesProcesados(ordenSeleccionada.getOrdenProduccion(),vistaSeguimiento.getCbxProcesosProduccion().getSelectedItem().toString());
-            llenarTotalesLotes(listaLotes);
-        }
+            llenarTablaLotes();
+        } 
         
-        private ArrayList<LoteProduccion> obtenerLotesProcesados(int noOrdenProduccion,String procesoSeleccionado){
+    };
+    
+    private void llenarTablaLotes(){
+            ArrayList<LoteProduccion> listaLotes = obtenerLotesProcesados(ordenSeleccionada.getNoOrdenProduccion(),
+                    vistaSeguimiento.getCbxProcesosProduccion().getSelectedItem().toString());
+            llenarTotalesLotes(listaLotes);    
+    }
+    
+    private ArrayList<LoteProduccion> obtenerLotesProcesados(int noOrdenProduccion,String procesoSeleccionado){
             ArrayList<LoteProduccion> listaLotesProduccion = 
                     seguimientoProduccionModel.listaLotesProduccion(noOrdenProduccion, procesoSeleccionado);
             
@@ -186,11 +208,19 @@ public final class SeguimientoProduccionController implements Constructores{
             Estructuras.limpiarTabla((DefaultTableModel) vistaSeguimiento.getJtbLotesProduccion().getModel());
             
             for(int i = 0;i<listaLotesProduccion.size();i++){
+                
                 LoteProduccion lote = listaLotesProduccion.get(i);
                 modelLotesProduccion.addRow(new Object[]{
-                    i,lote.getDescLote(),lote.getCantidadOperados(),lote.getScrapOperador(),
-                    lote.getMerma(),lote.getTiempoMuerto(),lote.getRechazo(),
-                    lote.getCantidadAdmin(),lote.getScrapAdmin()});
+                    i+1,
+                    lote.getDescLote(),
+                    lote.getCantidadOperados(),
+                    lote.getScrapOperador(),
+                    lote.getMerma(),
+                    lote.getTiempoMuerto(),
+                    lote.getRechazo(),
+                    lote.getCantidadAdmin(),
+                    lote.getScrapAdmin()});
+            
             }
             
             return listaLotesProduccion;
@@ -209,17 +239,26 @@ public final class SeguimientoProduccionController implements Constructores{
                 p.setCantidadAdmin(p.getCantidadAdmin() + lote.getCantidadAdmin());
                 p.setScrapAdmin(p.getScrapAdmin() + lote.getScrapAdmin() );
             }
+            
+            DefaultTableModel modeloTabla = (DefaultTableModel) vistaSeguimiento.getJtbTotalesLotesProduccion().getModel();
+            modeloTabla.addRow(new Object[]{
+                p.getCantidadOperados(),
+                p.getScrapOperador(),
+                p.getMerma(),
+                p.getTiempoMuerto(),
+                p.getRechazo(),
+                p.getCantidadAdmin(),
+                p.getScrapAdmin()
+            });
 
         }
         
         private String sumarTiempo(String tiempo1,String tiempo2){
-            String tiempoResultado = new String();
+            if(tiempo1 != null)
+                return Estructuras.sumarHoras(tiempo1, tiempo2);
             
-                
-                
-            return tiempoResultado;
+            return tiempo2;
         }
-    };
     
     private final ActionListener listenerPauseDetener = new ActionListener() {
         @Override
@@ -227,8 +266,6 @@ public final class SeguimientoProduccionController implements Constructores{
             
             if(e.getSource() == vistaSeguimiento.getBtnPausar())
                 pausarProceso();
-            else
-                detenerProceso();
             
         }
         
@@ -243,11 +280,21 @@ public final class SeguimientoProduccionController implements Constructores{
             }
         }
         
-        private void detenerProceso(){
+    };
+    
+    private final ActionListener listenerDetenerProceso = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int respuesta = JOptionPane.showConfirmDialog(null, "SI DETENIENE EL PROCESO NO PODRA REPETIRLO, ¿CONTINUAR? ","VALIDACION"
+            ,JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             
-            
-            
+            if(respuesta == JOptionPane.YES_OPTION){
+                tiempo.stop();
+                if(seguimientoProduccionModel.guardarProduccion(loteProduccion)){
+                    ProcesosProduccion.terminarLote(loteProduccion);
+                    vistaSeguimiento.dispose();
+                }
+            }
         }
-        
     };
 }

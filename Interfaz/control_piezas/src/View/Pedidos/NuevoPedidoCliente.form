@@ -106,15 +106,12 @@
                               <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="cbxContactoCliente" min="-2" pref="127" max="-2" attributes="0"/>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLabel7" min="-2" pref="90" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                          </Group>
+                      <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtContactoCliente" max="32767" attributes="0"/>
+                          <Component id="jLabel7" pref="140" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel8" max="32767" attributes="0"/>
                           <Component id="dcFechaEntrega" max="32767" attributes="0"/>
@@ -138,7 +135,7 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="txtNoOrdenCompra" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="cbxDescCliente" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="cbxContactoCliente" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtContactoCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="dcFechaEntrega" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -190,18 +187,9 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
+                <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="CONTACTO"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="cbxContactoCliente">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="0"/>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
               <Properties>
@@ -215,6 +203,8 @@
               </Properties>
             </Component>
             <Component class="com.toedter.calendar.JDateChooser" name="dcFechaEntrega">
+            </Component>
+            <Component class="javax.swing.JTextField" name="txtContactoCliente">
             </Component>
           </SubComponents>
         </Container>

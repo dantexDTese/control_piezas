@@ -88,12 +88,9 @@
                 <Component class="javax.swing.JTable" name="jtbConntrolProduccion">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="50" rowCount="0">
+                      <Table columnCount="11" rowCount="0">
                         <Column editable="false" title="RECHAZO" type="java.lang.Object"/>
-                        <Column editable="false" title="FECHA" type="java.lang.Object"/>
-                        <Column editable="false" title="OPERADOR" type="java.lang.Object"/>
-                        <Column editable="false" title="TURNO" type="java.lang.Object"/>
-                        <Column editable="false" title="MAQUINA" type="java.lang.Object"/>
+                        <Column editable="false" title="DESC LOTE" type="java.lang.Object"/>
                         <Column editable="false" title="PARTE" type="java.lang.Object"/>
                         <Column editable="false" title="OPERACION" type="java.lang.Object"/>
                         <Column editable="false" title="NO. BARRAS" type="java.lang.Object"/>
@@ -102,44 +99,67 @@
                         <Column editable="false" title="CANTIDAD RECHAZO LIBERADO" type="java.lang.Object"/>
                         <Column editable="false" title="SCRAP AJUSTE" type="java.lang.Object"/>
                         <Column editable="false" title="SCRAP" type="java.lang.Object"/>
-                        <Column editable="false" title="F.E CILINDRADO" type="java.lang.Object"/>
-                        <Column editable="false" title="F.E LARGO" type="java.lang.Object"/>
-                        <Column editable="false" title="C. ARRANCADO" type="java.lang.Object"/>
-                        <Column editable="false" title="B. DESCENTRALIZADO" type="java.lang.Object"/>
-                        <Column editable="false" title="D. DEBASTADOS" type="java.lang.Object"/>
-                        <Column editable="false" title="FILO DE REBABA" type="java.lang.Object"/>
-                        <Column editable="false" title="PUNTO DE CORTE" type="java.lang.Object"/>
-                        <Column editable="false" title="F.E.RADIO" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN CUERDA" type="java.lang.Object"/>
-                        <Column editable="false" title="DOBLE BARRENO" type="java.lang.Object"/>
-                        <Column editable="false" title="MOLETEADO FINO" type="java.lang.Object"/>
-                        <Column editable="false" title="MOLETEADO DESALINEADO" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN MOLETEADO" type="java.lang.Object"/>
-                        <Column editable="false" title="PASA PIN" type="java.lang.Object"/>
-                        <Column editable="false" title="PROFUNDIDAD DE RANURA" type="java.lang.Object"/>
-                        <Column editable="false" title="GOLPE" type="java.lang.Object"/>
-                        <Column editable="false" title="HERRAMIENTA ROTA" type="java.lang.Object"/>
-                        <Column editable="false" title="PIEZA DOBLE" type="java.lang.Object"/>
-                        <Column editable="false" title="RAYADAS" type="java.lang.Object"/>
-                        <Column editable="false" title="NO PASA PIN" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN CAJA" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN CHAFLAN" type="java.lang.Object"/>
-                        <Column editable="false" title="MAL LIMADO" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN BARRENO" type="java.lang.Object"/>
-                        <Column editable="false" title="CHAFLAN PROFUNDO" type="java.lang.Object"/>
-                        <Column editable="false" title="PIEZA RROTA" type="java.lang.Object"/>
-                        <Column editable="false" title="SIN CILINDRADO" type="java.lang.Object"/>
-                        <Column editable="false" title="NO PASA GO" type="java.lang.Object"/>
-                        <Column editable="false" title="PASA NO GO" type="java.lang.Object"/>
-                        <Column editable="false" title="NO PASA GAUGE" type="java.lang.Object"/>
-                        <Column editable="false" title="F.E VUELTAS" type="java.lang.Object"/>
-                        <Column editable="false" title="D. ENTRE BARRENO Y PARED." type="java.lang.Object"/>
-                        <Column editable="false" title="PROFUDIDAD BARENO" type="java.lang.Object"/>
-                        <Column editable="false" title="QUEMADAS" type="java.lang.Object"/>
-                        <Column editable="false" title="F.E. CAJA" type="java.lang.Object"/>
-                        <Column editable="false" title="T. MUERTO" type="java.lang.Object"/>
-                        <Column editable="false" title="CAUSA" type="java.lang.Object"/>
+                        <Column editable="false" title="TIEMPO MUERTO" type="java.lang.Object"/>
                       </Table>
+                    </Property>
+                    <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                      <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="false">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                      </TableColumnModel>
                     </Property>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
@@ -162,7 +182,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel1" pref="56" max="32767" attributes="0"/>
+                      <Component id="jLabel1" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -172,7 +192,7 @@
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Impact" size="36" style="0"/>
+                  <Font name="Impact" size="48" style="0"/>
                 </Property>
                 <Property name="horizontalAlignment" type="int" value="0"/>
                 <Property name="text" type="java.lang.String" value="CONTROL DE PRODUCCION"/>

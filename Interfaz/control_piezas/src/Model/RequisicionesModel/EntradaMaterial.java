@@ -1,73 +1,49 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Model.RequisicionesModel;
 
 public class EntradaMaterial {
     
-            private int noEntradaMaterial;
-            private String fechaRegistro;
-            private String descProveedor;
-            private String descMaterial;
-            private int cantidad;
-            private String  codigo;
-            private String  certificado;
-            private String ordenCompra;
-            private String inspector;
-            private String descEstado;
-            private String comentarios;
-            private String factura;
-            private String noParte;
+    
+    
+    private int noEntradaMaterial;
+    private String fechaRegistro;
+    private String descProveedor;    
+    private String descMaterial;
+    private int cantidad;
+    private String  codigo;
+    private String  certificado;
+    private String ordenCompra;
+    private String inspector;
+    private String descEstado;
+    private String comentarios;
+    private String factura;
+    private String noParte;
+    private String descLote;
             
-            
-            
-            public EntradaMaterial() {
+    public EntradaMaterial() {
                 
-            }
+    
+    }
 
+    public String getDescLote() {
+        return descLote;
+    }
 
-        public EntradaMaterial(int noEntradaMaterial,String descMaterial,String descProveedor,  int cantidad, String codigo, String certificado, String ordenCompra, String inspector) {
-            this.descProveedor = descProveedor;
-            this.descMaterial = descMaterial;
-            this.cantidad = cantidad;
-            this.codigo = codigo;
-            this.certificado = certificado;
-            this.ordenCompra = ordenCompra;
-            this.inspector = inspector;
-            this.noEntradaMaterial = noEntradaMaterial;
-        }
+    public void setDescLote(String descLote) {
+        this.descLote = descLote;
+    }
 
-    public EntradaMaterial(int noEntradaMaterial,String fechaRegistro, String descMaterial, String descProveedor, int cantidad, String codigo, String certificado, String ordenCompra, String inspector,String descEstado
-            ,String comentarios,String factura,String noParte) {
-        this.fechaRegistro = fechaRegistro;
-        this.descProveedor = descProveedor;
+    public String getDescMaterial() {
+        return descMaterial;
+    }
+
+    public void setDescMaterial(String descMaterial) {
         this.descMaterial = descMaterial;
-        this.cantidad = cantidad;
-        this.codigo = codigo;
-        this.certificado = certificado;
-        this.ordenCompra = ordenCompra;
-        this.inspector = inspector;
-        this.descEstado = descEstado;
+    }
+
+    public void setNoEntradaMaterial(int noEntradaMaterial) {
         this.noEntradaMaterial = noEntradaMaterial;
-        this.comentarios = comentarios;
-        this.factura = factura;
-        this.noParte = noParte;
     }
     
-    
-    
-    public EntradaMaterial(String descMaterial,String descProveedor,  int cantidad, String codigo, String certificado, String ordenCompra, String inspector) {
-        this.descProveedor = descProveedor;
-        this.descMaterial = descMaterial;
-        this.cantidad = cantidad;
-        this.codigo = codigo;
-        this.certificado = certificado;
-        this.ordenCompra = ordenCompra;
-        this.inspector = inspector;
-    }
-
     public int getNoEntradaMaterial() {
         return noEntradaMaterial;
     }
@@ -78,10 +54,6 @@ public class EntradaMaterial {
 
     public void setDescProveedor(String descProveedor) {
         this.descProveedor = descProveedor;
-    }
-
-    public void setDescMaterial(String descMaterial) {
-        this.descMaterial = descMaterial;
     }
 
     public void setCantidad(int cantidad) {
@@ -119,8 +91,6 @@ public class EntradaMaterial {
     public void setNoParte(String noParte) {
         this.noParte = noParte;
     }
-    
-    
 
     public String getComentarios() {
         return comentarios;
@@ -133,25 +103,17 @@ public class EntradaMaterial {
     public String getNoParte() {
         return noParte;
     }
-    
-    
 
     public String getDescEstado() {
         return descEstado;
     }
-
     
     public String getFechaRegistro() {
         return fechaRegistro;
-    }
-                    
+    }                    
 
     public String getDescProveedor() {
         return descProveedor;
-    }
-
-    public String getDescMaterial() {
-        return descMaterial;
     }
 
     public int getCantidad() {
@@ -163,14 +125,14 @@ public class EntradaMaterial {
     }
 
     public String getCertificado() {
-                return certificado;
-            }
+        return certificado;
+    }
 
     public String getOrdenCompra() {
-                return ordenCompra;
-            }
+        return ordenCompra;
+    }
 
-            public String getInspector() {
-                return inspector;
-            }
+    public String getInspector() {
+        return inspector;        
+    }
 }

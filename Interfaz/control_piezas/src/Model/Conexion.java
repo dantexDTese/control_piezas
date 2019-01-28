@@ -16,19 +16,23 @@ public class Conexion {
      *
      * 
     
-    private final String host = "69.175.92.67:3306/";
-    private final String user = "tlpnowlq_gmcmmt";
-    private final String password = ",2004conyla";
-    private final String dataBaseName = "tlpnowlq_control_piezas";
     */
     /**
     * CONEXION REMOTA LOCAL
-    * */
+    * 
+    */
     
-    private static final String host = "localhost/";
+    
+    /*private static final String host = "localhost/";
     private static final String user = "root";
     private static final String password = "";
-    private static final String dataBaseName = "control_piezas_2";
+    private static final String dataBaseName = "control_piezas";*/
+    //private static final String host = "gmcsys.ddns.net/";
+    
+    private static final String host = "192.168.1.100/";
+    private static final String user = "sistema";
+    private static final String password = "sistema";
+    private static final String dataBaseName = "control_piezas";
     
     
     private final String url="jdbc:mysql://"+host+dataBaseName;
@@ -38,9 +42,10 @@ public class Conexion {
         try {
             Class.forName(driver);
             nuevaConexion = DriverManager.getConnection(url+"?useSSL=false&noAccessToProcedureBodies=true",user,password);
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | SQLException e) {
             System.err.println("error:"+e.getMessage());
         }
+        
     }
     
     public static Conexion getInstance(){

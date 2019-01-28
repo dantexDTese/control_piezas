@@ -4,7 +4,8 @@ public class ordenProduccion extends OrdenTrabajo{
     
     private int noOrdenProduccion;
     private String codProducto;
-    private String descEstado;
+    private String descProducto;
+    private String descEstadoOrdenProduccion;
     private String descEmpaque;
     private int turnosReales;
     private int cantidadCliente;
@@ -17,19 +18,96 @@ public class ordenProduccion extends OrdenTrabajo{
     private String fechaFin;
     private String observaciones;
     private int piezasPorTurno;
-    private String descMateria;
-    private int barrasNecesarias;
-    
-    
+    private float barrasNecesarias;
+    private int noMaterial;
+    private String descTipoMaterial;
+    private String descDimencion;
+    private String descForma;
+    private String claveForma;
+    private String fechaDesmontaje;
+    private int barrasSelecciondas;
+    private boolean validacion_compras;
+    private boolean validacion_produccion;
+    private boolean validacion_matenimiento;
+    private boolean validacion_calidad;
+    private float piezasFaltantes;
     
     public ordenProduccion(){
         
+    }
+
+    public float getPiezasFaltantes() {
+        return piezasFaltantes;
+    }
+
+    public void setPiezasFaltantes(float piezasFaltantes) {
+        this.piezasFaltantes = piezasFaltantes;
+    }
+    
+    
+    public String getDescProducto() {
+        return descProducto;
+    }
+
+    public void setDescProducto(String descProducto) {
+        this.descProducto = descProducto;
+    }
+
+    public boolean isValidacion_compras() {
+        return validacion_compras;
+    }
+
+    public void setValidacion_compras(boolean validacion_compras) {
+        this.validacion_compras = validacion_compras;
+    }
+
+    public boolean isValidacion_produccion() {
+        return validacion_produccion;
+    }
+
+    public void setValidacion_produccion(boolean validacion_produccion) {
+        this.validacion_produccion = validacion_produccion;
+    }
+
+    public boolean isValidacion_matenimiento() {
+        return validacion_matenimiento;
+    }
+
+    public void setValidacion_matenimiento(boolean validacion_matenimiento) {
+        this.validacion_matenimiento = validacion_matenimiento;
+    }
+
+    public boolean isValidacion_calidad() {
+        return validacion_calidad;
+    }
+
+    public void setValidacion_calidad(boolean validacion_calidad) {
+        this.validacion_calidad = validacion_calidad;
+    }
+
+    public int getBarrasSelecciondas() {
+        return barrasSelecciondas;
+    }
+
+    public void setBarrasSelecciondas(int barrasSelecciondas) {
+        this.barrasSelecciondas = barrasSelecciondas;
+    }
+    
+    public ordenProduccion(String  codPedido,String codProducto){
+        super(codPedido);
+        this.codProducto = codProducto;
     }
     
     public ordenProduccion(int noOrdenProduccio,String claveProducto,int cantidadCliente){
         this.noOrdenProduccion = noOrdenProduccio;
         this.codProducto = claveProducto;
         this.cantidadCliente = cantidadCliente;
+    }
+    
+    public ordenProduccion(int noOrdenProduccio,int cantidadTotal,String claveProducto){
+        this.noOrdenProduccion = noOrdenProduccio;
+        this.codProducto = claveProducto;
+        this.cantidadTotal = cantidadTotal;
     }
 
     public ordenProduccion(int noOrdenProduccion){
@@ -48,7 +126,6 @@ public class ordenProduccion extends OrdenTrabajo{
             ,int barrasNecesarias) {
         
         this.codProducto = codProducto;
-        this.descMateria = descMaterial;
         this.cantidadCliente = cantidadCliente;
         this.cantidadTotal = cantidadTotal;
         this.piezasPorTurno = piezasPorTurno;
@@ -57,28 +134,99 @@ public class ordenProduccion extends OrdenTrabajo{
         
     }
 
+    public ordenProduccion(int noOrdenTrabajo, int noOrdenProduccion, String codProducto, int cantidadCliente,
+            int noMaterial,String descTipoMaterial,String descDimencion,String descForma,String claveForma) {
+         super(noOrdenTrabajo);
+         
+         this.noOrdenProduccion = noOrdenProduccion;
+         this.codProducto = codProducto;
+         this.cantidadCliente = cantidadCliente;
+         this.descTipoMaterial = descTipoMaterial;
+         this.descDimencion = descDimencion;
+         this.descForma = descForma;
+         this.claveForma = claveForma;
+         this.noMaterial = noMaterial;
+    
+    }
+
+    public float getBarrasNecesarias() {
+        return barrasNecesarias;
+    }
+
+    public void setBarrasNecesarias(float barrasNecesarias) {
+        this.barrasNecesarias = barrasNecesarias;
+    }
+
+    public void setNoOrdenProduccion(int noOrdenProduccion) {
+        this.noOrdenProduccion = noOrdenProduccion;
+    }
+
+    public void setCodProducto(String codProducto) {
+        this.codProducto = codProducto;
+    }
+
+    public void setBarrasNecesarias(int barrasNecesarias) {
+        this.barrasNecesarias = barrasNecesarias;
+    }
+
+    public String getFechaDesmontaje() {
+        return fechaDesmontaje;
+    }
+
+    public void setFechaDesmontaje(String fechaDesmontaje) {
+        this.fechaDesmontaje = fechaDesmontaje;
+    }
+    
+    public int getNoMaterial() {
+        return noMaterial;
+    }
+
+    public void setNoMaterial(int noMaterial) {
+        this.noMaterial = noMaterial;
+    }
+    
+    public String getDescTipoMaterial() {
+        return descTipoMaterial;
+    }
+
+    public void setDescTipoMaterial(String descTipoMaterial) {
+        this.descTipoMaterial = descTipoMaterial;
+    }
+
+    public String getDescDimencion() {
+        return descDimencion;
+    }
+
+    public void setDescDimencion(String descDimencion) {
+        this.descDimencion = descDimencion;
+    }
+
+    public String getDescForma() {
+        return descForma;
+    }
+
+    public void setDescForma(String descForma) {
+        this.descForma = descForma;
+    }
+
+    public String getClaveForma() {
+        return claveForma;
+    }
+
+    public void setClaveForma(String claveForma) {
+        this.claveForma = claveForma;
+    }
+    
+    
+
+    
     public int getNoOrdenProduccion() {
         return noOrdenProduccion;
     }
     
-    public int getBarrasNecesarias() {
-        return barrasNecesarias;
-    }
-
+  
     public String getCodProducto() {
         return codProducto;
-    }
-
-    public String getDescMateria() {
-        return descMateria;
-    }
-
-    public String getDescEstado() {
-        return descEstado;
-    }
-
-    public void setDescEstado(String descEstado) {
-        this.descEstado = descEstado;
     }
 
     public String getDescEmpaque() {
@@ -177,6 +325,16 @@ public class ordenProduccion extends OrdenTrabajo{
         this.piezasPorTurno = piezasPorTurno;
     }
     
-    
+    public String getDescEstadoOrdenProduccion() {
+        return descEstadoOrdenProduccion;
+    }
+
+    public void setDescEstadoOrdenProduccion(String descEstadoOrdenProduccion) {
+        this.descEstadoOrdenProduccion = descEstadoOrdenProduccion;
+    }
+       
+    public String materialToString(){
+        return descTipoMaterial + " " + descDimencion + " " + claveForma; 
+    }
     
 }

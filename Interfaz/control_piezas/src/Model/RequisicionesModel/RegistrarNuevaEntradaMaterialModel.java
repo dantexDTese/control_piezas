@@ -25,7 +25,7 @@ public class RegistrarNuevaEntradaMaterialModel {
                 query = "SELECT desc_proveedor FROM proveedores;";
                 break;
             case LISTA_MATERIALES:
-                query = "SELECT desc_material FROM materiales;";
+                query = "SELECT CONCAT(desc_tipo_material,' ',desc_dimencion,' ',clave_forma) AS desc_material FROM ver_materiales;";
                 break;
             default:
                 return combo;

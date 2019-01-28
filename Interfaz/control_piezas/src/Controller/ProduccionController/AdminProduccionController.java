@@ -1,12 +1,14 @@
 
 package Controller.ProduccionController;
 
+import Model.Constructores;
 import Model.Estructuras;
-import Model.PedidosModel.Pedido;
+import Model.LotePlaneado;
+import Model.OrdenTrabajo;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.ControlProduccionModel;
-import Model.ProduccionModel.OrdenProduccionGuardada;
 import Model.ProduccionModel.SeguimientoProduccionModel;
+import Model.ordenProduccion;
 import View.Produccion.AdminProduccionView;
 import View.Produccion.ControlProduccionDialogView;
 import View.Produccion.SeguimientoProduccionDialogView;
@@ -15,22 +17,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
-public class AdminProduccionController {
+public final class AdminProduccionController implements Constructores{
     
     /**
      * ATRIBUTOS
      */
     private final AdminProduccionView vista;
     private final AdminProduccionModel model;
-    private OrdenProduccionGuardada ordenSeleccionada;
+    private LotePlaneado ordenSeleccionada;
     
     /**
      * CONSTRUCTOR
@@ -38,23 +39,32 @@ public class AdminProduccionController {
      * @param model
      */
     public AdminProduccionController(AdminProduccionView vista, AdminProduccionModel model) {
-      
-        //INICIALIZACION
         this.vista = vista;
         this.model = model;
-        
-        //ORDENES DE TRABAJO
+        llenarComponentes();
+        asignarEventos();  
+    }
+    
+    @Override
+    public void llenarComponentes() {
         llenarTablaOrdenesTrabajo();
+    }
+
+    @Override
+    public void asignarEventos() {
         this.vista.getJtbOrdenesTrabajo().addMouseListener(listenerSeleccionOrdenTrabajo);
-        
-        //PRDEN DE PRODUCCION DE LA ORDEN DE TRABAJO
         this.vista.getJtbOrdenesProduccion().addMouseListener(listenerSeleccionOrdenProduccion);
-        
-        //BOTONES MODIFICAR Y GUARDAR MODIFICACION
         this.vista.getBtnModificar().addActionListener(listenerBotones);
         this.vista.getBtnGuardarModificacion().addActionListener(listenerBotones);
         this.vista.getBtnSeguimientoProduccion().addActionListener(listenerBotones);
         this.vista.getBtnControlProduccion().addActionListener(listenerBotones);
+        PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {llenarTablaOrdenesTrabajo();};
+        this.vista.getJdcMes().addPropertyChangeListener(listenerFechas);
+        this.vista.getJdcAnio().addPropertyChangeListener(listenerFechas);
+        this.vista.getBtnBuscar().addActionListener(listenerBotones);
+        this.vista.getBtnVerTodo().addActionListener(listenerBotones);
+        this.vista.getBtnCancelarModificaciones().addActionListener(listenerBotones);
+        this.vista.getBtnCerrar().addActionListener(listenerBotones);
     }
     
     
@@ -63,48 +73,122 @@ public class AdminProduccionController {
      */
     private void llenarTablaOrdenesTrabajo(){
         
-        ArrayList<Pedido> listaOrdenesTrabajo =  model.listaOrdenesTrabajo();
+        ArrayList<OrdenTrabajo> listaOrdenesTrabajo =  model.listaOrdenesTrabajo(
+                vista.getTxtOrdenCompra().getText(),
+                vista.getJdcAnio().getValue(),vista.getJdcMes().getMonth()+1);
+        
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel());
         DefaultTableModel modelTabla = (DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel();
         
         for(int i = 0;i<listaOrdenesTrabajo.size();i++){
             modelTabla.addRow(new Object[]{
-                listaOrdenesTrabajo.get(i).getNoOrdenTrabajo(),
-                listaOrdenesTrabajo.get(i).getEstado(),
+                listaOrdenesTrabajo.get(i).getNoPedido(),
+                listaOrdenesTrabajo.get(i).getNoOrdenCompra(),
+                listaOrdenesTrabajo.get(i).getDescEstadoPedido(),
             });
         }
     }
-    
     /**
      * EVENTOS
      */
-    
     private final ActionListener listenerBotones = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == vista.getBtnSeguimientoProduccion())
                 mostrarSeguimientoProduccion();
+            
             else if(e.getSource() == vista.getBtnControlProduccion())
                 mostrarControlProduccion();
+            else if(e.getSource() == vista.getBtnBuscar())
+                llenarTablaOrdenesTrabajo();
+
+            else if(e.getSource() == vista.getBtnVerTodo()){
+                vista.getTxtOrdenCompra().setText("");
+                llenarTablaOrdenesTrabajo();
+            }
+            else if(e.getSource() == vista.getBtnModificar()){
+                
+                if(ordenSeleccionada != null)
+                    activarCancelarModificacion(true);
+                else
+                    JOptionPane.showMessageDialog(null, "POR FAVOR PRIMERO SELECCIONE UNA ORDEN","VALIDACION",JOptionPane.WARNING_MESSAGE);
+            }
+            
+            
+            else if(e.getSource() == vista.getBtnGuardarModificacion())
+                guardarModificacion();
+            
+            else if(e.getSource() == vista.getBtnCancelarModificaciones())
+                activarCancelarModificacion(false);
+            
+            
+            else if(e.getSource() == vista.getBtnCerrar()){
+                int respuesta = JOptionPane.showConfirmDialog(null,"¿SEGURO QUE DESEA CERRAR ESTA ORDEN?","VALIDACION",JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                
+                if(respuesta == JOptionPane.YES_OPTION){
+                    model.cerrarOrdenProduccion(ordenSeleccionada.getNoOrdenProduccion());
+                    activarCancelarModificacion(false);
+                    vista.getBtnModificar().setEnabled(false);
+                }
+            }
         }     
         
         private void mostrarSeguimientoProduccion(){
-            SeguimientoProduccionDialogView vistaSeguimiento = new SeguimientoProduccionDialogView(vista.getPrincipal(), true);
-            SeguimientoProduccionController controllerSeguimiento = new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel(),ordenSeleccionada);
-            vistaSeguimiento.setVisible(true);
+            if(ordenSeleccionada != null){
+                SeguimientoProduccionDialogView vistaSeguimiento = 
+                        new SeguimientoProduccionDialogView(vista.getPrincipal(), true);
+                SeguimientoProduccionController controllerSeguimiento = 
+                        new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel(),ordenSeleccionada);
+                vistaSeguimiento.setVisible(true);
             
+            }else JOptionPane.showMessageDialog(null, "POR FAVOR PRIMER SELECCIONE UNA ORDEN","VALIDACION",JOptionPane.WARNING_MESSAGE);
+            
+                        
         }
         
         private void mostrarControlProduccion(){
             ControlProduccionDialogView viewControlProduccion = new ControlProduccionDialogView(vista.getPrincipal(), true);
             ControlProduccionController controllerControlProduccion = new ControlProduccionController(viewControlProduccion
-                                        , new ControlProduccionModel());
+                                        , new ControlProduccionModel(),ordenSeleccionada);
             viewControlProduccion.setVisible(true);
         }
         
+        
+        private void guardarModificacion(){
+            ordenSeleccionada.setDescEmpaque(vista.getTxtEmpaque().getText());
+            if(vista.getJdcDesmontajeMolde().getDate() != null)
+                ordenSeleccionada.setFechaDesmontaje(Estructuras.convertirFechaGuardar(vista.getJdcDesmontajeMolde().getDate()));
+            ordenSeleccionada.setValidacion_compras(vista.getCheckAprobacionCompras().isSelected());
+            ordenSeleccionada.setValidacion_produccion(vista.getCheckAprobacionProduccion().isSelected());
+            ordenSeleccionada.setValidacion_matenimiento(vista.getCheckAprobacionMatenimiento().isSelected());
+            ordenSeleccionada.setValidacion_calidad(vista.getCheckAprobacionCalidad().isSelected());
+            model.guardarModificaciones(ordenSeleccionada);
+            activarCancelarModificacion(false);
+        }
+        
+        private void activarCancelarModificacion(boolean valor){
+            vista.getTxtEmpaque().setEnabled(valor);
+            vista.getJdcDesmontajeMolde().setEnabled(valor);
+            vista.getCheckAprobacionCalidad().setEnabled(valor);
+            vista.getCheckAprobacionCompras().setEnabled(valor);
+            vista.getCheckAprobacionMatenimiento().setEnabled(valor);
+            vista.getCheckAprobacionProduccion().setEnabled(valor);
+            vista.getBtnGuardarModificacion().setEnabled(valor);
+            vista.getBtnCancelarModificaciones().setEnabled(valor);
+            vista.getBtnModificar().setEnabled(!valor);
+            
+            if(ordenSeleccionada.getDescEstadoOrdenProduccion().equals("ABIERTO")){
+                vista.getBtnCerrar().setEnabled(valor);
+                
+            }else
+                vista.getBtnModificar().setEnabled(false);
+            
+        }
+        
+        
+        
     };
-    
-    
     
     private final MouseListener listenerSeleccionOrdenTrabajo = new MouseAdapter() {
         @Override
@@ -117,14 +201,14 @@ public class AdminProduccionController {
         }
     
         private void llenarTablaOrdenesProduccion(int ordenTrabajo){
-            ArrayList<AdminProduccionModel.OrdenProduccion> listaOrdenesProduccion = model.listaOrdenesProduccion(ordenTrabajo);
+            ArrayList<ordenProduccion> listaOrdenesProduccion = model.listaOrdenesProduccion(ordenTrabajo);
             Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbOrdenesProduccion().getModel());
             DefaultTableModel modelTabla = (DefaultTableModel) vista.getJtbOrdenesProduccion().getModel();
             
             for(int i = 0;i<listaOrdenesProduccion.size();i++)
                 modelTabla.addRow(new Object[]{
                     listaOrdenesProduccion.get(i).getNoOrdenProduccion(),
-                    listaOrdenesProduccion.get(i).getClaveProducto(),
+                    listaOrdenesProduccion.get(i).getCodProducto(),
                 });            
         }
     
@@ -136,34 +220,45 @@ public class AdminProduccionController {
             super.mousePressed(e);            
             int filaSeleccionada = vista.getJtbOrdenesProduccion().rowAtPoint(e.getPoint());
             llenarOrdenProduccion((Integer)vista.getJtbOrdenesProduccion().getValueAt(filaSeleccionada,0));
+            
         }
         
         private void llenarOrdenProduccion(Integer noOrdenProduccion){
             ordenSeleccionada = model.obtenerOrdenProduccion(noOrdenProduccion);
             if(ordenSeleccionada!= null){
-                vista.getLbNoOP().setText(ordenSeleccionada.getOrdenProduccion()+"");
-                vista.getLbProducto().setText(ordenSeleccionada.getClaveProducto());
-                vista.getLbCliente().setText(ordenSeleccionada.getNombreCliente());
+                vista.getLbNoOP().setText(ordenSeleccionada.getNoOrdenProduccion()+"");
+                vista.getLbProducto().setText(ordenSeleccionada.getCodProducto());
+                vista.getLbCliente().setText(ordenSeleccionada.getDescCliente());
                 vista.getLbOrdenCompra().setText(ordenSeleccionada.getNoOrdenCompra());
-                vista.getLbCantidad().setText(ordenSeleccionada.getCantidadCliente()+"");
+                vista.getLbCantidad().setText(ordenSeleccionada.getCantidadTotal()+"");
                 vista.getLbPiezasPorTurno().setText(ordenSeleccionada.getPiezasPorTurno()+"");
-                vista.getLbMaterial().setText(ordenSeleccionada.getDescMaterial());
+                vista.getLbMaterial().setText(ordenSeleccionada.getDescTipoMaterial()+" "+ordenSeleccionada.getClaveForma() + " "+ ordenSeleccionada.getDescDimencion() );
                 vista.getLbMaquina().setText(ordenSeleccionada.getDescMaquina());
                 vista.getLbCantidadProduccir().setText(ordenSeleccionada.getCantidadTotal()+"");
-                vista.getLbBarrasNecesarias().setText(ordenSeleccionada.getBarrasNecesarias()+"");
+                vista.getLbBarrasNecesarias().setText(Math.ceil(ordenSeleccionada.getBarrasNecesarias())+"");
                 vista.getLbFechaMontajeMolde().setText(ordenSeleccionada.getFechaMontaje());
-                vista.getLbFechaArranqueProceso().setText(ordenSeleccionada.getFechaInicioOP());
-                vista.getLbInicioProduccion().setText(ordenSeleccionada.getFechaInicioOP());
-                vista.getLbFechaEntrega().setText(ordenSeleccionada.getFechaEntregaPedido());
+                vista.getLbFechaArranqueProceso().setText(ordenSeleccionada.getFechaInicio());
+                vista.getLbInicioProduccion().setText(ordenSeleccionada.getFechaInicio());
+                vista.getLbFechaEntrega().setText(ordenSeleccionada.getFechaentrega());
+                vista.getLbTurnosNecesarios().setText(ordenSeleccionada.getTurnosNecesarios()+"");
+                vista.getLbFechaCerrada().setText(ordenSeleccionada.getFechaFin());
+                vista.getJdcDesmontajeMolde().setDate(Estructuras.formateFecha(ordenSeleccionada.getFechaDesmontaje()));
+                vista.getCheckAprobacionCompras().setSelected(ordenSeleccionada.isValidacion_compras());
+                vista.getCheckAprobacionProduccion().setSelected(ordenSeleccionada.isValidacion_produccion());
+                vista.getCheckAprobacionMatenimiento().setSelected(ordenSeleccionada.isValidacion_matenimiento());
+                vista.getCheckAprobacionCalidad().setSelected(ordenSeleccionada.isValidacion_calidad());
+                vista.getTxtEmpaque().setText(ordenSeleccionada.getDescEmpaque());
+                vista.getLbFechaCerrada().setText(ordenSeleccionada.getFechaFin());
                 
-                if(ordenSeleccionada.getFechaDesmontaje() != null && !"".equals(ordenSeleccionada.getFechaDesmontaje()))
-                    vista.getJdcDesmontajeMolde().setDate(new Date(ordenSeleccionada.getFechaDesmontaje()));
+                if("CERRADO".equals(ordenSeleccionada.getDescEstadoOrdenProduccion()))
+                    vista.getBtnModificar().setEnabled(false);
                 
             }
             else
                 JOptionPane.showMessageDialog(null,"error");       
         }
     };
+    
     
     
     

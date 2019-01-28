@@ -1,6 +1,7 @@
 
 package Controller.AlmacenController;
 
+import Model.AlmacenModel.ProductoInventario;
 import Model.AlmacenModel.RegistroInventarioModel;
 import Model.Constructores;
 import Model.Estructuras;
@@ -13,30 +14,51 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
-public class RegistroInventarioController implements Constructores{
+public final class RegistroInventarioController implements Constructores{
 
     
-    RegistroInventario vista;
-    RegistroInventarioModel modelo;
-    
+    private RegistroInventario vista;
+    private RegistroInventarioModel modelo;
+    private ArrayList<ProductoInventario> listaInventario;
     RegistroInventarioController(RegistroInventario vista, RegistroInventarioModel modelo) {
         
         this.vista = vista;
         this.modelo = modelo;
+        llenarTablaProductos();
         llenarComponentes();
         asignarEventos();
         
     }
 
+    RegistroInventarioController(RegistroInventario viewInventario,
+            RegistroInventarioModel registroInventarioModel, ArrayList<ProductoInventario> listaInventario,
+            String fecha) {
+        this.vista = viewInventario;
+        this.modelo = registroInventarioModel;
+        this.vista.getLbFecha().setText(fecha);
+        this.listaInventario = listaInventario;
+        this.vista.getBtnGuardar().setEnabled(false);
+        this.vista.getTxtEncargado().setEnabled(false);
+        llenarTablaProductosRegistrados();
+    }
+
     @Override
     public void llenarComponentes() {
-        llenarTablaProductos();
         vista.getLbFecha().setText(Estructuras.obtenerFechaActual());
     }
 
     @Override
     public void asignarEventos() {
         vista.getBtnGuardar().addActionListener(listenerGuardar);
+    }
+    
+    private void llenarTablaProductosRegistrados() {
+        DefaultTableModel modeloTabla = (DefaultTableModel) vista.getJtbProductosInventario().getModel();
+        Estructuras.limpiarTabla(modeloTabla);
+        for(int i = 0;i<listaInventario.size();i++)
+            modeloTabla.addRow(new Object[]{
+                listaInventario.get(i).getCodProducto(),
+                listaInventario.get(i).getCantidad()});
     }
     
     private void llenarTablaProductos(){
@@ -82,5 +104,7 @@ public class RegistroInventarioController implements Constructores{
             return true;
         }
     };
+
+    
     
 }

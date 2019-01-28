@@ -18,20 +18,20 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
         this.principal = principal;
     }
 
+    public JYearChooser getJdcAnioInventario() {
+        return jdcAnioInventario;
+    }
+
+    public JMonthChooser getJdcMesInventario() {
+        return jdcMesInventario;
+    }
+    
     public Principal getPrincipal() {
         return principal;
     }
 
     public JTable getJtbRegistroEntradaSalida() {
         return jtbRegistroEntradaSalida;
-    }
-    
-    public void setCbxClientes(JComboBox<String> cbxClientes) {
-        this.cbxClientes = cbxClientes;
-    }
-
-    public void setCbxPartes(JComboBox<String> cbxPartes) {
-        this.cbxPartes = cbxPartes;
     }
 
     public JButton getBtnRegistrarEntrada() {
@@ -44,14 +44,6 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
 
     public JButton getBtnRegistrarSalida() {
         return btnRegistrarSalida;
-    }
-
-    public JComboBox<String> getCbxClientes() {
-        return cbxClientes;
-    }
-
-    public JComboBox<String> getCbxPartes() {
-        return cbxPartes;
     }
 
     public JYearChooser getJdcAnio() {
@@ -73,10 +65,6 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
     public JLabel getLbNoParte() {
         return lbNoParte;
     }
-
-    public JLabel getLbNomCliente() {
-        return lbNomCliente;
-    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -95,10 +83,7 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtbProductosClientes = new javax.swing.JTable();
         jPanel8 = new javax.swing.JPanel();
-        cbxClientes = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        cbxPartes = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jdcMes = new com.toedter.calendar.JMonthChooser();
         jdcAnio = new com.toedter.calendar.JYearChooser();
@@ -106,8 +91,6 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         jtbRegistroEntradaSalida = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        lbNomCliente = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         lbNoParte = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -207,7 +190,7 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "CLIENTE", "NO. PARTE"
+                "NO", "NO. PARTE"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -227,47 +210,25 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
 
         jPanel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        cbxClientes.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cbxClientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "cualquiera" }));
-
-        jLabel7.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("CLIENTE");
-
-        jLabel8.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("PARTE");
-
-        cbxPartes.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cbxPartes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "cualquiera" }));
+        jLabel8.setText("PRODUCTOS");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxClientes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cbxPartes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxClientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbxPartes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -354,14 +315,6 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
 
         jPanel6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel2.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("CLIENTE");
-
-        lbNomCliente.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lbNomCliente.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbNomCliente.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(0, 204, 204), null));
-
         jLabel4.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("NO. PARTE");
@@ -375,29 +328,20 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lbNomCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbNoParte, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbNoParte, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbNomCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lbNoParte, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         btnRegistrarInventario.setText("REGISTRAR INVENTARIO");
@@ -462,9 +406,7 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(16, 16, 16)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -494,14 +436,10 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnRegistrarEntrada;
     private javax.swing.JButton btnRegistrarInventario;
     private javax.swing.JButton btnRegistrarSalida;
-    private javax.swing.JComboBox<String> cbxClientes;
-    private javax.swing.JComboBox<String> cbxPartes;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -522,6 +460,5 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
     private javax.swing.JTable jtbRegistroEntradaSalida;
     private javax.swing.JTable jtbRegistroInventario;
     private javax.swing.JLabel lbNoParte;
-    private javax.swing.JLabel lbNomCliente;
     // End of variables declaration//GEN-END:variables
 }

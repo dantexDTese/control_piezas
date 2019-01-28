@@ -4,7 +4,7 @@ package Model;
 public class Pedido {
     
     private int noPedido;
-    private String descEstado;
+    private String descEstadoPedido;
     private String descContacto;
     private String descCliente;
     private String fechaRecepcion;
@@ -14,7 +14,10 @@ public class Pedido {
 
     public Pedido() {
     }
-
+    
+    public Pedido(String noOrdenCompra){
+        this.noOrdenCompra = noOrdenCompra;
+    }
     
     
     public Pedido(int noPedido, String noOrdenCompra,String descCliente) {
@@ -22,6 +25,8 @@ public class Pedido {
         this.noOrdenCompra = noOrdenCompra;
         this.descCliente = descCliente;
     }
+    
+    
 
     public int getNoPedido() {
         return noPedido;
@@ -31,13 +36,15 @@ public class Pedido {
         this.noPedido = noPedido;
     }
 
-    public String getDescEstado() {
-        return descEstado;
+    public String getDescEstadoPedido() {
+        return descEstadoPedido;
     }
 
-    public void setDescEstado(String descEstado) {
-        this.descEstado = descEstado;
+    public void setDescEstadoPedido(String descEstadoPedido) {
+        this.descEstadoPedido = descEstadoPedido;
     }
+
+   
 
     public String getDescContacto() {
         return descContacto;

@@ -45,10 +45,15 @@ public final class RegistrarNuevaEntradaMaterialController implements Constructo
             int respuesta = JOptionPane.showConfirmDialog(null, "¿ESTAS SEGURO DE REGISTAR ESTE MATERIAL?","REGISTRO MATERIAL",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if(respuesta == JOptionPane.YES_OPTION && validarCampos()){
             
-                EntradaMaterial material = new EntradaMaterial(vista.getCbxMaterial().getSelectedItem().toString(),
-                        vista.getCbxProveedores().getSelectedItem().toString()
-                        ,Integer.parseInt(vista.getSprCantidad().getValue().toString()),
-                    vista.getTxtCodigo().getText(),vista.getTxtCertificado().getText(),vista.getTxtOrdenCompra().getText(),vista.getTxtInspector().getText());
+                
+                EntradaMaterial material = new EntradaMaterial();
+                material.setDescMaterial(vista.getCbxMaterial().getSelectedItem().toString());
+                material.setDescProveedor(vista.getCbxProveedores().getSelectedItem().toString());
+                material.setCantidad(Integer.parseInt(vista.getSprCantidad().getValue().toString()));
+                material.setCodigo(vista.getTxtCodigo().getText());
+                material.setCertificado(vista.getTxtCertificado().getText());
+                material.setOrdenCompra(vista.getTxtOrdenCompra().getText());
+                material.setInspector(vista.getTxtInspector().getText());
             
                 model.agregarEntradaMaterial(material);
                 

@@ -19,11 +19,21 @@ SELECT * FROM defectos_lotes;
 SELECT * FROM entradas_materiales;
 
 
+
+SELECT op.id_orden_produccion,op.clave_producto,op.cantidad_total,obtener_piezas_procesar(op.id_orden_produccion) 
+FROM (SELECT * FROM todos_pedidos WHERE desc_estado = 'ABIERTO') AS pd
+INNER JOIN (SELECT * FROM todas_ordenes_produccion WHERE desc_estado = 'ABIERTO') AS op ON pd.id_orden_trabajo = op.id_orden_trabajo
+INNER JOIN (SELECT * FROM todos_lotes_planeados WHERE desc_estado = 'ABIERTO') AS lp ON lp.id_orden_produccion = op.id_orden_produccion
+WHERE pd.no_orden_compra = 'prueba1'
+GROUP BY op.id_orden_produccion;
+
+
 #PLANEACION
 #SELECCIONAR TODAS LOS PEDIDOS QUE NO ESTEN EN PLANEACION O SU PLANEACION PASADA 
 SELECT pd.id_pedido,pd.no_orden_compra,pd.fecha_entrega FROM pedidos AS pd 
 JOIN ordenes_trabajo AS ot ON  pd.id_pedido = ot.id_pedido
-JOIN ordenes_por_planear AS opp ON ot.id_orden_trabajo = opp.id_orden_trabajo GROUP BY pd.id_pedido;
+JOIN ordenes_por_planear AS opp ON ot.id_orden_trabajo = opp.id_orden_trabajo GROUP BY pd.id_pedido
+;
 
 
 #REQUISICIONES
@@ -41,3 +51,8 @@ LEFT JOIN lotes_produccion AS lp ON tlp.id_lote_planeado = lp.id_lote_planeado;
 select * from ver_ordenes_produccion;
 
 SELECT id_pedido,id_orden_trabajo,no_orden_compra,nombre_cliente FROM todos_pedidos WHERE desc_estado = 'ABIERTO';
+
+
+SELECT VERSION();
+
+SHOW VARIABLES;

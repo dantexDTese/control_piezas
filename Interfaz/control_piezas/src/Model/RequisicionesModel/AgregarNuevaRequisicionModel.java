@@ -2,8 +2,8 @@
 package Model.RequisicionesModel;
 
 import Model.Conexion;
-import Model.PedidosModel.Pedido;
-import Model.PedidosModel.ProductosPendientes;
+import Model.Pedido;
+import Model.ordenProduccion;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -18,20 +18,27 @@ import java.util.ArrayList;
  */
 public class AgregarNuevaRequisicionModel {
     
-    
-    
     public ArrayList<Pedido> listaOrdenesPendientes(){
         ArrayList<Pedido> pedidos = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT id_pedido,no_orden_compra FROM faltantes_requisicion GROUP BY id_pedido;";  
-        
+        String query = "SELECT 	pd.id_pedido,pd.no_orden_compra,op.id_orden_produccion FROM ordenes_produccion AS op " +
+                        "JOIN ordenes_trabajo AS ot ON ot.id_orden_trabajo = op.id_orden_trabajo " +
+                        "JOIN pedidos AS pd ON pd.id_pedido = ot.id_pedido " +
+                        "JOIN materiales_orden AS mo ON op.id_orden_produccion = mo.id_orden_produccion " +
+                        "JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mo.id_material_requerido " +
+                        "JOIN ver_materiales AS mt ON mt.id_material = mr.id_material " +
+                        "WHERE mo.barras_necesarias > obtener_suma_materiales(op.id_orden_produccion) " +
+                        "GROUP BY pd.id_pedido;";          
         if(c!=null)
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 if(rs.first())
                     do{
-                       pedidos.add(new Pedido(rs.getString(2),rs.getInt(1)));
+                        Pedido pedido = new Pedido();
+                        pedido.setNoPedido(rs.getInt(1));
+                        pedido.setNoOrdenCompra(rs.getString(2));
+                       pedidos.add(pedido);
                     }while(rs.next());
                 c.close();
             } catch (SQLException e) {
@@ -40,20 +47,36 @@ public class AgregarNuevaRequisicionModel {
         return pedidos;       
     }
     
-    public ArrayList<ProductosPendientes> listaProductosPendientes(int noOrdenTrabajo){
-        ArrayList<ProductosPendientes> productosPendientes = new ArrayList<>();
-        String query =  "select id_orden_produccion,clave_producto,cantidad_total,desc_material,barras_necesarias"
-                + ",fecha_inicio FROM faltantes_requisicion WHERE id_orden_trabajo = "+noOrdenTrabajo+";";
+    public ArrayList<ordenProduccion> listaProductosPendientes(int noOrdenTrabajo){
+        ArrayList<ordenProduccion> productosPendientes = new ArrayList<>();
+        String query =  "select op.id_orden_produccion,op.clave_producto,op.cantidad_total,mt.desc_tipo_material,"
+                + "mt.desc_dimencion,mt.clave_forma,mo.barras_necesarias,obtener_fecha_siguiente_lote_planeado(op.id_orden_produccion)"
+                + ",mt.id_material,mo.barras_necesarias - obtener_suma_materiales(op.id_orden_produccion) AS piezas_faltantes "
+              + "FROM todas_ordenes_produccion AS op " +
+                "JOIN materiales_orden AS mo ON op.id_orden_produccion = mo.id_orden_produccion " +
+                "JOIN materiales_requeridos AS mr ON mr.id_material_requerido = mo.id_material_requerido " +
+                "JOIN ver_materiales AS mt ON mt.id_material = mr.id_material " +
+                "WHERE mo.barras_necesarias > obtener_suma_materiales(op.id_orden_produccion) AND op.id_orden_trabajo = '"+noOrdenTrabajo+"' " +
+                "GROUP BY id_orden_produccion;";
+        
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 if(rs.first())
-                    do {                        
-                        productosPendientes.add(new ProductosPendientes(
-                                rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getString(4)
-                                ,rs.getFloat(5),rs.getString(6)));
+                    do {         
+                        ordenProduccion orden = new ordenProduccion(rs.getInt(1));
+                        orden.setCodProducto(rs.getString(2));
+                        orden.setCantidadTotal(rs.getInt(3));
+                        orden.setDescTipoMaterial(rs.getString(4));
+                        orden.setDescDimencion(rs.getString(5));
+                        orden.setClaveForma(rs.getString(6));
+                        orden.setBarrasNecesarias(rs.getFloat(7));
+                        orden.setFechaInicio(rs.getString(8));
+                        orden.setNoMaterial(rs.getInt(9));
+                        orden.setPiezasFaltantes(rs.getFloat(10));
+                        productosPendientes.add(orden);
                     } while (rs.next());
                 c.close();
             } catch (SQLException e) {
@@ -80,8 +103,7 @@ public class AgregarNuevaRequisicionModel {
             }
         return idRequisicion;
     }
-    
-    
+
     public int agregarMaterialSolicitado(int idRequisicion,ParcialidadMaterial material){
         Connection c = Conexion.getInstance().getConexion();
         int idMaterialSolicitado=0;
@@ -92,7 +114,7 @@ public class AgregarNuevaRequisicionModel {
                 CallableStatement cs = c.prepareCall(query);
                 cs.setInt(1,idRequisicion);
                 cs.setInt(2, material.getNoPartida());
-                cs.setString(3,material.getMaterial());
+                cs.setInt(3,material.getNoMaterial());
                 cs.setInt(4, material.getCantidad());
                 cs.setString(5, material.getUnidad());
                 cs.setInt(6,material.getNoParcialidad());

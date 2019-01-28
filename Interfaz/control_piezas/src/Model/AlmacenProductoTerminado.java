@@ -2,33 +2,27 @@
 package Model;
 
 
-public class AlmacenProductoTerminado extends ProductoCliente{
+public class AlmacenProductoTerminado{
     
     private int noAlmacenProductoTerminado;
+    private String codProducto;
     private int total;
 
     public AlmacenProductoTerminado(){    }
     
-    public AlmacenProductoTerminado(int noAlmacenProductoTerminado, int total,int noProductoCliente) {
-        super(noProductoCliente);
+    public AlmacenProductoTerminado(int noAlmacenProductoTerminado, int total,String codProducto) {
         this.noAlmacenProductoTerminado = noAlmacenProductoTerminado;
+        this.codProducto = codProducto;
         this.total = total;
     }
-    
-     public AlmacenProductoTerminado(int noAlmacenProductoTerminado, int total,int noMaterialCliente, String descCliente, String claveProducto) {
-        super(noMaterialCliente, descCliente, claveProducto);
-        this.noAlmacenProductoTerminado = noAlmacenProductoTerminado;
-        this.total = total;
-    }
-     
-    public AlmacenProductoTerminado(int noAlmacenProductoTerminado,int noMaterialCliente, String descCliente, String claveProducto) {
-        super(noMaterialCliente, descCliente, claveProducto);
-        this.noAlmacenProductoTerminado = noAlmacenProductoTerminado;
-    }
-    
+
     public AlmacenProductoTerminado(int noAlmacenProductoTerminado) {
-        super();
         this.noAlmacenProductoTerminado = noAlmacenProductoTerminado;
+    }
+   
+
+    public String getCodProducto() {
+        return codProducto;
     }
     
     public int getNoAlmacenProductoTerminado() {

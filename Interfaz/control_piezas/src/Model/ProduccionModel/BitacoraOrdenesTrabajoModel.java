@@ -20,7 +20,13 @@ public class BitacoraOrdenesTrabajoModel {
     public ArrayList<RegistroOrdenTrabajo> listaOrdenesTrabajo(int fecha){
         ArrayList<RegistroOrdenTrabajo> listaOrdenes = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = String.format("SELECT * FROM bitacora_ordenes_trabajo WHERE YEAR(fecha_registro) = %d;",fecha) ;
+        String query = String.format("SELECT op.id_orden_produccion,op.fecha_registro," +
+                                    "op.clave_producto,op.cantidad_cliente,op.fecha_inicio," +
+                                    "op.fecha_fin,obtenerIdRequisicion(op.id_orden_produccion)," +
+                                    "pd.fecha_entrega,op.desc_estado,op.observaciones " +
+                                    "FROM pedidos AS pd JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido " +
+                                    "INNER JOIN todas_ordenes_produccion AS op ON op.id_orden_trabajo = ot.id_orden_trabajo "
+                                    + "WHERE YEAR(op.fecha_registro) = %d;",fecha) ;
        if(c!=null) 
            try {
                Statement st = c.createStatement();

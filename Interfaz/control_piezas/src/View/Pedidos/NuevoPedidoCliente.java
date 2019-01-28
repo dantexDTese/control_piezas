@@ -27,9 +27,9 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         cbxDescCliente = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        cbxContactoCliente = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         dcFechaEntrega = new com.toedter.calendar.JDateChooser();
+        txtContactoCliente = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -58,6 +58,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
 
         jLabel7.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("CONTACTO");
 
         jLabel8.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
@@ -81,13 +82,11 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(42, 42, 42)))
-                .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbxContactoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addGap(26, 26, 26)
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtContactoCliente)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dcFechaEntrega, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -107,14 +106,14 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtNoOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cbxDescCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbxContactoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtContactoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(dcFechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnGuardar.setText("GUARDAR");
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(255, 255, 255))); // NOI18N
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(255, 255, 255))); // NOI18N
         jPanel3.setOpaque(false);
 
         tbListaProductos.setModel(new javax.swing.table.DefaultTableModel(
@@ -270,12 +269,6 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
         return btnGuardar;
     }
 
-    
-    
-    public JComboBox<String> getCbxContactoCliente() {
-        return cbxContactoCliente;
-    }
-
     public JComboBox<String> getCbxDescCliente() {
         return cbxDescCliente;
     }
@@ -296,9 +289,11 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
         return txtNoOrdenCompra;
     }
 
-    public void setCbxContactoCliente(JComboBox<String> cbxContactoCliente) {
-        this.cbxContactoCliente = cbxContactoCliente;
+    public JTextField getTxtContactoCliente() {
+        return txtContactoCliente;
     }
+
+   
 
     public void setCbxDescCliente(JComboBox<String> cbxDescCliente) {
         this.cbxDescCliente = cbxDescCliente;
@@ -348,7 +343,6 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> cbxContactoCliente;
     private javax.swing.JComboBox<String> cbxDescCliente;
     private com.toedter.calendar.JDateChooser dcFechaEntrega;
     private javax.swing.JLabel jLabel1;
@@ -366,6 +360,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbListaPedido;
     private javax.swing.JTable tbListaProductos;
+    private javax.swing.JTextField txtContactoCliente;
     private javax.swing.JTextField txtNoOrdenCompra;
     // End of variables declaration//GEN-END:variables
 }

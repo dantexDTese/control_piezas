@@ -3,8 +3,10 @@ package Model.PedidosModel;
 
 import Model.Conexion;
 import Model.Estructuras;
+import Model.LotePlaneado;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -16,22 +18,45 @@ public class PlaneacionModel {
         return Estructuras.obtenerlistaDatos("SELECT desc_maquina FROM maquinas");
     }
     
-    public ArrayList<procedimientoTotal> listaProcedimientoMaquina(String nombreMaquina){
+    public ArrayList<LotePlaneado> listaProcedimientoMaquina(String nombreMaquina,int mes,int anio){
         Connection c = Conexion.getInstance().getConexion();
-        ArrayList<procedimientoTotal> lista = new ArrayList<>();
-        String query="SELECT * FROM procedimiento_total WHERE desc_maquina = '"+nombreMaquina+"' GROUP BY id_orden_trabajo;";
+        ArrayList<LotePlaneado> lista = new ArrayList<>();
+        
+        String query="SELECT op.id_orden_trabajo,op.clave_producto,op.cantidad_total,pd.no_orden_compra,op.id_orden_produccion,op.piezas_turno_registro," +
+                    " vm.desc_tipo_material,vm.desc_dimencion,vm.clave_forma,op.worker,lp.desc_tipo_proceso,lp.desc_maquina,op.desc_estado,fecha_registro " +
+                    " FROM todas_ordenes_produccion AS op INNER JOIN todos_pedidos AS pd ON op.id_orden_trabajo = pd.id_orden_trabajo " +
+                    " INNER JOIN ver_materiales AS vm ON op.id_material = vm.id_material " +
+                    " INNER JOIN todos_lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion " +
+                    " WHERE lp.desc_maquina = '"+nombreMaquina+"' AND(MONTH(fecha_registro) = "+mes+"  AND YEAR(fecha_registro) = "+anio+") "
+                    + " GROUP BY op.id_orden_produccion ORDER BY op.id_orden_trabajo; ";
+              
         if(c!=null)
             try {
                Statement st = c.createStatement();
                ResultSet rs = st.executeQuery(query);
                if(rs.first())
-                    do {                        
-                        lista.add(new procedimientoTotal(
-                                rs.getInt(1),rs.getString(2), rs.getInt(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7),rs.getFloat(8),
-                        rs.getString(9)));
+                    do {    
+                        
+                        LotePlaneado lote = new LotePlaneado();
+                        lote.setOrdenTrabajo(rs.getInt(1));
+                        lote.setCodProducto(rs.getString(2));
+                        lote.setCantidadTotal(rs.getInt(3));
+                        lote.setNoOrdenCompra(rs.getString(4));
+                        lote.setNoOrdenProduccion(rs.getInt(5));
+                        lote.setPiezasPorTurno(rs.getInt(6));
+                        lote.setDescTipoMaterial(rs.getString(7));
+                        lote.setDescDimencion(rs.getString(8));
+                        lote.setClaveForma(rs.getString(9));
+                        lote.setWorker(rs.getFloat(10));
+                        lote.setTipoProceso(rs.getString(11));
+                        lote.setDescMaquina(rs.getString(12));
+                        lote.setDescEstadoOrdenProduccion(rs.getString(13));
+                        
+                        lista.add(lote);
+                        
                     } while (rs.next());
                c.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error: class: PlaneacionModel, method:listaProcedimentosMaquina "+e.getMessage());
             }
         
@@ -58,24 +83,6 @@ public class PlaneacionModel {
         return principal;
     }
     
-    public ArrayList<lotesProduccion> listaLotesProduccion(String descMaquina){
-        Connection c = Conexion.getInstance().getConexion();
-        ArrayList<lotesProduccion> listaLotes = new ArrayList<>();
-        String query = "SELECT * FROM procesando_producto WHERE desc_maquina = '"+descMaquina+"';";
-        if(c!=null)
-            try {
-                Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery(query);
-                if(rs.first())
-                    do {                        
-                        listaLotes.add(new lotesProduccion(rs.getInt(8),rs.getString(10)));
-                    } while (rs.next());
-                c.close();
-            } catch (Exception e) {
-                System.err.println("error: PlaneacionModel, method:listaLotesProduccion "+e.getMessage());
-            }
-        return listaLotes;
-    }
     
     
     

@@ -63,7 +63,7 @@ public class RegistroSalidaModel {
     
     public int obtenerCantidadAlmacenada(String claveProducto){
         Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT total FROM productos_clientes WHERE clave_producto = '"+claveProducto+"';";
+        String query = "SELECT total FROM productos_almacen WHERE clave_producto = '"+claveProducto+"';";
         int resultado=0;
         try {
             
@@ -99,19 +99,18 @@ public class RegistroSalidaModel {
         return respuesta;
     }
 
-    public int registrarSalidaProducto(String claveProducto, String descCliente, int cantidadRegistrar) {
+    public int registrarSalidaProducto(String claveProducto, int cantidadRegistrar) {
         int noRegistroSalidaProducto = 0;
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
             try {
-                String query = "{CALL registrar_salida_producto(?,?,?,?)}";
+                String query = "{CALL registrar_salida_producto(?,?,?)}";
                 CallableStatement cs = c.prepareCall(query);
                 cs.setString(1, claveProducto);
-                cs.setString(2, descCliente);
-                cs.setInt(3, cantidadRegistrar);
-                cs.registerOutParameter(4, Types.INTEGER);
+                cs.setInt(2, cantidadRegistrar);
+                cs.registerOutParameter(3, Types.INTEGER);
                 cs.execute();
-                noRegistroSalidaProducto = cs.getInt(4);
+                noRegistroSalidaProducto = cs.getInt(3);
             } catch (SQLException e) {
                 System.err.println("error: paquete:AlmacenModel, class:RegistroSalidaModel, metodo:registrarSalidaProducto "+e.getMessage());                
             }

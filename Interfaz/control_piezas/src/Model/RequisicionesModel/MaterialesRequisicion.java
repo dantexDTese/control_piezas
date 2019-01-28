@@ -3,23 +3,36 @@ package Model.RequisicionesModel;
 
     
 public class MaterialesRequisicion{
+    
         private int noRequisicion;
-        private final String material;
+        private int noMaterial;
+        private String descTipoMaterial;
+        private String descDimencion;
+        private String claveForma;
         private int barrasNecesarias;
         private String descEstado;
-        
-        public MaterialesRequisicion(int barrasNecesarias,String material) {
-            this.material = material;
-            this.barrasNecesarias = barrasNecesarias;
-        }
+        private String descMaterial;
 
-    public MaterialesRequisicion(int noRequisicion, String material, int barrasNecesarias, String descEstado) {
-        this.noRequisicion = noRequisicion;
-        this.material = material;
-        this.barrasNecesarias = barrasNecesarias;
-        this.descEstado = descEstado;
+    public MaterialesRequisicion() {
+        
     }
 
+    public String getDescMaterial() {
+        return descMaterial;
+    }
+
+    public void setDescMaterial(String descMaterial) {
+        this.descMaterial = descMaterial;
+    }
+
+    public int getNoMaterial() {
+        return noMaterial;
+    }
+
+    public void setNoMaterial(int noMaterial) {
+        this.noMaterial = noMaterial;
+    }
+       
     public int getNoRequisicion() {
         return noRequisicion;
     }
@@ -27,21 +40,56 @@ public class MaterialesRequisicion{
     public String getDescEstado() {
         return descEstado;
     }
-        
-    
-        
 
-        public MaterialesRequisicion(String material) {
-            this.material = material;
-        }
-        
-        public String getMaterial() {
-            return material;
-        }
-
-        public int getBarrasNecesarias() {
-            return barrasNecesarias;
-        }
-              
+    public String getClaveForma() {
+        return claveForma;
     }
+
+    public void setClaveForma(String claveForma) {
+        this.claveForma = claveForma;
+    }
+   
+
+    public void setNoRequisicion(int noRequisicion) {
+        this.noRequisicion = noRequisicion;
+    }
+
+    public void setDescEstado(String descEstado) {
+        this.descEstado = descEstado;
+    }
+
+    
+    public String getDescTipoMaterial() {
+        return descTipoMaterial;
+    }
+
+    public void setDescTipoMaterial(String descTipoMaterial) {
+        this.descTipoMaterial = descTipoMaterial;
+    }
+
+    public String getDescDimencion() {
+        return descDimencion;
+    }
+
+    public void setDescDimencion(String descDimencion) {
+        this.descDimencion = descDimencion;
+    }
+
+    public int getBarrasNecesarias() {
+        return barrasNecesarias;
+    }
+
+    public void setBarrasNecesarias(int barrasNecesarias) {
+        this.barrasNecesarias = barrasNecesarias;
+    }
+    
+    
+    public String materialToString(){
+        return descTipoMaterial + " " +descDimencion + " " + claveForma;
+                
+    }
+ 
+    
+              
+ }
     

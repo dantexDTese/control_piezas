@@ -63,7 +63,7 @@ public class RegistroEntradaMateriales extends javax.swing.JInternalFrame {
 
         jLabel1.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("REGISTRO DE ENTRADA DE MATERIALES");
+        jLabel1.setText("REGISTRO ENTRADA DE MATERIALES");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

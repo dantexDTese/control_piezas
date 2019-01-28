@@ -5,8 +5,7 @@ import Model.AlmacenModel.RegistroSalidaModel;
 import Model.Constructores;
 import Model.Estructuras;
 import Model.OrdenTrabajo;
-import Model.PedidosModel.LotePlaneado;
-import Model.ordenProduccion;
+import Model.LotePlaneado;
 import View.almacenView.CantidadParcialidad;
 import View.almacenView.RegistroSalida;
 import java.awt.event.ActionEvent;
@@ -139,15 +138,14 @@ public final class RegistroSalidaController implements Constructores{
 
                     for(int i = 0;i<modeloTabla.getRowCount();i++){
 
-                        int noRegistroSalida = modelo.registrarSalidaProducto(modeloTabla.getValueAt(i, 1).toString(),
-                                ordenTrabajo.getDescCliente(),Integer.parseInt(modeloTabla.getValueAt(i, 2).toString()));
+                        int noRegistroSalida = modelo.registrarSalidaProducto(modeloTabla.getValueAt(i, 1).toString(),Integer.parseInt(modeloTabla.getValueAt(i, 2).toString()));
 
                         modelo.registrarParcialidadEntrega(Integer.parseInt(modeloTabla.getValueAt(i, 0).toString()),noRegistroSalida,noParcialidadPedido);
 
                     }
                 }
 
-                JOptionPane.showConfirmDialog(null, "REGISTRO CORRECTO");
+                JOptionPane.showMessageDialog(null, "REGISTRO CORRECTO");
                 vista.dispose();
             } else
                 JOptionPane.showMessageDialog(null, "LA LISTA DE PRODUCTOS ESTA VACIA");

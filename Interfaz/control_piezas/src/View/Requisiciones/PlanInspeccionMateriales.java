@@ -44,8 +44,10 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
     public JTextField getTxtNoParte() {
         return txtNoParte;
     }
-    
-    
+
+    public JTextField getLbLote() {
+        return lbLote;
+    }
 
     public JTable getJtbInspeccion() {
         return jtbInspeccion;
@@ -69,10 +71,6 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
 
     public JLabel getLbFecha() {
         return lbFecha;
-    }
-
-    public JLabel getLbLote() {
-        return lbLote;
     }
 
     public JLabel getLbOrdenCompra() {
@@ -118,7 +116,7 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
         lbOrdenCompra = new javax.swing.JLabel();
         jPanel13 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
-        lbLote = new javax.swing.JLabel();
+        lbLote = new javax.swing.JTextField();
         jPanel14 = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         lbDescripcion = new javax.swing.JLabel();
@@ -172,9 +170,7 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("PART. NO");
 
-        txtNoParte.setForeground(new java.awt.Color(255, 255, 255));
         txtNoParte.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtNoParte.setOpaque(false);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -184,10 +180,10 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(txtNoParte, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(txtNoParte, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -239,9 +235,7 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("FACTURA");
 
-        txtFactura.setForeground(new java.awt.Color(255, 255, 255));
         txtFactura.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtFactura.setOpaque(false);
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -250,13 +244,9 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(txtFactura, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                        .addContainerGap())))
+                    .addComponent(txtFactura)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,8 +426,7 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel18.setText("LOTE");
 
-        lbLote.setForeground(new java.awt.Color(255, 255, 255));
-        lbLote.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbLote.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
@@ -446,8 +435,8 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
             .addGroup(jPanel13Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbLote, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                    .addComponent(lbLote))
                 .addContainerGap())
         );
         jPanel13Layout.setVerticalGroup(
@@ -456,8 +445,8 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lbLote, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(lbLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -801,7 +790,7 @@ public class PlanInspeccionMateriales extends javax.swing.JDialog {
     private javax.swing.JLabel lbDescripcion;
     private javax.swing.JLabel lbDisponibilidad;
     private javax.swing.JLabel lbFecha;
-    private javax.swing.JLabel lbLote;
+    private javax.swing.JTextField lbLote;
     private javax.swing.JLabel lbOrdenCompra;
     private javax.swing.JLabel lbProveedor;
     private javax.swing.JRadioButton rbtAprobar;

@@ -1,5 +1,7 @@
 package Controller.PedidosController;
 
+//ULTIMA MODIFICACION 10/01/2019
+
 import Model.Constructores;
 import Model.Estructuras;
 import Model.PedidosModel.nuevoPedidoClienteModel;
@@ -18,7 +20,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 
-public class nuevoPedidoClienteController implements ActionListener,Constructores{
+public final class nuevoPedidoClienteController implements ActionListener,Constructores{
 
     private final NuevoPedidoCliente vistaNuevoPedido;
     private final nuevoPedidoClienteModel modelNuevoPedido;
@@ -30,7 +32,6 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
         this.modelNuevoPedido = modelNuevoPedido;
         llenarComponentes();
         asignarEventos();
-        
     }
     
     @Override
@@ -42,7 +43,6 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
     @Override
     public void asignarEventos() {
        //ASIGNAR EVENTOS
-        this.vistaNuevoPedido.getCbxDescCliente().addActionListener(this);
         this.vistaNuevoPedido.getBtnGuardar().addActionListener(this);
         this.vistaNuevoPedido.getTbListaProductos().addMouseListener(listenerAgregarProducto);
         this.vistaNuevoPedido.getDcFechaEntrega().addPropertyChangeListener((PropertyChangeEvent evt) -> {
@@ -62,17 +62,6 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
             this.vistaNuevoPedido.getCbxDescCliente().addItem(listaClientes.get(i).toString());
     }
     
-    private void llenarListaContactos(String nombreCliente){
-        ArrayList listaContactos = modelNuevoPedido.listaContacto(nombreCliente);
-        
-        if(this.vistaNuevoPedido.getCbxContactoCliente().getItemCount() > 0)
-        this.vistaNuevoPedido.getCbxContactoCliente().removeAllItems();
-        
-        for(int i = 0;i<listaContactos.size();i++)
-            this.vistaNuevoPedido.getCbxContactoCliente().addItem(listaContactos.get(i).toString());
-        
-    }
-    
     private void llenarListaProductos(){
         DefaultTableModel  model = (DefaultTableModel) vistaNuevoPedido.getTbListaProductos().getModel();
         ArrayList<String> productos = this.modelNuevoPedido.listaProductos();
@@ -85,11 +74,8 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == this.vistaNuevoPedido.getCbxDescCliente())
-            llenarListaContactos(this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString());
-    
         
-        else if(e.getSource() == this.vistaNuevoPedido.getBtnGuardar()){
+        if(e.getSource() == this.vistaNuevoPedido.getBtnGuardar()){
             int res = JOptionPane.showConfirmDialog(null, "¿Esta seguro de guardar esta orden?",
                     "Guardar orden",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
             if(res == JOptionPane.YES_OPTION)
@@ -108,7 +94,7 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
             int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
                     this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
                     ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
-                    ,this.vistaNuevoPedido.getCbxContactoCliente().getSelectedItem().toString()
+                    ,this.vistaNuevoPedido.getTxtContactoCliente().getText()
                     ,Estructuras.convertirFechaGuardar(vistaNuevoPedido.getDcFechaEntrega().getDate()));
 
             if(idPedidoAgregado > 0){
@@ -162,7 +148,7 @@ public class nuevoPedidoClienteController implements ActionListener,Constructore
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e); 
             if(!"".equals(vistaNuevoPedido.getTxtNoOrdenCompra().getText()) && vistaNuevoPedido.getDcFechaEntrega().getDate() != null
-                    && vistaNuevoPedido.getCbxContactoCliente().getSelectedItem() != null){
+                    && !"".equals(vistaNuevoPedido.getTxtContactoCliente().getText())){
             int seleccionado = vistaNuevoPedido.getTbListaProductos().rowAtPoint(e.getPoint());
                  
             String cantidad = JOptionPane.showInputDialog(new JFrame(), "INCRESA LA CANTIDAD NECESARIA");

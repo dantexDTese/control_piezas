@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package View.Produccion;
 
-import com.toedter.calendar.JMonthChooser;
-import com.toedter.calendar.JYearChooser;
+import java.awt.Frame;
 import javax.swing.JTable;
 
 /**
@@ -15,14 +10,18 @@ import javax.swing.JTable;
  */
 public class ControlProduccionDialogView extends javax.swing.JDialog {
 
-    /**
-     * Creates new form ControlProduccionDialogView
-     */
+    
+    private java.awt.Frame parent;
+    
     public ControlProduccionDialogView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.parent = parent;
     }
 
+    public Frame getParent() {
+        return parent;
+    }
 
     public JTable getJtbConntrolProduccion() {
         return jtbConntrolProduccion;
@@ -54,11 +53,11 @@ public class ControlProduccionDialogView extends javax.swing.JDialog {
 
             },
             new String [] {
-                "RECHAZO", "FECHA", "OPERADOR", "TURNO", "MAQUINA", "PARTE", "OPERACION", "NO. BARRAS", "MERMA", "PRODUCCION", "CANTIDAD RECHAZO LIBERADO", "SCRAP AJUSTE", "SCRAP", "F.E CILINDRADO", "F.E LARGO", "C. ARRANCADO", "B. DESCENTRALIZADO", "D. DEBASTADOS", "FILO DE REBABA", "PUNTO DE CORTE", "F.E.RADIO", "SIN CUERDA", "DOBLE BARRENO", "MOLETEADO FINO", "MOLETEADO DESALINEADO", "SIN MOLETEADO", "PASA PIN", "PROFUNDIDAD DE RANURA", "GOLPE", "HERRAMIENTA ROTA", "PIEZA DOBLE", "RAYADAS", "NO PASA PIN", "SIN CAJA", "SIN CHAFLAN", "MAL LIMADO", "SIN BARRENO", "CHAFLAN PROFUNDO", "PIEZA RROTA", "SIN CILINDRADO", "NO PASA GO", "PASA NO GO", "NO PASA GAUGE", "F.E VUELTAS", "D. ENTRE BARRENO Y PARED.", "PROFUDIDAD BARENO", "QUEMADAS", "F.E. CAJA", "T. MUERTO", "CAUSA"
+                "RECHAZO", "DESC LOTE", "PARTE", "OPERACION", "NO. BARRAS", "MERMA", "PRODUCCION", "CANTIDAD RECHAZO LIBERADO", "SCRAP AJUSTE", "SCRAP", "TIEMPO MUERTO"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -67,10 +66,23 @@ public class ControlProduccionDialogView extends javax.swing.JDialog {
         });
         jtbConntrolProduccion.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jtbConntrolProduccion);
+        if (jtbConntrolProduccion.getColumnModel().getColumnCount() > 0) {
+            jtbConntrolProduccion.getColumnModel().getColumn(0).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(1).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(2).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(3).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(4).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(5).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(6).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(7).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(8).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(9).setResizable(false);
+            jtbConntrolProduccion.getColumnModel().getColumn(10).setResizable(false);
+        }
 
         jScrollPane2.setViewportView(jScrollPane1);
 
-        jLabel1.setFont(new java.awt.Font("Impact", 0, 36)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Impact", 0, 48)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("CONTROL DE PRODUCCION");
 
@@ -84,7 +96,7 @@ public class ControlProduccionDialogView extends javax.swing.JDialog {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

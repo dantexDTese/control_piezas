@@ -13,17 +13,19 @@ import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
 
-public class CalendarioController implements Constructores{
+public final class CalendarioController implements Constructores{
 
     private final Calendario vista;
     private final CalendarioModel model;
     private final String descMaquina;
+    
     public CalendarioController(Calendario vista,CalendarioModel model,String descMaquina) {           
      
      this.vista = vista;
      this.model = model;
      this.descMaquina = descMaquina;
-     
+     llenarComponentes();
+     asignarEventos();
      
     }
     
@@ -66,8 +68,6 @@ public class CalendarioController implements Constructores{
         
         for(int i = 0;i<zeller;i++,diaSemana++)
             fechas[i] = null;
-        
-        
         
         for(int i = 0;i<dias;i++){
             CalendarioModel.OrdenPlaneada orden = obtenerOrden(i+1, listOrdenesMes);

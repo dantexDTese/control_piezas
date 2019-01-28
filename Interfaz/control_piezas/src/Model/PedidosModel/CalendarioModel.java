@@ -18,16 +18,19 @@ public class CalendarioModel {
         
         ArrayList<OrdenPlaneada>  listOrdenesMes = new ArrayList<>();        
         Connection c = Conexion.getInstance().getConexion();
-        String query = String.format("SELECT dia,id_orden_produccion,cantidad_planeada,desc_tipo_proceso "
-                + "FROM fechas_planeadas WHERE (fecha_planeada BETWEEN '%s' AND ADDDATE('%s',%d)) " +
-                        " AND desc_maquina = '%s';",fecha,fecha,dias-1,maquina);
+        String query = String.format("SELECT op.id_orden_produccion,lpn.cantidad_planeada,DAY(fecha_planeada) AS dia "
+                                    + " ,lpn.fecha_planeada,lpn.desc_maquina,lpn.desc_tipo_proceso " +
+                                    "FROM todos_lotes_planeados AS lpn " +
+                                    "JOIN ordenes_produccion AS op ON op.id_orden_produccion = lpn.id_orden_produccion " +
+                                    "WHERE (fecha_planeada BETWEEN '%s' AND ADDDATE('%s',%d)) " +
+                                    "AND desc_maquina = '%s';",fecha,fecha,dias-1,maquina);
         if(c!=null)
             try {
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 if(rs.first())
                     do{
-                        listOrdenesMes.add(new OrdenPlaneada(rs.getInt(1),rs.getInt(2),rs.getInt(3),rs.getString(4)));
+                        listOrdenesMes.add(new OrdenPlaneada(rs.getInt(3),rs.getInt(1),rs.getInt(2),rs.getString(6)));
                     }while(rs.next());
                     
                 c.close();

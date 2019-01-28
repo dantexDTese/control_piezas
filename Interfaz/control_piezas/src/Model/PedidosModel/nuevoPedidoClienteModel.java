@@ -1,14 +1,14 @@
 
 package Model.PedidosModel;
 
+//ULTIMA MODIFICACION 1001/19
+
 import Model.Conexion;
 import Model.Estructuras;
 import java.awt.HeadlessException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -23,32 +23,6 @@ public class nuevoPedidoClienteModel {
     }
     
     
-    public ArrayList listaContacto(String nombreCliente){
-        Connection c = Conexion.getInstance().getConexion();
-        int idCliente;
-        ArrayList listaContactos = new ArrayList();
-        if(c!=null)
-            try {
-                Statement st = c.createStatement();
-                ResultSet rs = st.executeQuery(
-                        String.format("select id_cliente FROM clientes "
-                                + "WHERE nombre_cliente = '%s'", nombreCliente));
-                
-                if(rs.first()){
-                    idCliente = rs.getInt(1);
-                    listaContactos =  Estructuras.obtenerlistaDatos(
-                        String.format("SELECT desc_contacto FROM contactos WHERE "
-                                + "id_cliente = %s", idCliente));
-                }
-                
-                c.close();
-            } catch (SQLException e) {
-                System.err.println("error class:nuevoPedidoClienteModel,"
-                        + "method:listaContacto->"+e.getMessage());
-            }
-        
-        return listaContactos;
-    }
     
     public ArrayList<String> listaProductos(){
         return Estructuras.obtenerlistaDatos("SELECT clave_producto FROM productos");
@@ -79,6 +53,9 @@ public class nuevoPedidoClienteModel {
                 
         return res;
     }
+    
+    
+    
     
     public void agregarOrdenProduccion(int idPedido,String descProducto,int cantidadCliente){
         Connection c = Conexion.getInstance().getConexion();

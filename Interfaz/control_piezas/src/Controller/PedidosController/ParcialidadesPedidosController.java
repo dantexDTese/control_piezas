@@ -5,7 +5,7 @@
  */
 package Controller.PedidosController;
 
-import Model.PedidosModel.Parcialidad;
+import Model.Parcialidad;
 import Model.PedidosModel.ParcialidadesPedidosModel;
 import View.Pedidos.ParcialidadesPedidos;
 import java.util.ArrayList;
@@ -17,8 +17,7 @@ public class ParcialidadesPedidosController {
     ParcialidadesPedidos vistaParcialidades;
     ParcialidadesPedidosModel parcialidadesPedidosModel;    
     
-    ParcialidadesPedidosController(ParcialidadesPedidos vistaParcialidades,
-            ParcialidadesPedidosModel parcialidadesPedidosModel) {
+    ParcialidadesPedidosController(ParcialidadesPedidos vistaParcialidades, ParcialidadesPedidosModel parcialidadesPedidosModel) {
      
         this.vistaParcialidades = vistaParcialidades;
         this.parcialidadesPedidosModel = parcialidadesPedidosModel;
@@ -46,16 +45,16 @@ public class ParcialidadesPedidosController {
     }
     
     private void llenarTabla(){
-        ArrayList<Parcialidad> parcialidades = parcialidadesPedidosModel.
-                            listaParcialidades(vistaParcialidades.getNoOrden());
+        ArrayList<Parcialidad> parcialidades = parcialidadesPedidosModel.listaParcialidades(vistaParcialidades.getNoOrden(),vistaParcialidades.getProducto());
             
         DefaultTableModel model = (DefaultTableModel) vistaParcialidades.getJtParcialidadesPedidos().getModel();
         
         if(parcialidades.size()>0){
+            
             for(int i = 0;i<parcialidades.size();i++){
-                model.addRow(new Object[]{parcialidades.get(i).getFecha_entrega(),
-                                parcialidades.get(i).getCantidad()});
+                model.addRow(new Object[]{parcialidades.get(i).getFechaEntrega(),parcialidades.get(i).getCantidadEntregada()});
             }
+            
         }
           
     }

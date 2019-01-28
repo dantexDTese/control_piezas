@@ -11,8 +11,14 @@ public class OrdenTrabajo extends Pedido{
     public OrdenTrabajo() {
         
     }
-
     
+    public OrdenTrabajo(int ordenTrabajo){
+        
+    }
+
+    public OrdenTrabajo(String codPedido){
+        super(codPedido);
+    }
     
     public OrdenTrabajo(int noPedido,int ordenTrabajo, String noOrdenCompra,String nombreCliente) {
         super(noPedido, noOrdenCompra,nombreCliente);

@@ -4,8 +4,11 @@ package Controller.RequisicionesController;
 import Model.Constructores;
 import Model.Estructuras;
 import Model.RequisicionesModel.AgregarNuevaRequisicionModel;
+import Model.RequisicionesModel.AsignarMaterialRequisicionModel;
 import Model.RequisicionesModel.MaterialesRequisicion;
 import Model.RequisicionesModel.ControlEntregasModel;
+import Model.RequisicionesModel.ParcialidadesRequisicion;
+import View.Requisiciones.AsignarMaterialRequisicion;
 import View.Requisiciones.ControlEntregasView;
 import View.Requisiciones.agregarNuevasRequisiciones;
 import java.awt.event.ActionEvent;
@@ -15,7 +18,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -28,7 +35,9 @@ public final class ControlEntregasController implements Constructores{
      */
     private ControlEntregasView entregasView;
     private final ControlEntregasModel entregasModel;
-    
+    private ArrayList<ParcialidadesRequisicion> parcialidades;
+    private int noRequisicionSeleccionado;
+    private String descMaterialSeleccionado;
     /**
      * CONSTRUCTOR
      * @param entragasView
@@ -44,26 +53,35 @@ public final class ControlEntregasController implements Constructores{
     @Override
     public void llenarComponentes() {
         llenarTablaRequisiciones();
+        entregasView.getBtnCerrar().setEnabled(false);
     }
 
     @Override
     public void asignarEventos() {
         this.entregasView.getBtnAgregarRequisiciones().addActionListener(listenerBotones);
         this.entregasView.getJtEntregas().addMouseListener(listenerTablas);
+        this.entregasView.getJycAnioSeleccionado().addPropertyChangeListener(listenerFechas);
+        this.entregasView.getJmcMesSeleccionado().addPropertyChangeListener(listenerFechas);
+        this.entregasView.getBtnModificarObservaciones().addActionListener(listenerBotones);
+        this.entregasView.getJtParcialidades().addMouseListener(listenerAsignarMaterial);
+        this.entregasView.getBtnCerrar().addActionListener(listenerCerrar);
     }
     
     /**
      *METODOS 
      */
     public void llenarTablaRequisiciones(){
-        ArrayList<MaterialesRequisicion> listaMaterialesRequisicion = entregasModel.obtenerRequisiciones();
+        ArrayList<MaterialesRequisicion> listaMaterialesRequisicion = entregasModel.obtenerRequisiciones(entregasView.getJycAnioSeleccionado().getValue(),
+                                                                                entregasView.getJmcMesSeleccionado().getMonth()+1);
+        
         DefaultTableModel modelRequisiciones = (DefaultTableModel) entregasView.getJtEntregas().getModel();
-
+        Estructuras.limpiarTabla(modelRequisiciones);
+        
         for(int i = 0;i<listaMaterialesRequisicion.size();i++){
             MaterialesRequisicion requisicion = listaMaterialesRequisicion.get(i);
             modelRequisiciones.addRow(new Object[]{
                 requisicion.getNoRequisicion(),
-                requisicion.getMaterial(),
+                requisicion.getDescTipoMaterial() + " " + requisicion.getDescDimencion() + " " + requisicion.getClaveForma() ,
                 requisicion.getBarrasNecesarias(),
                 requisicion.getDescEstado()
             });
@@ -74,11 +92,27 @@ public final class ControlEntregasController implements Constructores{
     /**
      * EVENTOS
      */
+    
+    private final PropertyChangeListener listenerFechas = new PropertyChangeListener() {
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            entregasView.getLbAnioBitacora().setText(entregasView.getJycAnioSeleccionado().getValue()+"");
+            llenarTablaRequisiciones();
+            entregasView.getTxtObservaciones().setText("");
+            Estructuras.limpiarTabla((DefaultTableModel) entregasView.getJtParcialidades().getModel());
+            entregasView.getLbNoRequisicion().setText("");
+        }
+    };
+    
     private final ActionListener listenerBotones   =  new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource() == entregasView.getBtnAgregarRequisiciones())
                     agregarNuevaRequisicion();
+                
+                else if(e.getSource() == entregasView.getBtnModificarObservaciones())
+                   entregasModel.agregarComentarios(Integer.parseInt(entregasView.getLbNoRequisicion().getText()), entregasView.getTxtObservaciones().getText());
+                
         }
         
         private void agregarNuevaRequisicion(){
@@ -86,22 +120,17 @@ public final class ControlEntregasController implements Constructores{
             AgregarNuevaRequisicionController controller = new AgregarNuevaRequisicionController(vista,
             new AgregarNuevaRequisicionModel());
             vista.setVisible(true);
-            vista.addWindowStateListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    super.windowClosing(e);
-                    llenarTablaRequisiciones();
-                }
-
+            vista.addWindowListener(new WindowAdapter() {
+                
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    super.windowClosed(e);
+                    super.windowClosed(e); 
                     llenarTablaRequisiciones();
                 }
                 
-                
             });
-        }
+       }
+        
     };
 
     private final MouseListener listenerTablas = new MouseAdapter() {
@@ -111,33 +140,101 @@ public final class ControlEntregasController implements Constructores{
             if(e.getClickCount() == 2){
                
                 if(e.getSource() == entregasView.getJtEntregas()){
+                    
                     int fila = entregasView.getJtEntregas().rowAtPoint(e.getPoint());
-                    LlenarTablaParcialidades(Integer.parseInt(entregasView.getJtEntregas().getValueAt(fila, 0).toString()),entregasView.getJtEntregas().getValueAt(fila, 1).toString());
+                    noRequisicionSeleccionado = Integer.parseInt(entregasView.getJtEntregas().getValueAt(fila, 0).toString());
+                    descMaterialSeleccionado = entregasView.getJtEntregas().getValueAt(fila, 1).toString();
+                    LlenarTablaParcialidades(noRequisicionSeleccionado,descMaterialSeleccionado);
+                    validarCerrarRequisicion(fila);
+                    entregasView.getLbNoRequisicion().setText(noRequisicionSeleccionado+"");
+                    entregasView.getTxtObservaciones().setText(entregasModel.obtenerObservaciones(noRequisicionSeleccionado));
+                    
                 }
                     
             }
         }
         
+        
         private void LlenarTablaParcialidades(int numRequisicion,String material){
             Estructuras.limpiarTabla((DefaultTableModel) entregasView.getJtParcialidades().getModel());
-            ArrayList<ControlEntregasModel.ParcialidadesRequisicion> parcialidades = entregasModel.listaParcialiades(numRequisicion, material);
+            parcialidades = entregasModel.listaParcialiades(numRequisicion, material);
             DefaultTableModel model = (DefaultTableModel) entregasView.getJtParcialidades().getModel();
             for(int i = 0;i<parcialidades.size();i++){
-                ControlEntregasModel.ParcialidadesRequisicion parcialidad = parcialidades.get(i);
+                ParcialidadesRequisicion parcialidad = parcialidades.get(i);
                 model.addRow(new Object[]{
                     parcialidad.getParcialidad(),
                     parcialidad.getCantidad(),
                     parcialidad.getFechaSolicitud(),
-                    parcialidad.getFechaEntrega(),
                     parcialidad.getNoOrdenProduccion()
                 });
             }
         }
+
+        private void validarCerrarRequisicion(int fila) {
+            String estado = entregasView.getJtEntregas().getValueAt(fila, 3).toString();
+            System.err.println(estado);
+            entregasView.getBtnCerrar().setEnabled(("ABIERTO".equals(estado)));
+        }
  
     };
     
+    ActionListener listenerCerrar = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int respuesta = JOptionPane.showConfirmDialog(null, "¿ESTAS SEGURO DE CERRAR ESTA PARTE DE LA REQUISICION?","VALIDACION",
+                            JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+                    System.err.println(noRequisicionSeleccionado+" "+descMaterialSeleccionado);
+                    if(respuesta == JOptionPane.YES_OPTION){
+                        entregasModel.cerrarParteRequisicion(noRequisicionSeleccionado,descMaterialSeleccionado);
+                        entregasView.getBtnCerrar().setEnabled(false);
+                        llenarTablaRequisiciones();
+                    }
+                }
+            };
     
-    
-    
+    private MouseListener listenerAsignarMaterial = new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);    
+            
+            int fila = entregasView.getJtParcialidades().rowAtPoint(e.getPoint());
+            
+            ParcialidadesRequisicion parcialidad = obtenerParcialidad(
+                    Integer.parseInt(entregasView.getJtParcialidades().getValueAt(fila, 0).toString()),
+                    Integer.parseInt(entregasView.getJtParcialidades().getValueAt(fila, 3).toString()));
+            
+            AsignarMaterialRequisicion vista = new AsignarMaterialRequisicion(entregasView.getPrincipal(), true);
+            AsignarMaterialRequisicionController controller = new AsignarMaterialRequisicionController(vista,
+                    new AsignarMaterialRequisicionModel(),parcialidad);
+            vista.setVisible(true);
+            
+            vista.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    super.windowClosed(e);
+                    
+                    
+                    
+                    
+                    
+                }
+                
+            
+            });
+        }
+
+        private ParcialidadesRequisicion obtenerParcialidad(int noParcialidad, int noOp) {
+            ParcialidadesRequisicion parcialidad = null;
+            
+            for(int i = 0;i<parcialidades.size();i++){
+                parcialidad = parcialidades.get(i);
+                if(parcialidad.getNoOrdenProduccion() == noOp && parcialidad.getParcialidad() == noParcialidad)
+                    return parcialidad;
+            
+            }
+            return null;
+        }
+        
+    };
     
 }

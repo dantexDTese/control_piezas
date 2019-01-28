@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,17 @@ public class BitacoraOrdenesTrabajoController {
     private final BitacoraOrdenesTrabajoModel bitacoraTrabajosModel;
     private ArrayList<RegistroOrdenTrabajo> ordenesTrabajo;
     int noOrden=0;
+    
+    public BitacoraOrdenesTrabajoController(BitacoraOrdenesTrabajoView bitacoraTrabajosView, BitacoraOrdenesTrabajoModel bitacoratrabajosModel) {
+        this.bitacoraTrabajosView = bitacoraTrabajosView;
+        this.bitacoraTrabajosModel = bitacoratrabajosModel;
+        llenarTablaOrdenesTrabajo(this.bitacoraTrabajosView.getYcrAnio().getValue());
+        this.bitacoraTrabajosView.getTbOrdenesTrabajo().addMouseListener(clickTabla);
+        this.bitacoraTrabajosView.getBtnGuardarObservacion().addActionListener(botonGuardar);
+        this.bitacoraTrabajosView.getLbAnio().setText(bitacoraTrabajosView.getYcrAnio().getValue()+"");
+        this.bitacoraTrabajosView.getYcrAnio().addPropertyChangeListener(listenerBuscarAnio);
+    }
+    
     private final MouseAdapter clickTabla = new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -34,9 +47,7 @@ public class BitacoraOrdenesTrabajoController {
             int fila  = bitacoraTrabajosView.getTbOrdenesTrabajo().rowAtPoint(e.getPoint());
             noOrden = (int)bitacoraTrabajosView.getTbOrdenesTrabajo().getValueAt(fila, 0);
             bitacoraTrabajosView.getLbNoOrdenTrabajo().setText(noOrden+"");
-            bitacoraTrabajosView.getTxtaObservacionGuardada().setText(obtenerObservacion(noOrden));
-            bitacoraTrabajosView.getAtxtObservacion().setText(obtenerObservacion(noOrden));
-            
+            bitacoraTrabajosView.getTxtObservaciones().setText(obtenerObservacion(noOrden));
         }
     };
     
@@ -44,21 +55,23 @@ public class BitacoraOrdenesTrabajoController {
         @Override
         public void actionPerformed(ActionEvent e) {       
             if(noOrden != 0){
-                bitacoraTrabajosModel.guardarObservacion(bitacoraTrabajosView.getAtxtObservacion().getText(),noOrden);
-                bitacoraTrabajosView.getAtxtObservacion().setText("");
+                bitacoraTrabajosModel.guardarObservacion(bitacoraTrabajosView.getTxtObservaciones().getText(),noOrden);
             }
             else
-                JOptionPane.showMessageDialog(null,"SELECCIONA UNA ORDEN DE TRABAJO");
+                JOptionPane.showMessageDialog(null,"SELECCIONA UNA ORDEN DE PRODUCCION");
             
             llenarTablaOrdenesTrabajo(bitacoraTrabajosView.getYcrAnio().getValue());
+            bitacoraTrabajosView.getTxtObservaciones().setText("");
+            noOrden = 0;
+            bitacoraTrabajosView.getLbNoOrdenTrabajo().setText("");
         }
         
         
     };
     
-    private final ActionListener botonBuscar = new ActionListener() {
+    private final PropertyChangeListener listenerBuscarAnio = new PropertyChangeListener() {
         @Override
-        public void actionPerformed(ActionEvent e) {
+        public void propertyChange(PropertyChangeEvent evt) {
              bitacoraTrabajosView.getLbAnio().setText(bitacoraTrabajosView.getYcrAnio().getValue()+"");
              llenarTablaOrdenesTrabajo(bitacoraTrabajosView.getYcrAnio().getValue());
         }
@@ -68,17 +81,7 @@ public class BitacoraOrdenesTrabajoController {
         String observacion = bitacoraTrabajosModel.obtenerObservacion(noOrden);
         return observacion;
     }
-    
-    public BitacoraOrdenesTrabajoController(BitacoraOrdenesTrabajoView bitacoraTrabajosView, BitacoraOrdenesTrabajoModel bitacoratrabajosModel) {
-        this.bitacoraTrabajosView = bitacoraTrabajosView;
-        this.bitacoraTrabajosModel = bitacoratrabajosModel;
-        llenarTablaOrdenesTrabajo(this.bitacoraTrabajosView.getYcrAnio().getValue());
-        this.bitacoraTrabajosView.getTbOrdenesTrabajo().addMouseListener(clickTabla);
-        this.bitacoraTrabajosView.getBtnGuardarObservacion().addActionListener(botonGuardar);
-        this.bitacoraTrabajosView.getLbAnio().setText(bitacoraTrabajosView.getYcrAnio().getValue()+"");
-        this.bitacoraTrabajosView.getBtnBuscar().addActionListener(botonBuscar);
-    }
-    
+   
     private void llenarTablaOrdenesTrabajo(int anio){
             ordenesTrabajo = bitacoraTrabajosModel.listaOrdenesTrabajo(anio);
             DefaultTableModel modelOrdenesTrabajo = (DefaultTableModel) bitacoraTrabajosView.getTbOrdenesTrabajo().getModel();        

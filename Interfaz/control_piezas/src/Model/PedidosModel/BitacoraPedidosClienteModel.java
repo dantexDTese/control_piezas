@@ -1,4 +1,3 @@
-
 package Model.PedidosModel;
 
 import Model.Conexion;
@@ -14,11 +13,16 @@ public class BitacoraPedidosClienteModel {
         Connection c = Conexion.getInstance().getConexion();
         String query;
         if("".equals(noOrdenCompra))
-            query = "SELECT * FROM bitacoraPedidos WHERE MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
+            query = " SELECT pd.id_orden_trabajo,pd.no_orden_compra,op.clave_producto,pd.fecha_entrega,pd.fecha_confirmacion_entrega, " +
+                    " pd.fecha_recepcion,pd.desc_estado,pd.desc_contacto,pd.nombre_cliente,op.cantidad_cliente FROM todos_pedidos AS pd " +
+                    " JOIN todas_ordenes_produccion AS op ON pd.id_orden_trabajo = op.id_orden_trabajo "+
+                    " WHERE MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
     
         else 
-            query = "SELECT * FROM bitacoraPedidos WHERE no_orden_compra = '"+noOrdenCompra+"' AND "
-                    + " MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
+            query = " SELECT pd.id_orden_trabajo,pd.no_orden_compra,op.clave_producto,pd.fecha_entrega,pd.fecha_confirmacion_entrega, " +
+                    " pd.fecha_recepcion,pd.desc_estado,pd.desc_contacto,pd.nombre_cliente,op.cantidad_cliente FROM todos_pedidos AS pd " +
+                    " JOIN todas_ordenes_produccion AS op ON pd.id_orden_trabajo = op.id_orden_trabajo "
+                    + "WHERE no_orden_compra = '"+noOrdenCompra+"' AND MONTH(fecha_recepcion) = "+mes+"  AND YEAR(fecha_recepcion) = "+anio+";";
         if(c!=null)
             try {
                 Statement st = c.createStatement();

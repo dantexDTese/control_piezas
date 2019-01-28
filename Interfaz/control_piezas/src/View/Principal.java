@@ -4,6 +4,12 @@ package View;
 import View.Produccion.AdminProduccionView;
 import Controller.AlmacenController.MateriaPrimaController;
 import Controller.AlmacenController.ProductoTerminadoController;
+import Controller.CatalogosController.CatalogoClientesController;
+import Controller.CatalogosController.CatalogoMaquinasController;
+import Controller.CatalogosController.CatalogoOperadoresController;
+import Controller.CatalogosController.CatalogoProductosController;
+import Controller.CatalogosController.CatalogoProveedoreController;
+import Controller.EtiquetasController.ImpresionEtiquetasController;
 import Controller.RequisicionesController.ControlEntregasController;
 import Controller.PedidosController.BitacoraPedidosClienteController;
 import Controller.PedidosController.PlaneacionController;
@@ -12,6 +18,12 @@ import Controller.ProduccionController.BitacoraOrdenesTrabajoController;
 import Controller.RequisicionesController.RegistroEntradaMaterialesController;
 import Model.AlmacenModel.MateriaPrimaModel;
 import Model.AlmacenModel.ProductoTerminadoModel;
+import Model.CatalogosModel.CatalogoClientesModel;
+import Model.CatalogosModel.CatalogoMaquinasModel;
+import Model.CatalogosModel.CatalogoOperadoresModel;
+import Model.CatalogosModel.CatalogoProductosModel;
+import Model.CatalogosModel.CatalogoProveedoresModel;
+import Model.EtiquetasModel.ImpresionEtiquetasModel;
 import Model.RequisicionesModel.ControlEntregasModel;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.PlaneacionModel;
@@ -19,6 +31,12 @@ import Model.ProcesosProduccion;
 import Model.ProduccionModel.AdminProduccionModel;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
 import Model.RequisicionesModel.RegistroEntradaMaterialesModel;
+import View.Catalogos.CatalogoClientes;
+import View.Catalogos.CatalogoMaquinas;
+import View.Catalogos.CatalogoOperadores;
+import View.Catalogos.CatalogoProductos;
+import View.Catalogos.CatalogoProveedores;
+import View.Etiquetas.ImpresionEtiquetasView;
 import View.Requisiciones.ControlEntregasView;
 import View.Pedidos.BitacoraPedidosClienteView;
 import View.Pedidos.PlaneacionView;
@@ -54,7 +72,7 @@ public class Principal extends javax.swing.JFrame {
 
 
     private void IntroducirPanle(JInternalFrame pnNuevo,JDesktopPane escritorio,Point punto) { 
-        Dimension d = pnNuevo.getPreferredSize();
+            Dimension d = pnNuevo.getPreferredSize();
             pnNuevo.setSize(d);
             pnNuevo.setLocation(punto.x-pnNuevo.getWidth()/2,punto.y-pnNuevo.getHeight()/2);
             escritorio.add(pnNuevo);
@@ -95,6 +113,15 @@ public class Principal extends javax.swing.JFrame {
         menuItemControlEntregaMP = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuItemEntradasMateriales = new javax.swing.JMenuItem();
+        jMenu7 = new javax.swing.JMenu();
+        menuItemImprimirEtiquetas = new javax.swing.JMenuItem();
+        jMenu11 = new javax.swing.JMenu();
+        menuItemProductos = new javax.swing.JMenuItem();
+        menuItemClientes = new javax.swing.JMenuItem();
+        menuItemMaquinas = new javax.swing.JMenuItem();
+        menuItemOperadores = new javax.swing.JMenuItem();
+        menuItemProveedores = new javax.swing.JMenuItem();
+        menuItemMateriales = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -121,7 +148,7 @@ public class Principal extends javax.swing.JFrame {
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 732, Short.MAX_VALUE)
+            .addGap(0, 734, Short.MAX_VALUE)
         );
 
         jMenu3.setText("Archivo                    ");
@@ -220,6 +247,65 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar2.add(jMenu10);
 
+        jMenu7.setText("Etiquetado               ");
+
+        menuItemImprimirEtiquetas.setText("Imprimir etiquetas");
+        menuItemImprimirEtiquetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemImprimirEtiquetasActionPerformed(evt);
+            }
+        });
+        jMenu7.add(menuItemImprimirEtiquetas);
+
+        jMenuBar2.add(jMenu7);
+
+        jMenu11.setText("Catalogos                        ");
+
+        menuItemProductos.setText("PRODUCTOS");
+        menuItemProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemProductosActionPerformed(evt);
+            }
+        });
+        jMenu11.add(menuItemProductos);
+
+        menuItemClientes.setText("CLIENTES");
+        menuItemClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemClientesActionPerformed(evt);
+            }
+        });
+        jMenu11.add(menuItemClientes);
+
+        menuItemMaquinas.setText("MAQUINAS");
+        menuItemMaquinas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemMaquinasActionPerformed(evt);
+            }
+        });
+        jMenu11.add(menuItemMaquinas);
+
+        menuItemOperadores.setText("OPERADORES");
+        menuItemOperadores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemOperadoresActionPerformed(evt);
+            }
+        });
+        jMenu11.add(menuItemOperadores);
+
+        menuItemProveedores.setText("PROVEEDORES");
+        menuItemProveedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemProveedoresActionPerformed(evt);
+            }
+        });
+        jMenu11.add(menuItemProveedores);
+
+        menuItemMateriales.setText("MATERIALES");
+        jMenu11.add(menuItemMateriales);
+
+        jMenuBar2.add(jMenu11);
+
         setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -248,6 +334,7 @@ public class Principal extends javax.swing.JFrame {
         new AdminProduccionModel());
         
         IntroducirPanle(adminProduccionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2-80));
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void itemMenuBitacoraPedidosClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuBitacoraPedidosClienteActionPerformed
@@ -312,6 +399,49 @@ public class Principal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menuItemEntradasMaterialesActionPerformed
 
+    private void menuItemImprimirEtiquetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemImprimirEtiquetasActionPerformed
+        ImpresionEtiquetasView impresionView = new ImpresionEtiquetasView(this);
+        ImpresionEtiquetasController impresionCOntroller = new ImpresionEtiquetasController(impresionView, new ImpresionEtiquetasModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(impresionView, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemImprimirEtiquetasActionPerformed
+
+    private void menuItemProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemProductosActionPerformed
+        CatalogoProductos view = new CatalogoProductos(this);
+        CatalogoProductosController controller = new CatalogoProductosController(view,new CatalogoProductosModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(view, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+        
+    }//GEN-LAST:event_menuItemProductosActionPerformed
+
+    private void menuItemClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemClientesActionPerformed
+        CatalogoClientes view = new CatalogoClientes(this);
+        CatalogoClientesController controller = new CatalogoClientesController(view,new CatalogoClientesModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(view, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemClientesActionPerformed
+
+    private void menuItemMaquinasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemMaquinasActionPerformed
+        CatalogoMaquinas view = new CatalogoMaquinas(this);
+        CatalogoMaquinasController controller = new CatalogoMaquinasController(view,new CatalogoMaquinasModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(view, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemMaquinasActionPerformed
+
+    private void menuItemOperadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOperadoresActionPerformed
+        CatalogoOperadores view = new CatalogoOperadores(this);
+        CatalogoOperadoresController controller = new CatalogoOperadoresController(view,new CatalogoOperadoresModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(view, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemOperadoresActionPerformed
+
+    private void menuItemProveedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemProveedoresActionPerformed
+        CatalogoProveedores view = new CatalogoProveedores();
+        CatalogoProveedoreController controller = new CatalogoProveedoreController(view,new CatalogoProveedoresModel());
+        Escritorio.removeAll();    
+        IntroducirPanle(view, Escritorio,new Point(screenSize.width/2,screenSize.height/2));
+    }//GEN-LAST:event_menuItemProveedoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -355,11 +485,13 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem itemMenuPlaneacion;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu10;
+    private javax.swing.JMenu jMenu11;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenu jMenu8;
     private javax.swing.JMenu jMenu9;
     private javax.swing.JMenuBar jMenuBar1;
@@ -367,11 +499,18 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem menuItemBitacoraOrdenesTrabajo;
+    private javax.swing.JMenuItem menuItemClientes;
     private javax.swing.JMenuItem menuItemControlEntregaMP;
     private javax.swing.JMenu menuItemControlProduccion;
     private javax.swing.JMenuItem menuItemEntradasMateriales;
+    private javax.swing.JMenuItem menuItemImprimirEtiquetas;
+    private javax.swing.JMenuItem menuItemMaquinas;
     private javax.swing.JMenuItem menuItemMateriaPrima;
+    private javax.swing.JMenuItem menuItemMateriales;
+    private javax.swing.JMenuItem menuItemOperadores;
     private javax.swing.JMenuItem menuItemProductoTerminado;
+    private javax.swing.JMenuItem menuItemProductos;
+    private javax.swing.JMenuItem menuItemProveedores;
     private javax.swing.JMenu menuPedidos;
     // End of variables declaration//GEN-END:variables
 }

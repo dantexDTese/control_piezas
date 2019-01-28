@@ -1,6 +1,7 @@
 package Model.RequisicionesModel;
 
 import Model.PedidosModel.ProductosPendientes;
+import Model.ordenProduccion;
 import java.util.ArrayList;
 
 
@@ -15,29 +16,27 @@ public final class ParcialidadMaterial extends  MaterialesRequisicion{
         private float precioUnitario;
         private float precioTotal;
         private String proveedor;
-        private ArrayList<ProductosPendientes> listaOrdenesProduccion;
+        private ArrayList<ordenProduccion> listaOrdenesProduccion;
         
 
-    public ParcialidadMaterial(int noPartida,int noParcialidad,String material) {
-        super(material);
+    public ParcialidadMaterial(int noPartida,int noParcialidad) {
             this.noParcialidad = noParcialidad;
             this.noPartida = noPartida;
     }
 
-    public ArrayList<ProductosPendientes> getListaOrdenesProduccion() {
+    public ArrayList<ordenProduccion> getListaOrdenesProduccion() {
         return listaOrdenesProduccion;
     }
 
-    public void setListaOrdenesProduccion(ArrayList<ProductosPendientes> listaOrdenesProduccion) {
+    public void setListaOrdenesProduccion(ArrayList<ordenProduccion> listaOrdenesProduccion) {
         this.listaOrdenesProduccion = listaOrdenesProduccion;
     }
-    
-    
 
     public void setFechaSolicitadaParcialidadMaterial(String fechaSolicitadaParcialidadMaterial) {
         this.fechaSolicitadaParcialidadMaterial = fechaSolicitadaParcialidadMaterial;
     }
 
+    
     public void setPrecioUnitario(float precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
