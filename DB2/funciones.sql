@@ -1,4 +1,5 @@
-SELECT obtener_suma_materiales(1);
+USE control_piezas;
+
 
 DELIMITER //
 CREATE FUNCTION obtener_suma_materiales(id_orden_produccion INT) RETURNS INT
@@ -15,6 +16,7 @@ END //
 DELIMITER ;
 
 
+
 DELIMITER //
 CREATE FUNCTION obtenerIdRequisicion(id_orden_produccion INT) RETURNS INT
 BEGIN
@@ -26,6 +28,10 @@ BEGIN
 END //
 DELIMITER ;
 
+
+
+
+
 DELIMITER // 
 CREATE FUNCTION cantidad_restante_parcialidad(id_orden_produccion INT) RETURNS INT
 BEGIN
@@ -34,13 +40,18 @@ BEGIN
 	parcialidades_entrega AS pe ON res.id_registro_entrada_salida = pe.id_registro_entrada_salida WHERE pe.id_orden_produccion = id_orden_produccion);
 	
     IF suma IS NOT NULL THEN
-		return suma;
+    
+		return suma;        
         
 	ELSE return 0;
 		
     END IF;
+    
 END //
 DELIMITER ;
+
+
+
 
 DELIMITER //
 CREATE FUNCTION obtener_piezas_procesar(id_orden_produccion INT, desc_proceso VARCHAR(50)) RETURNS INT
@@ -80,11 +91,22 @@ DELIMITER //
 CREATE FUNCTION obtener_barras_faltantes_asignar(id_orden_produccion INT) RETURNS INT
 BEGIN 
 	DECLARE barras_necesarias FLOAT;
+    DECLARE barras_restantes FLOAT;
+    
     SET barras_necesarias = (SELECT mo.barras_necesarias FROM materiales_orden AS mo WHERE mo.id_orden_produccion = id_orden_produccion);
     SET barras_necesarias = (SELECT CEILING(barras_necesarias));
     
-    RETURN barras_necesarias - (SELECT SUM(me.cantidad) FROM materiales_entregados AS me WHERE me.id_material_orden =
+    SET barras_restantes = (SELECT SUM(me.cantidad) FROM materiales_entregados AS me WHERE me.id_material_orden =
                     (SELECT mo.id_material_orden FROM materiales_orden AS mo WHERE mo.id_orden_produccion = id_orden_produccion));
+    
+    IF barras_restantes IS NULL THEN
+		
+        SET barras_restantes = 0;
+    
+    END IF;
+    
+    RETURN barras_necesarias - barras_restantes;
+    
 END //
 DELIMITER ;
 
@@ -99,8 +121,35 @@ BEGIN
 END //    
 DELIMITER ;
 
-SELECT obtener_fecha_siguiente_lote_planeado(1);
+DELIMITER //
+CREATE FUNCTION cantidad_restante_compras(id_material_solicitado INT,cantidad_total INT) RETURNS INT
+BEGIN
+	DECLARE suma INT;
+    SET suma = (SELECT SUM(cantidad) FROM materiales_solicitud_compras AS msc WHERE msc.id_material_solicitado = id_material_solicitado);
+   
+   IF suma IS NULL THEN
+		SET suma = 0;
+	END IF;
+   
+   RETURN cantidad_total - suma;
+END //
+DELIMITER ;
 
 
 
-
+DELIMITER //
+CREATE FUNCTION obtener_cantidad_utilizada_material(desc_lote VARCHAR(200)) RETURNS INT
+BEGIN
+	
+    DECLARE cantidad 	INT;
+    
+	SET cantidad = (SELECT SUM(me.cantidad) FROM entradas_materiales AS em INNER JOIN materiales_entregados AS me ON 
+					em.id_entrada_material = me.id_entrada_material WHERE em.desc_lote = desc_lote);
+    
+    IF cantidad IS NULL THEN
+		SET cantidad = 0;
+    END IF;
+    
+    RETURN cantidad;
+END //
+DELIMITER ;

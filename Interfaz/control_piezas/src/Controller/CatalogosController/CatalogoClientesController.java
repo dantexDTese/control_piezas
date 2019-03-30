@@ -7,9 +7,11 @@ package Controller.CatalogosController;
 
 import Model.CatalogosModel.CatalogoClientesModel;
 import Model.CatalogosModel.Cliente;
+import Model.CatalogosModel.ContactosClienteModel;
 import Model.Constructores;
 import Model.Estructuras;
 import View.Catalogos.CatalogoClientes;
+import View.Catalogos.ContactosCliente;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -25,7 +27,7 @@ public final class CatalogoClientesController implements Constructores{
     private ArrayList<Cliente> listaClientes;
     private CatalogoClientes view;
     private CatalogoClientesModel model;
-    
+    private Cliente c;
     
     public CatalogoClientesController(CatalogoClientes view, CatalogoClientesModel model) {
         this.view = view;
@@ -43,7 +45,7 @@ public final class CatalogoClientesController implements Constructores{
     public void asignarEventos() {
         view.getJtbTablaClientes().addMouseListener(listenerTablaClientes);
         view.getBtnGuardar().addActionListener(listenerGuardarModificar);
-        
+        view.getBtnContactosCliente().addActionListener(listenerContactosCliente);
     }
     
     private void llenarTablaClientes(){
@@ -57,14 +59,12 @@ public final class CatalogoClientesController implements Constructores{
             });
     }
     
-    private final MouseListener listenerTablaClientes = new MouseAdapter() {
-        
-        
+    private final MouseListener listenerTablaClientes = new MouseAdapter() {     
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
             int fila = view.getJtbTablaClientes().rowAtPoint(e.getPoint());
-            Cliente c = buscarCliente(Integer.parseInt(view.getJtbTablaClientes().getValueAt(fila,0).toString()));
+            c = buscarCliente(Integer.parseInt(view.getJtbTablaClientes().getValueAt(fila,0).toString()));
             if(e.getClickCount() == 2){
                 int res = JOptionPane.showConfirmDialog(null, "¿DESEA MODIFICAR ESTE CLIENTE?","VALIDACION",JOptionPane.YES_NO_OPTION
                 ,JOptionPane.QUESTION_MESSAGE);
@@ -104,6 +104,20 @@ public final class CatalogoClientesController implements Constructores{
             }else JOptionPane.showMessageDialog(null, "COMPLETE LOS CAMPOS PARA REALIZAR LA OPERACION","VALIDACION",
                     JOptionPane.WARNING_MESSAGE);
         }
+    };
+    
+    private final ActionListener listenerContactosCliente = new ActionListener() {
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(c != null){
+                ContactosCliente contactosView = new ContactosCliente(view.getPrincipal(), true);
+                ContactosClienteController contactosController = new ContactosClienteController(
+                contactosView,new ContactosClienteModel(),c);
+                contactosView.setVisible(true);
+            }
+        }
+        
     };
     
     private void limpiar(){

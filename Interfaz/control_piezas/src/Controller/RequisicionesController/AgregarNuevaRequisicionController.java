@@ -48,7 +48,6 @@ public class AgregarNuevaRequisicionController implements Constructores{
         asignarEventos();
     }
     
-    
     @Override
     public void llenarComponentes() {
         llenarListaPendientes();
@@ -65,22 +64,21 @@ public class AgregarNuevaRequisicionController implements Constructores{
             @Override
             public void stateChanged(ChangeEvent e) {
                 if(opSeleccionada != null){
-                    if((int)Math.ceil(opSeleccionada.getPiezasFaltantes()) < Integer.parseInt(vista.getSprCantidad().getValue().toString())){
+                    if((int)Math.ceil(opSeleccionada.getPiezasFaltantes())+2 < Integer.parseInt(vista.getSprCantidad().getValue().toString())){
                         JOptionPane.showMessageDialog(null, "LA CANTIDAD QUE ESTA INTENTEDO ES MAYOR A LA NECESARIA, "
                                 + "POR FAVOR INTENTE DE NUEVO");
                         vista.getSprCantidad().setValue((int)Math.ceil(opSeleccionada.getPiezasFaltantes()));
-                    }
-                        
-                }
-                    
+                    }      
+                }         
             }
         };
         this.vista.getSprCantidad().addChangeListener(listenerValidarCantidad);
+        this.vista.getJtMaterialOrdenesSeleccionado().addMouseListener(listenerQuitarOrdenTrabajo);
     }
     
     /**
-     * METODOS
-     */
+    * METODOS
+    */
     private void llenarListaPendientes(){
         ArrayList<Pedido> listaPendientes = model.listaOrdenesPendientes();
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbPendientes().getModel());
@@ -144,12 +142,10 @@ public class AgregarNuevaRequisicionController implements Constructores{
                 }
             }                    
            for(int i = 0;i<usoMaterial.size();i++)               
-               vista.getTxtUsoMaterial().setText( vista.getTxtUsoMaterial().getText()+","+usoMaterial.get(i) );                                                       
+               vista.getTxtUsoMaterial().setText( vista.getTxtUsoMaterial().getText()+","+usoMaterial.get(i) );
        }
        
     };
-    
-    
     
     private final MouseAdapter listenerSeleccionarOrdenTrabajo = new MouseAdapter() {
         
@@ -158,41 +154,58 @@ public class AgregarNuevaRequisicionController implements Constructores{
             super.mousePressed(e);
             if(e.getClickCount() == 2){
                 int filaSeleccionada = vista.getJtbProductos().rowAtPoint(e.getPoint());
-                
-                opSeleccionada = iniciarPartida(filaSeleccionada);
-                
-                if("".equals(vista.getLbMaterial().getText())){
-                    if(0==JOptionPane.showConfirmDialog(null, "¿esta seguro de comenzar con el material de esta orden?"
-                            ,"SELECCION DE MATERIAL",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)){
-                        agregarPartida(opSeleccionada, (DefaultTableModel) vista.getJtMaterialOrdenesSeleccionado().getModel());       
-                    }
-                }
-               else if(opSeleccionada.materialToString().equals(vista.getLbMaterial().getText()))
-                        agregarPartida(opSeleccionada, (DefaultTableModel) vista.getJtMaterialOrdenesSeleccionado().getModel());       
-                else
-                    JOptionPane.showMessageDialog(null, "EL MATERIAL DE ESTA OP NO CONINCIDE CON LA ANTERIOR","SIN COINCIDENCIA",JOptionPane.WARNING_MESSAGE);
+                ordenProduccion opTabla = iniciarPartida(filaSeleccionada);
+                if(opTabla.getBarrasNecesarias()+2 > buscarOrdenParcialidades(opSeleccionada)){
+                    opSeleccionada = opTabla;
+                    if("".equals(vista.getLbMaterial().getText()) || listaOrdenesProduccion.isEmpty()){
+                        if(JOptionPane.YES_OPTION==JOptionPane.showConfirmDialog(null, " ¿esta seguro de comenzar con el material de esta orden? "
+                                ," SELECCION DE MATERIAL ",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)){
+                            agregarPartida(opSeleccionada, (DefaultTableModel) vista.getJtMaterialOrdenesSeleccionado().getModel());
+                        }
+                    }else if(opSeleccionada.materialToString().equals(vista.getLbMaterial().getText()))
+                            agregarPartida(opSeleccionada, (DefaultTableModel) vista.getJtMaterialOrdenesSeleccionado().getModel());
+                    else JOptionPane.showMessageDialog(null, "EL MATERIAL DE ESTA OP NO CONINCIDE CON LA ANTERIOR","SIN COINCIDENCIA",JOptionPane.WARNING_MESSAGE);
+                }else JOptionPane.showMessageDialog(null, "YA SE HA AGREGADO EL NUMERO MAXIMO DE BARRAS PARA ESTA ORDEN DE PRODUCCION");
             }
         }
         
-         private void agregarPartida(ordenProduccion op,DefaultTableModel model){
-            listaOrdenesProduccion.add(op);
+        private int buscarOrdenParcialidades(ordenProduccion op){
+            int cantidadAgregada=0;
+            for(int i = 0;i<listaParcialidad.size();i++){
+                ParcialidadMaterial material = listaParcialidad.get(i);
+                for(int j = 0;j<material.getListaOrdenesProduccion().size();j++){
+                    ordenProduccion opr = material.getListaOrdenesProduccion().get(j);
+                    if(op.getNoOrdenProduccion() == opr.getNoOrdenProduccion())
+                        cantidadAgregada += opr.getBarrasSelecciondas();
+                }       
+            }
+            return cantidadAgregada;
+        }
+         
+        private void agregarPartida(ordenProduccion op,DefaultTableModel model){
+             
             int cantidad = (int)Math.ceil(op.getPiezasFaltantes());
             vista.getLbOrdenProduccion().setText(op.getNoOrdenProduccion()+"");  
             vista.getLbNoPartida().setText(noPartida+"");
             vista.getLbMaterial().setText(op.materialToString());
             vista.getSpParcialidad().setValue(parcialidadMaxima);
             vista.getSprCantidad().setValue((int)Math.ceil(cantidad));
+                
             ActionListener listenerBoton = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+                @Override    
+                public void actionPerformed(ActionEvent e) {                
                     op.setBarrasSelecciondas((int) vista.getSprCantidad().getValue());
+                    listaOrdenesProduccion.add(op);
                     model.addRow(new Object[]{listaOrdenesProduccion.size(),op.getNoOrdenProduccion(),op.getBarrasSelecciondas()});
-                    vista.getBtnAgregarListaOP().removeActionListener(this);
-                }
+                    vista.getBtnAgregarListaOP().removeActionListener(this);                   
+                } 
             };
-            vista.getBtnAgregarListaOP().addActionListener(listenerBoton);
+                
+            if(vista.getBtnAgregarListaOP().getActionListeners().length == 0)
+                vista.getBtnAgregarListaOP().addActionListener(listenerBoton);
+             
         }
-               
+         
         private ordenProduccion iniciarPartida(int filaSeleccionada){
             
             int noOrden = Integer.parseInt(vista.getJtbProductos().getValueAt(filaSeleccionada, 0).toString());
@@ -202,6 +215,16 @@ public class AgregarNuevaRequisicionController implements Constructores{
             
             
             return null;
+        }
+
+        private boolean buscarEnLista(ordenProduccion op) {
+            
+            if(listaOrdenesProduccion!=null){
+                for(int i = 0;i<listaOrdenesProduccion.size();i++)
+                    if(op.getNoOrdenProduccion() == listaOrdenesProduccion.get(i).getNoOrdenProduccion())
+                        return true;
+            }
+            return false;
         }
         
     };
@@ -231,8 +254,7 @@ public class AgregarNuevaRequisicionController implements Constructores{
                         ParcialidadMaterial parcialidadMaterial = listaParcialidad.get(i);
                         noMaterialSolicitado = model.agregarMaterialSolicitado(noRequisicion, parcialidadMaterial);                    
                         ArrayList<ordenProduccion> listaOrdenesProduccion = parcialidadMaterial.getListaOrdenesProduccion();
-
-
+                        
                         for(int j = 0;j < listaOrdenesProduccion.size();j++){    
                             ordenProduccion pendiente = listaOrdenesProduccion.get(j);
                             model.agregarMaterialesOrdenRequisicion(noMaterialSolicitado, pendiente.getNoOrdenProduccion(), pendiente.getBarrasSelecciondas());                                                
@@ -295,7 +317,41 @@ public class AgregarNuevaRequisicionController implements Constructores{
             
     };
 
-    
-    
-    
+    private final MouseAdapter listenerQuitarOrdenTrabajo = new MouseAdapter() {
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            if(e.getClickCount() == 2){
+                int fila = vista.getJtMaterialOrdenesSeleccionado().rowAtPoint(e.getPoint());
+                int op = Integer.parseInt(vista.getJtMaterialOrdenesSeleccionado().getValueAt(fila, 1).toString());
+                if(!quitarOp(op)) 
+                    JOptionPane.showMessageDialog(null," OCURRIO UN PROBLEMA MIENTRAS SE REMOVIA LA ORDEN ");
+                else{
+                    llenarTablaListaOrdenes();
+                    limpiar();
+                }
+            }
+        }
+
+        private boolean quitarOp(int op){
+            for(int i = 0;i<listaOrdenesProduccion.size();i++)
+                if(op == listaOrdenesProduccion.get(i).getNoOrdenProduccion()){
+                    listaOrdenesProduccion.remove(i);
+                    return true;
+                }
+            return false;
+        }
+        
+        private void llenarTablaListaOrdenes(){
+            DefaultTableModel modeloTabla = (DefaultTableModel) vista.getJtMaterialOrdenesSeleccionado().getModel();
+            Estructuras.limpiarTabla(modeloTabla);
+            for(int i = 0;i<listaOrdenesProduccion.size();i++)
+                modeloTabla.addRow(new Object[]{
+                    i+1,listaOrdenesProduccion.get(i).getNoOrdenCompra(),
+                    listaOrdenesProduccion.get(i).getBarrasSelecciondas()
+                });
+        }
+        
+    };
 }

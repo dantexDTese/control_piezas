@@ -1,4 +1,3 @@
-
 package View.almacenView;
 
 import View.Principal;
@@ -9,52 +8,53 @@ import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
 
-
 public class MateriaPrimaView extends javax.swing.JInternalFrame {
-
-    
 
     public MateriaPrimaView(Principal aThis) {
         initComponents();
     }
 
-    public JYearChooser getJdcAnio() {
+    public JButton getBtnVerMerma(){
+        return btnVerMerma;
+    }
+
+    public JYearChooser getJdcAnio(){
         return jdcAnio;
     }
 
-    public void setJdcAnio(JYearChooser jdcAnio) {
+    public void setJdcAnio(JYearChooser jdcAnio){
         this.jdcAnio = jdcAnio;
     }
 
-    public JMonthChooser getJdcMes() {
+    public JMonthChooser getJdcMes(){
         return jdcMes;
     }
 
-    public void setJdcMes(JMonthChooser jdcMes) {
+    public void setJdcMes(JMonthChooser jdcMes){
         this.jdcMes = jdcMes;
     }
     
-    public JTable getJtbLotes() {
+    public JTable getJtbLotes(){
         return jtbLotes;
     }
 
-    public JTable getJtbMateriales() {
+    public JTable getJtbMateriales(){
         return jtbMateriales;
     }
 
-    public JLabel getLbLote() {
+    public JLabel getLbLote(){
         return lbLote;
     }
 
-    public JLabel getLbMaterialSeleccionado() {
+    public JLabel getLbMaterialSeleccionado(){
         return lbMaterialSeleccionado;
     }
 
-    public JButton getBtnRegistrar() {
+    public JButton getBtnRegistrar(){
         return btnRegistrar;
     }
 
-    public JSpinner getSprCantidad() {
+    public JSpinner getSprCantidad(){
         return sprCantidad;
     }
 
@@ -84,6 +84,10 @@ public class MateriaPrimaView extends javax.swing.JInternalFrame {
         btnRegistrar = new javax.swing.JButton();
         jdcAnio = new com.toedter.calendar.JYearChooser();
         jdcMes = new com.toedter.calendar.JMonthChooser();
+        btnVerMerma = new javax.swing.JButton();
+
+        setBorder(null);
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
@@ -268,38 +272,46 @@ public class MateriaPrimaView extends javax.swing.JInternalFrame {
                         .addContainerGap())))
         );
 
+        btnVerMerma.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        btnVerMerma.setText("MERMA DE MATERIAL");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jScrollPane2)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jdcAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jdcMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3))))
+                        .addComponent(btnVerMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel3)))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 24, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jdcAnio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdcMes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jdcMes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)))
+                        .addComponent(btnVerMerma, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -329,7 +341,7 @@ public class MateriaPrimaView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -349,6 +361,7 @@ public class MateriaPrimaView extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVerMerma;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

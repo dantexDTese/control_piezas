@@ -30,7 +30,7 @@ public final class CalendarioController implements Constructores{
     }
     
     @Override
-    public void llenarComponentes() {
+    public void llenarComponentes() {        
         this.vista.getJtCalendario().setDefaultRenderer(Object.class,new FechaCalendario());   
     }
 

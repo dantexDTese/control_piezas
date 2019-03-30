@@ -86,7 +86,6 @@ public final class AsignarDiasProduccionController implements Constructores{
                         listaOrdenesNuevaPlaneacion = modelo.listaOrdenesNuevaPlaneacion(pedidoSeleccionado,modelo.SELECCION_SIGUIENTE_PROCESO);
                 }
             
-            
                 if(vista.getCbxProducto().getItemCount() > 0)
                     vista.getCbxProducto().removeAllItems();
             
@@ -105,9 +104,7 @@ public final class AsignarDiasProduccionController implements Constructores{
             int fila = vista.getJtOrdenesPendientes().rowAtPoint(e.getPoint());
             pedidoSeleccionado = vista.getJtOrdenesPendientes().getValueAt(fila, 1).toString();
             obtenerProductosPendientes();
-            
         }
-        
     };
     
     private final ActionListener listenerCbxTipoOperacion = new ActionListener() {
@@ -126,11 +123,9 @@ public final class AsignarDiasProduccionController implements Constructores{
                 if(vista.getCbxProceso().getActionListeners().length==0){
                     vista.getCbxProceso().addActionListener(listenerCbxProceso);                
                     vista.getCbxMaquina().addActionListener(listenerCbxMaquina);
-                }
-                    
+                }               
                 vista.getLbMensaje().setText("PIEZAS PARA PROCESAR");
             }
-            
         }
     };
     

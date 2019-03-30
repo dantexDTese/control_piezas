@@ -14,7 +14,6 @@ import java.util.ArrayList;
 public class ParcialidadesPedidosModel {
 
 
-
     public ArrayList<Parcialidad> listaParcialidades(String noOrden,String codProducto){
         ArrayList<Parcialidad> parcialidades = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
@@ -35,6 +34,7 @@ public class ParcialidadesPedidosModel {
                         parcialidades.add(new Parcialidad(rs.getString(1), rs.getInt(2), codProducto, noOrden));
                     } while (rs.next());
                 c.close();
+                
             } catch (SQLException e) {
                 System.err.println("error: Class ParcialiadesPedidosModel,Method: listaParcialiades"+e.getMessage());
             }

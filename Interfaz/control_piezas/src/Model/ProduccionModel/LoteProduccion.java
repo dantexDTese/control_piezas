@@ -21,7 +21,8 @@ public class LoteProduccion extends LotePlaneado{
     private int scrapAjustable;
     private float barrasUtilizadas;
     private int numLote;
-    
+    private String fechaTrabajo;
+    private String descEstado;
     private reloj tiempoTranscurridoR;
     private float piezasSegundoR;
     private reloj tiempoMuertoR;
@@ -58,9 +59,15 @@ public class LoteProduccion extends LotePlaneado{
     public void setAviso3(boolean aviso3) {
         this.aviso3 = aviso3;
     }
-    
-    
 
+    public String getDescEstado() {
+        return descEstado;
+    }
+
+    public void setDescEstado(String descEstado) {
+        this.descEstado = descEstado;
+    }
+    
     public int getNumLote() {
         return numLote;
     }
@@ -236,6 +243,15 @@ public class LoteProduccion extends LotePlaneado{
     public int getCantidadAdmin() {
         return cantidadAdmin;
     }
+
+    public String getFechaTrabajo() {
+        return fechaTrabajo;
+    }
+
+    public void setFechaTrabajo(String fechaTrabajo) {
+        this.fechaTrabajo = fechaTrabajo;
+    }
+    
 
     public int getScrapAdmin() {
         return scrapAdmin;

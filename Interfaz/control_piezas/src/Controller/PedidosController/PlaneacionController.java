@@ -1,14 +1,14 @@
-
 package Controller.PedidosController;
 
 import Model.Constructores;
 import Model.Estructuras;
 import Model.LotePlaneado;
+import Model.PedidosModel.AjustesPlaneacionModel;
 import Model.PedidosModel.AsignacionMaquinaAPedidoModel;
 import Model.PedidosModel.AsignarDiasProduccionModel;
 import Model.PedidosModel.PlaneacionModel;
 import Model.PedidosModel.ProcesoPrincipal;
-import Model.PedidosModel.lotesProduccion;
+import View.Pedidos.AjustePlaneacion;
 import View.Pedidos.AsignarDiasProduccion;
 import View.Pedidos.AsignarMaquinaAPedido;
 import View.Pedidos.PlaneacionView;
@@ -16,24 +16,24 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
-
 
 public final class PlaneacionController implements Constructores{
 
-    /**
-     * Atributos
-     */
+    
     private final PlaneacionView vista;
     private final PlaneacionModel model;
     private ProcesoPrincipal procesoPrincipal; 
-    private final ArrayList<lotesProduccion> listaLotes;
+    private ArrayList<LotePlaneado> procedimientos;
     
     /**
      * Constructor
@@ -44,7 +44,6 @@ public final class PlaneacionController implements Constructores{
     public PlaneacionController(PlaneacionView vista, PlaneacionModel model) {
         
         //INICIALIZAR
-        this.listaLotes = new ArrayList<>();
         this.vista = vista;
         this.model = model;
         
@@ -73,15 +72,15 @@ public final class PlaneacionController implements Constructores{
         this.vista.getBtnAgregarOrdenesMaquinas().addActionListener(listenerBotones);
         this.vista.getJdcAnio().addPropertyChangeListener(listenerFecha);
         this.vista.getJdcMes().addPropertyChangeListener(listenerFecha);
+        this.vista.getTbLIstaPedidosMaquina().addMouseListener(modificarLotesPlaneados);
     }
     
-    //METHODOS
     private void llenarListaMaquinas(){
         ArrayList<String> maquinas = model.listaMaquinas();            
-        if(maquinas.size()>0){   
+        if(maquinas.size()>0){
             vista.getCbxListaMaquinas().removeAllItems();
             for(int i = 0;i<maquinas.size();i++)
-                vista.getCbxListaMaquinas().addItem(maquinas.get(i));        
+                vista.getCbxListaMaquinas().addItem(maquinas.get(i));
         }
     }
     
@@ -89,26 +88,59 @@ public final class PlaneacionController implements Constructores{
         if(nombreMaquina != null){
             
             Estructuras.limpiarTabla((DefaultTableModel) vista.getTbLIstaPedidosMaquina().getModel());
-            ArrayList<LotePlaneado> procedimientos = model.listaProcedimientoMaquina(nombreMaquina,vista.getJdcMes().getMonth()+1,vista.getJdcAnio().getValue());
+            procedimientos = model.listaProcedimientoMaquina(nombreMaquina,vista.getJdcMes().getMonth()+1,vista.getJdcAnio().getValue());
             DefaultTableModel modelMaquinas = (DefaultTableModel) vista.getTbLIstaPedidosMaquina().getModel();
 
             for(int i = 0;i<procedimientos.size();i++){
-
                 LotePlaneado procedimiento = procedimientos.get(i);
 
                 modelMaquinas.addRow(new Object[]{procedimiento.getOrdenTrabajo(),
                     procedimiento.getCodProducto(),procedimiento.getCantidadTotal(),procedimiento.getNoOrdenCompra(),
                     procedimiento.getNoOrdenProduccion(),procedimiento.getPiezasPorTurno(),procedimiento.getDescTipoMaterial() +" "+
                     procedimiento.getClaveForma()+ " " +procedimiento.getDescDimencion(),procedimiento.getWorker(),procedimiento.getTipoProceso()});
-
             }
-            
         }
-        
-        
     }
     
-    //EVENTOS
+    
+    private final MouseListener modificarLotesPlaneados = new MouseAdapter() {
+        
+        @Override
+        public void mousePressed(MouseEvent e) {
+            super.mousePressed(e);
+            
+            int fila = vista.getTbLIstaPedidosMaquina().rowAtPoint(e.getPoint());   
+            
+            LotePlaneado loteSeleccionado = buscarLote(
+                    Integer.parseInt(vista.getTbLIstaPedidosMaquina().getValueAt(fila, 0).toString()),
+                    Integer.parseInt(vista.getTbLIstaPedidosMaquina().getValueAt(fila, 4).toString()));
+            
+            if(loteSeleccionado != null)
+                mostrarReplaneacion(loteSeleccionado);
+            
+        }
+
+        private LotePlaneado buscarLote(int noPedido, int ordenProduccion) {
+            
+            for(int i = 0;i<procedimientos.size();i++){
+                LotePlaneado lp = procedimientos.get(i);
+                if(lp.getOrdenTrabajo() == noPedido && lp.getNoOrdenProduccion() == ordenProduccion)
+                    return lp;
+            }
+            
+            return null;
+        }
+
+        private void mostrarReplaneacion(LotePlaneado loteSeleccionado) {
+            
+            AjustePlaneacion vistaAjuste = new AjustePlaneacion(vista.getPrincpial(), true);
+            AjustesPlaneacionController controllerAjuste = new AjustesPlaneacionController(
+            vistaAjuste,new AjustesPlaneacionModel(),loteSeleccionado);
+            vistaAjuste.setVisible(true);     
+        }
+        
+    };
+    
     private final ItemListener maquinaSeleccionada = new ItemListener() {
         @Override
         public void itemStateChanged(ItemEvent e) {

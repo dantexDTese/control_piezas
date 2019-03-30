@@ -99,6 +99,7 @@ public class ProductoTerminadoView extends javax.swing.JInternalFrame {
         btnRegistrarEntrada = new javax.swing.JButton();
 
         setBorder(null);
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 

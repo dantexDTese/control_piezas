@@ -132,7 +132,8 @@ public class AsignacionMaquinaAPedidoModel {
             try {
                 String query = "SELECT piezas_por_turno,piezas_por_hora,desc_maquina,id_producto_maquina "
                         + "FROM ver_productos_maquinas WHERE clave_producto = '"+codProducto+"' "
-                        + "AND desc_tipo_proceso = 'Maquinado';";
+                        + "AND desc_tipo_proceso = 'Maquinado' AND desc_maquina IS NOT NULL;";
+                
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
                 if(rs.first())

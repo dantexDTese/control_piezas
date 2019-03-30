@@ -18,7 +18,6 @@ public class ParcialidadesPedidosController {
     ParcialidadesPedidosModel parcialidadesPedidosModel;    
     
     ParcialidadesPedidosController(ParcialidadesPedidos vistaParcialidades, ParcialidadesPedidosModel parcialidadesPedidosModel) {
-     
         this.vistaParcialidades = vistaParcialidades;
         this.parcialidadesPedidosModel = parcialidadesPedidosModel;
         this.vistaParcialidades.getLbClaveOrdenCompra().setText(this.vistaParcialidades.getNoOrden());
@@ -40,7 +39,6 @@ public class ParcialidadesPedidosController {
           suma+= Integer.parseInt(modelTabla.getValueAt(i,1).toString());
         
         vistaParcialidades.getLbCantidadRestante().setText(""+(vistaParcialidades.getCantidad()-suma));
-        
         
     }
     

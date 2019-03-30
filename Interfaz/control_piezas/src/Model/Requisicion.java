@@ -54,11 +54,26 @@ public class Requisicion {
     }
     
     
+    public Requisicion(){
+        
+    }
+
+    
+    
+    
+    
+     
+
+    public void setNoRequisicion(int noRequisicion) {
+        this.noRequisicion = noRequisicion;
+    }
+
     /**
      * PROPIEDADES
      */
-    
-    
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 
     public String getDescProveedor() {
         return descProveedor;
@@ -96,6 +111,19 @@ public class Requisicion {
         return total;
     }
 
+    public int getNoRequisicion() {
+        return noRequisicion;
+    }
+
+    public String getFechaCerrada() {
+        return fechaCerrada;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    
     
     
 }

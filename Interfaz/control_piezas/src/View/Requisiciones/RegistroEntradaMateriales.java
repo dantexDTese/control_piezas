@@ -56,6 +56,7 @@ public class RegistroEntradaMateriales extends javax.swing.JInternalFrame {
         jtbEntradaMateriales = new javax.swing.JTable();
 
         setBorder(null);
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 

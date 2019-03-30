@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controller.ProduccionController;
 
+import Model.Constructores;
 import Model.Estructuras;
+import Model.ImgTabla;
 import Model.ProduccionModel.BitacoraOrdenesTrabajoModel;
 import Model.ProduccionModel.RegistroOrdenTrabajo;
+import View.Pedidos.ColorEstado;
 import View.Produccion.BitacoraOrdenesTrabajoView;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author cesar
  */
-public class BitacoraOrdenesTrabajoController {
+public final class BitacoraOrdenesTrabajoController implements Constructores{
 
     private final BitacoraOrdenesTrabajoView bitacoraTrabajosView;
     private final BitacoraOrdenesTrabajoModel bitacoraTrabajosModel;
@@ -33,10 +33,21 @@ public class BitacoraOrdenesTrabajoController {
     public BitacoraOrdenesTrabajoController(BitacoraOrdenesTrabajoView bitacoraTrabajosView, BitacoraOrdenesTrabajoModel bitacoratrabajosModel) {
         this.bitacoraTrabajosView = bitacoraTrabajosView;
         this.bitacoraTrabajosModel = bitacoratrabajosModel;
+        llenarComponentes();
+        asignarEventos();
+    }
+    
+    @Override
+    public void llenarComponentes() {
+        bitacoraTrabajosView.getTbOrdenesTrabajo().setDefaultRenderer(Object.class,new ImgTabla());
         llenarTablaOrdenesTrabajo(this.bitacoraTrabajosView.getYcrAnio().getValue());
+        this.bitacoraTrabajosView.getLbAnio().setText(bitacoraTrabajosView.getYcrAnio().getValue()+"");
+    }
+
+    @Override
+    public void asignarEventos() {
         this.bitacoraTrabajosView.getTbOrdenesTrabajo().addMouseListener(clickTabla);
         this.bitacoraTrabajosView.getBtnGuardarObservacion().addActionListener(botonGuardar);
-        this.bitacoraTrabajosView.getLbAnio().setText(bitacoraTrabajosView.getYcrAnio().getValue()+"");
         this.bitacoraTrabajosView.getYcrAnio().addPropertyChangeListener(listenerBuscarAnio);
     }
     
@@ -89,6 +100,9 @@ public class BitacoraOrdenesTrabajoController {
             if(ordenesTrabajo.size()>0)
                 for(int i = 0;i<ordenesTrabajo.size();i++){
                     RegistroOrdenTrabajo ordenTrabajo = ordenesTrabajo.get(i);
+                    
+                    ColorEstado estado = Estructuras.obtenerColorEstado(ordenTrabajo.getDescEstados());
+                    
                     modelOrdenesTrabajo.addRow(new Object[]{
                         ordenTrabajo.getNoOrdenProduccion(),
                         ordenTrabajo.getFechaRegistro(),
@@ -98,8 +112,10 @@ public class BitacoraOrdenesTrabajoController {
                         ordenTrabajo.getFechaFin(),
                         ordenTrabajo.getNoPedido(),
                         ordenTrabajo.getFechaEntrega(),
-                        ordenTrabajo.getDescEstados()
+                        estado
                     });
                 }
     }   
+
+    
 }

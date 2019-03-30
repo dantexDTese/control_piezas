@@ -1,7 +1,6 @@
 
 package Model.PedidosModel;
 
-//ULTIMA MODIFICACION 1001/19
 
 import Model.Conexion;
 import Model.Estructuras;
@@ -19,18 +18,28 @@ public class nuevoPedidoClienteModel {
     
     
     public ArrayList listaClientes(){
+        
         return Estructuras.obtenerlistaDatos("SELECT nombre_cliente FROM clientes");
+        
+    }
+    
+    
+    public ArrayList<String> listaContactosCliente(String nombreCliente){
+        return Estructuras.obtenerlistaDatos(" SELECT desc_contacto FROM clientes AS cl INNER JOIN contactos "
+                + " AS cn ON cl.id_cliente = cn.id_cliente WHERE cl.nombre_cliente =  '"+nombreCliente+"'; ");
     }
     
     
     
     public ArrayList<String> listaProductos(){
-        return Estructuras.obtenerlistaDatos("SELECT clave_producto FROM productos");
+        return Estructuras.obtenerlistaDatos(" SELECT clave_producto FROM productos AS pr INNER JOIN productos_maquinas AS pm " +
+                                           " ON pm.id_producto = pr.id_producto WHERE pm.id_maquina IS NOT NULL " +
+                                           " AND pm.id_tipo_proceso = "
+                                         + " (SELECT id_tipo_proceso FROM tipos_proceso WHERE desc_tipo_proceso = 'Maquinado') " +
+                                           " GROUP BY clave_producto; ");
     }
     
-    public int agregarPedido(String descOrdenCompra, String descCliente,
-                                String descContacto,String fechaEntrega){
-        
+    public int agregarPedido(String descOrdenCompra, String descCliente,String descContacto,String fechaEntrega){   
         Connection c = Conexion.getInstance().getConexion();
         String query = "{Call agregar_pedido(?,?,?,?,?,?)}";
         int res=0;
@@ -47,6 +56,7 @@ public class nuevoPedidoClienteModel {
                 JOptionPane.showMessageDialog(null,cs.getString(5));
                 res = cs.getInt(6);
                 c.close();
+                        
             } catch (HeadlessException | SQLException e) {
                 System.err.println("error clase:NuevoPedidoClienteModel method:agregarPedido :"+e.getMessage());
             }

@@ -363,20 +363,20 @@ public class agregarNuevasRequisiciones extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("MATERIAL");
-        jPanel10.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 70, 20));
+        jPanel10.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 60, 30));
 
         lbMaterial.setFont(new java.awt.Font("Impact", 0, 13)); // NOI18N
         lbMaterial.setForeground(new java.awt.Color(255, 255, 255));
         lbMaterial.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbMaterial.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel10.add(lbMaterial, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 100, 17));
+        jPanel10.add(lbMaterial, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 170, 30));
 
         jLabel9.setFont(new java.awt.Font("Impact", 0, 13)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("CANTIDAD");
-        jPanel10.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 70, -1));
-        jPanel10.add(sprCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 100, -1));
+        jPanel10.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 70, -1));
+        jPanel10.add(sprCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 20, 100, -1));
 
         jLabel10.setFont(new java.awt.Font("Impact", 0, 13)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
@@ -411,26 +411,26 @@ public class agregarNuevasRequisiciones extends javax.swing.JDialog {
         jLabel8.setText("CUENTA A CARGO");
         jPanel10.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 310, 104, -1));
 
-        cbxCuentaCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GMC", "GSM" }));
+        cbxCuentaCargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GMC", "MMT" }));
         jPanel10.add(cbxCuentaCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 310, 100, -1));
 
         btnAgregarMaterialesRequeridos.setText("AGREGAR MATERIALES REQUERIDOS");
         jPanel10.add(btnAgregarMaterialesRequeridos, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 370, -1));
 
         btnAgregarListaOP.setText("AGREGAR LISTA OP");
-        jPanel10.add(btnAgregarListaOP, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 160, -1));
+        jPanel10.add(btnAgregarListaOP, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 50, 140, -1));
 
         jLabel5.setFont(new java.awt.Font("Impact", 0, 13)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("OP");
-        jPanel10.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 60, 20));
+        jPanel10.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 40, 30));
 
         lbOrdenProduccion.setFont(new java.awt.Font("Impact", 0, 13)); // NOI18N
         lbOrdenProduccion.setForeground(new java.awt.Color(255, 255, 255));
         lbOrdenProduccion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbOrdenProduccion.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanel10.add(lbOrdenProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, 100, 20));
+        jPanel10.add(lbOrdenProduccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 130, 30));
 
         jLabel7.setFont(new java.awt.Font("Impact", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));

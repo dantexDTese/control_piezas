@@ -2,13 +2,18 @@ package Controller.RequisicionesController;
 
 import Model.Constructores;
 import Model.Estructuras;
+import Model.ImgTabla;
+import Model.RequisicionesModel.AsignacionMaterialModel;
 import Model.RequisicionesModel.EntradaMaterial;
 import Model.RequisicionesModel.PlanInspeccionMaterialesModel;
 import Model.RequisicionesModel.RegistroEntradaMaterialesModel;
 import Model.RequisicionesModel.RegistrarNuevaEntradaMaterialModel;
+import View.Pedidos.ColorEstado;
+import View.Requisiciones.AsignacionMaterialView;
 import View.Requisiciones.PlanInspeccionMateriales;
 import View.Requisiciones.RegistrarNuevaEntradaMaterial;
 import View.Requisiciones.RegistroEntradaMateriales;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -34,8 +39,7 @@ public final class RegistroEntradaMaterialesController implements Constructores{
         
         this.entradaMaterialesView = entradaMaterialesView;
         this.entradaMaterialesModel = entradaMaterialesModel;
-
-        
+    
         llenarComponentes();
         asignarEventos();
         
@@ -44,22 +48,18 @@ public final class RegistroEntradaMaterialesController implements Constructores{
     @Override
     public void llenarComponentes() {
         llenarTablaRegistroEntradaMateriales();
+        this.entradaMaterialesView.getJtbEntradaMateriales().setDefaultRenderer(Object.class,new ImgTabla());
     }
 
     @Override
     public void asignarEventos() {
         entradaMaterialesView.getBtnRegistrarNuevaEntrada().addActionListener(listenerBotones);
         entradaMaterialesView.getJtbEntradaMateriales().addMouseListener(listenerTablaEntradas);
-        
-        
         PropertyChangeListener listenerFecha = (PropertyChangeEvent evt) -> {llenarTablaRegistroEntradaMateriales();};
         entradaMaterialesView.getJdcAnio().addPropertyChangeListener(listenerFecha);
         entradaMaterialesView.getJdcMes().addPropertyChangeListener(listenerFecha);
         
     }
-    
-    
-    
     
     private void llenarTablaRegistroEntradaMateriales(){
         listaEntradaMateriales = entradaMaterialesModel.listaRegistroEntradaMateriales(entradaMaterialesView.getJdcAnio().getValue(),entradaMaterialesView.getJdcMes().getMonth()+1);
@@ -67,6 +67,16 @@ public final class RegistroEntradaMaterialesController implements Constructores{
         DefaultTableModel modelTabla = (DefaultTableModel) entradaMaterialesView.getJtbEntradaMateriales().getModel();
         for(int i = 0;i<listaEntradaMateriales.size();i++){
             EntradaMaterial entradaMaterial = listaEntradaMateriales.get(i);
+            
+            ColorEstado estado;
+            if("ABIERTO".equals(entradaMaterial.getDescEstado()))
+                estado = new ColorEstado(Color.ORANGE);
+
+            else if("APROBADA".equals(entradaMaterial.getDescEstado()))
+                estado = new ColorEstado(Color.GREEN);
+            
+            else estado = new ColorEstado(Color.RED);
+            
             modelTabla.addRow(new Object[]{
                 entradaMaterial.getNoEntradaMaterial(),
                 entradaMaterial.getFechaRegistro(),
@@ -77,16 +87,13 @@ public final class RegistroEntradaMaterialesController implements Constructores{
                 entradaMaterial.getOrdenCompra(),
                 entradaMaterial.getInspector(),
                 entradaMaterial.getCertificado(),
-                entradaMaterial.getDescEstado()
+                estado
             });
-        }
-            
+        }        
     }
     
-    
-    
-    
     private final ActionListener listenerBotones = new ActionListener() {
+        
         @Override
         public void actionPerformed(ActionEvent e) {
             agregarNuevaEntradaMaterial();
@@ -111,6 +118,7 @@ public final class RegistroEntradaMaterialesController implements Constructores{
     };
     
     private final MouseListener listenerTablaEntradas = new MouseAdapter() {
+        
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);
@@ -119,27 +127,39 @@ public final class RegistroEntradaMaterialesController implements Constructores{
                     int fila = entradaMaterialesView.getJtbEntradaMateriales().rowAtPoint(e.getPoint());
                     int planInspeccion = 0,asignarMaterial = 1;
                     int seleccion = JOptionPane.showOptionDialog(null,"SELECCIONE UNA OPCION", "SELECTOR DE OPCIONES",JOptionPane.YES_NO_CANCEL_OPTION,
-                            JOptionPane.QUESTION_MESSAGE,null, new Object[]{"PLAN DE INSPECCION"}, "PLAN DE INSPECCION");
+                            JOptionPane.QUESTION_MESSAGE,null, new Object[]{"PLAN DE INSPECCION"/*,"ASIGNACION DE MATERIAL"*/}, "PLAN DE INSPECCION");
                       
                     if(seleccion == planInspeccion)
                         mostrarPlanInspeccion(listaEntradaMateriales.get(fila));
-                    
+                    else if(seleccion == asignarMaterial)
+                        mostrarAsignarMaterial(listaEntradaMateriales.get(fila));
                 }
             }
         }
         
-        private void mostrarPlanInspeccion(EntradaMaterial materialSeleccionado){
-            
-            
+        private void mostrarPlanInspeccion(EntradaMaterial materialSeleccionado){         
+    
             PlanInspeccionMateriales viewInspeccion = new PlanInspeccionMateriales(entradaMaterialesView.getPrincipal(), true);
             PlanInspeccionMaterialesController controllerInspeccion = new PlanInspeccionMaterialesController(viewInspeccion,new PlanInspeccionMaterialesModel(),
             materialSeleccionado);
             viewInspeccion.setVisible(true);
             
+            viewInspeccion.addWindowListener(new WindowAdapter() {
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    super.windowClosed(e);
+                    llenarTablaRegistroEntradaMateriales();
+                }
+                
+            });   
         }
-        
-        private void asignarMaterial(){
-            
+
+        private void mostrarAsignarMaterial(EntradaMaterial loteSeleccionado){
+            AsignacionMaterialView asignacionView = new AsignacionMaterialView(entradaMaterialesView.getPrincipal(), true);
+            AsignacionMaterialController asignacionController = new AsignacionMaterialController(asignacionView,
+                    new AsignacionMaterialModel(),loteSeleccionado);
+            asignacionView.setVisible(true);
         }
         
     };

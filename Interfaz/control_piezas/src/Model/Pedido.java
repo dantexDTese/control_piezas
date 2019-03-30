@@ -13,20 +13,18 @@ public class Pedido {
     private String fechaConfirmacionEntrega;
 
     public Pedido() {
+        
     }
     
     public Pedido(String noOrdenCompra){
         this.noOrdenCompra = noOrdenCompra;
     }
     
-    
     public Pedido(int noPedido, String noOrdenCompra,String descCliente) {
         this.noPedido = noPedido;
         this.noOrdenCompra = noOrdenCompra;
         this.descCliente = descCliente;
     }
-    
-    
 
     public int getNoPedido() {
         return noPedido;
@@ -44,6 +42,7 @@ public class Pedido {
         this.descEstadoPedido = descEstadoPedido;
     }
 
+    
    
 
     public String getDescContacto() {

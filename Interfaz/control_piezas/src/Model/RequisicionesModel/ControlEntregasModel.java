@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 
 public class ControlEntregasModel {
 
-
     public ArrayList<MaterialesRequisicion> obtenerRequisiciones(int anio,int mes){
         Connection c = Conexion.getInstance().getConexion();
         String query =  "SELECT ms.id_requisicion,mt.desc_tipo_material,mt.desc_dimencion,mt.clave_forma,"
@@ -80,7 +79,7 @@ public class ControlEntregasModel {
         return lista;
     }
     
-    public String obtenerObservaciones(int noRequisicion) {
+    public String obtenerObservaciones(int noRequisicion){
         Connection c = Conexion.getInstance().getConexion();
         String comentarios = "";
         if(c!=null)
@@ -92,7 +91,8 @@ public class ControlEntregasModel {
                     comentarios = rs.getString(1);
                 c.close();
             } catch (SQLException e) {
-                System.err.println("error: paquete:RequisicionesModel, class ControlEntregasModel, metodo:obtenerObservaciones "+e.getMessage());
+                System.err.println("error: paquete:RequisicionesModel, class ControlEntregasModel,"
+                        + " metodo:obtenerObservaciones "+e.getMessage() );
             }
         return comentarios;
     }
@@ -110,12 +110,15 @@ public class ControlEntregasModel {
                 JOptionPane.showMessageDialog(null, cs.getString(3));
                 cs.close();
             } catch (SQLException e) {
-                System.err.println("error: paquete:RequisicionesModel, class ControlEntregasModel, metodo:agregarComentarios "+e.getMessage());
+                System.err.println("error: paquete:RequisicionesModel,"
+                        + " class ControlEntregasModel, metodo:agregarComentarios "+e.getMessage());
             }
     }
 
     public void cerrarParteRequisicion(int noRequisicion, String descMaterial) {
+        
         Connection c = Conexion.getInstance().getConexion();
+        
         if(c!=null)
             try {
                 String query = "{CALL cerrar_parte_requisicion(?,?,?)}";
@@ -130,5 +133,6 @@ public class ControlEntregasModel {
                 System.err.println("error: paquete:RequisicionesModel,"
                         + " class ControlEntregasModel, metodo:cerrarParteRequisicion "+e.getMessage());
             }
+        
     }
 }

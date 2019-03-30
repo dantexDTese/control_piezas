@@ -4,13 +4,14 @@ USE control_piezas;
 CREATE VIEW todos_pedidos
 AS
 SELECT 
-pd.id_pedido,ot.id_orden_trabajo,es.desc_estado,pd.desc_contacto,pd.fecha_recepcion,
+pd.id_pedido,ot.id_orden_trabajo,es.desc_estado,cn.desc_contacto,pd.fecha_recepcion,
 pd.no_orden_compra,pd.fecha_entrega,pd.fecha_confirmacion_entrega,cl.nombre_cliente,
 ot.fecha_inicio,ot.fecha_terminacion 
 FROM pedidos AS pd
 INNER JOIN ordenes_trabajo AS ot ON pd.id_pedido = ot.id_pedido
 INNER JOIN estados AS es ON pd.id_estado = es.id_estado
-INNER JOIN clientes AS cl ON pd.id_cliente = cl.id_cliente
+INNER JOIN contactos AS cn ON cn.id_contacto = pd.id_contacto
+INNER JOIN clientes AS cl ON cl.id_cliente = cn.id_cliente
 GROUP BY pd.id_pedido;
 
 #TODAS LAS ORDENES DE PRODUCCION MOSTRANDO LA CLAVE DEL PRODUCTO Y LA DESCRIPCION DE SU ESTADO
@@ -42,6 +43,15 @@ INNER JOIN tipos_proceso AS tp ON lp.id_tipo_proceso = tp.id_tipo_proceso
 INNER JOIN maquinas AS mq ON lp.id_maquina = mq.id_maquina
 INNER JOIN estados AS es ON lp.id_estado = es.id_estado;
 
+SELECT lp.id_orden_produccion,pd.id_pedido,lp.desc_tipo_proceso,cantidad_planeada,fecha_planeada,desc_estado FROM todos_lotes_planeados AS lp
+INNER JOIN (SELECT id_orden_trabajo,id_orden_produccion FROM todas_ordenes_produccion) AS op ON op.id_orden_produccion = lp.id_orden_produccion
+INNER JOIN (SELECT id_pedido,id_orden_trabajo FROM todos_pedidos) AS pd ON pd.id_pedido = op.id_orden_trabajo WHERE desc_estado = 'ABIERTO';
+
+SELECT 
+lp.desc_tipo_proceso,cantidad_planeada,fecha_planeada FROM todos_lotes_planeados AS lp 
+INNER JOIN (SELECT id_orden_trabajo,id_orden_produccion FROM todas_ordenes_produccion) AS op 
+ON op.id_orden_produccion = lp.id_orden_produccion INNER JOIN (SELECT id_pedido,id_orden_trabajo FROM todos_pedidos) 
+ AS pd ON pd.id_pedido = op.id_orden_trabajo WHERE desc_estado = 'ABIERTO' AND lp.id_orden_produccion = 1 AND pd.id_pedido = 1;
 
 #######################################################################################################################################
 #######################################################################################################################################
@@ -88,7 +98,7 @@ JOIN tipos_operaciones_almacenes AS toa ON res.id_tipo_operacion_almacen = toa.i
 CREATE VIEW ver_entradas_materiales
 AS
 SELECT em.id_entrada_material,amp.id_almacen_materia_prima,amp.cantidad_total,em.fecha_registro,CONCAT(mt.desc_tipo_material,' ',mt.desc_dimencion,' ',mt.clave_forma) AS desc_material,
-pr.desc_proveedor,em.cantidad,em.codigo,em.certificado,em.orden_compra,em.inspector,es.desc_estado,em.comentarios,em.factura,em.no_parte,em.desc_lote
+pr.desc_proveedor,em.cantidad,em.codigo,em.certificado,em.orden_compra,em.inspector,es.desc_estado,em.comentarios,em.factura,em.desc_lote
 FROM entradas_materiales AS em 
 LEFT JOIN  almacen_materias_primas AS amp ON amp.id_entrada_material = em.id_entrada_material
 INNER JOIN ver_materiales AS mt ON em.id_material = mt.id_material

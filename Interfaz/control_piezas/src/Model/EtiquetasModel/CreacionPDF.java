@@ -56,7 +56,8 @@ public class CreacionPDF {
     private static final String DIRECCION_ETIQUETA_PDF  = "src\\Model\\EtiquetasModel\\etiqueta.pdf";
     private static final String DIRECCION_ETIQUETA_PDF_IMG  = "src\\Model\\EtiquetasModel\\etiqueta-pdf.png";
     private static final String DIRECCION_DOCUMENTO_IMPRIMIR  = "src\\Model\\EtiquetasModel\\impresion.pdf";
-    private static final String DIRECCION_ETIQUETAS_IMG = "src\\Model\\EtiquetasModel\\ETIQUETA.png";
+    private static final String DIRECCION_ETIQUETAS_IMG_GMC = "src\\Model\\EtiquetasModel\\ETIQUETA_GMC.png";
+    private static final String DIRECCION_ETIQUETAS_IMG_MMT = "src\\Model\\EtiquetasModel\\ETIQUETA_MMT.png";
     private static final String DIRECCION_LOGO_MMT = "src\\Model\\EtiquetasModel\\mmt.jpeg";
     private static final String DIRECCION_LOGO_MGC = "src\\Model\\EtiquetasModel\\gmc2.jpeg";
     private static final String DIRECCION_COD_BARRAS = "src\\Model\\EtiquetasModel\\codBarras.png";
@@ -101,22 +102,26 @@ public class CreacionPDF {
         
           try {
               
-            Image plantilla =  Image.getInstance(DIRECCION_ETIQUETAS_IMG);
-            plantilla.setAbsolutePosition(0f, 0f);
-            plantilla.scalePercent(ESCALA_ETIQUETA_15X10);
-            plantilla.setAlignment(Image.ALIGN_CENTER);
-            
+            Image plantilla;
             Image codBarras =  Image.getInstance(DIRECCION_COD_BARRAS);
             codBarras.setAbsolutePosition(132f, 10f);
             codBarras.scalePercent(60);
             
             Image logo;
             
-            if(tLogo == LOGO_MMT)
+            if(tLogo == LOGO_MMT){
                 logo =  Image.getInstance(DIRECCION_LOGO_MMT);               
-            else if(tLogo == LOGO_GMC)
+               plantilla = Image.getInstance(DIRECCION_ETIQUETAS_IMG_MMT);
+            }
+            else if(tLogo == LOGO_GMC){
                 logo =  Image.getInstance(DIRECCION_LOGO_MGC);
+               plantilla = Image.getInstance(DIRECCION_ETIQUETAS_IMG_GMC);
+            }
             else return;
+            
+            plantilla.setAbsolutePosition(0f, 0f);
+            plantilla.scalePercent(ESCALA_ETIQUETA_15X10);
+            plantilla.setAlignment(Image.ALIGN_CENTER);
             
             logo.scalePercent(40);
             logo.setAbsolutePosition(10f, 120f);

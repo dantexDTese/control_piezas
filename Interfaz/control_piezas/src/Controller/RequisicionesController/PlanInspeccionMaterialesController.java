@@ -10,9 +10,6 @@ import Model.RequisicionesModel.PlanInspeccionMaterialesModel;
 import View.Requisiciones.PlanInspeccionMateriales;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -51,7 +48,6 @@ public final class PlanInspeccionMaterialesController implements Constructores{
         vista.getJtbInspeccion().setRowHeight(50);
         vista.getTxtComentarios().setText(materialSeleccionado.getComentarios());
         vista.getTxtFactura().setText(materialSeleccionado.getFactura());
-        vista.getTxtNoParte().setText(materialSeleccionado.getNoParte());
         vista.getLbLote().setText(materialSeleccionado.getDescLote());
         
         Estructuras.modificarAnchoTabla(vista.getJtbInspeccion(), new Integer[]{250,50,50,50,50,50,50});
@@ -59,7 +55,6 @@ public final class PlanInspeccionMaterialesController implements Constructores{
         if(materialSeleccionado.getDescEstado().equals("APROBADA") || materialSeleccionado.getDescEstado().equals("RECHAZADA")){
             vista.getBtnGuardar().setEnabled(false);
             vista.getTxtFactura().setEditable(false);
-            vista.getTxtNoParte().setEditable(false);
             vista.getLbLote().setEditable(false);
             vista.getTxtComentarios().setEditable(false);
             obtenerResultados();
@@ -88,76 +83,80 @@ public final class PlanInspeccionMaterialesController implements Constructores{
     @Override
     public void asignarEventos() {
         vista.getBtnGuardar().addActionListener(listenerBotones);
-        vista.getJtbInspeccion().addKeyListener(listenerTabla);
     }
-    
     
     private final ActionListener listenerBotones = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(!"".equals(vista.getTxtFactura().getText()) && !"".equals(vista.getTxtNoParte().getText()) && 
+            if(!"".equals(vista.getTxtFactura().getText()) && 
                     (vista.getRbtAprobar().isSelected() || vista.getRbtRechazar().isSelected())){
                 
-                JOptionPane.showConfirmDialog(null, "SEGURO DE GUARDAR LOS CAMBIOS","GUARDAR CAMBIOS",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-                vista.getTxtComentarios().transferFocus();
-                completarCampos();
-                
-                model.actualizarInformacion(materialSeleccionado);
-                model.registrarInspeccionEntrada(listaInspeccionEntradas);
-                model.registrarInspeccionDimenciones(listaInspeccionDimenciones);
-                
-                
-            }else
-                JOptionPane.showMessageDialog(null,"POR FAVOR COMPLETA LOS CAMPOS");
+                if(JOptionPane.showConfirmDialog(null, "SEGURO DE GUARDAR LOS CAMBIOS"
+                        ,"GUARDAR CAMBIOS",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    if(completarCampos()){
+                        model.actualizarInformacion(materialSeleccionado);
+                        model.registrarInspeccionEntrada(listaInspeccionEntradas);
+                        model.registrarInspeccionDimenciones(listaInspeccionDimenciones);
+                    }   
+                    vista.dispose();
+                }
+            }else JOptionPane.showMessageDialog(null,"POR FAVOR COMPLETA LOS CAMPOS");
         }
         
         
-        private void completarCampos(){
-            materialSeleccionado.setFactura(vista.getTxtFactura().getText());
-            materialSeleccionado.setNoParte(vista.getTxtNoParte().getText());
-            materialSeleccionado.setComentarios(vista.getTxtComentarios().getText());
-            materialSeleccionado.setDescEstado( (vista.getRbtAprobar().isSelected())? "APROBADA":"RECHAZADA" );
-            materialSeleccionado.setDescLote(vista.getLbLote().getText());
-            llenarListaInspeccionEntrada();
-            llenarListaInspeccionDimenciones();
+        private boolean completarCampos(){
+            if(llenarListaInspeccionEntrada() && llenarListaInspeccionDimenciones()){
+                materialSeleccionado.setFactura(vista.getTxtFactura().getText());
+                materialSeleccionado.setComentarios(vista.getTxtComentarios().getText());
+                materialSeleccionado.setDescEstado( (vista.getRbtAprobar().isSelected())? "APROBADA":"RECHAZADA" );
+                materialSeleccionado.setDescLote(vista.getLbLote().getText());
+                return true;
+            }
+            return false;   
         }
 
-        private void llenarListaInspeccionEntrada() {
+        private boolean llenarListaInspeccionEntrada() {
             DefaultTableModel modeloTabla = (DefaultTableModel) vista.getJtbInspeccion().getModel();
             for(int i=2;i<modeloTabla.getRowCount();i++)
                 for(int j = 1;j<modeloTabla.getColumnCount();j++){
-                    InspeccionEntrada entrada = new InspeccionEntrada();
-                    entrada.setNoEntradaMaterial(materialSeleccionado.getNoEntradaMaterial());
-                    entrada.setDescResultadoInspeccion(modeloTabla.getValueAt(i, j).toString());
-                    entrada.setDescTipoInspeccion(model.LISTA_TIPOS_INSPECCION[i-2]);
-                    listaInspeccionEntradas[i-2][j-1] = entrada;
+                    String resultadoInspeccion = modeloTabla.getValueAt(i, j).toString().toUpperCase();
+                    if(resultadoInspeccion.equals("C") ||resultadoInspeccion.equals("R") ){
+                        InspeccionEntrada entrada = new InspeccionEntrada();
+                        entrada.setNoEntradaMaterial(materialSeleccionado.getNoEntradaMaterial());
+                        entrada.setDescResultadoInspeccion(resultadoInspeccion);
+                        entrada.setDescTipoInspeccion(model.LISTA_TIPOS_INSPECCION[i-2]);
+                        listaInspeccionEntradas[i-2][j-1] = entrada;
+                    }else{
+                        JOptionPane.showMessageDialog(null, "LOS VALORES DE LA INSPECCION NO SON VALIDOS"
+                                ,"VALIDACION",JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }
                 }
+            
+            return true;
         }
 
-        private void llenarListaInspeccionDimenciones() {
+        private boolean llenarListaInspeccionDimenciones() {
             DefaultTableModel modeloTabla = (DefaultTableModel) vista.getJtbInspeccion().getModel();
             for(int i=0;i<2;i++)
                 for(int j = 1;j<modeloTabla.getColumnCount();j++){
-                    InspeccionDimencion entrada = new InspeccionDimencion();
-                    entrada.setNoEntradaMaterial(materialSeleccionado.getNoEntradaMaterial());
-                    entrada.setResultadoInspeccion(Float.parseFloat(vista.getJtbInspeccion().getValueAt(i, j).toString()));
-                    entrada.setDescTipoInspeccion(model.LISTA_TIPOS_INSPECCION_DIMENCIONES[i]);
-                    listaInspeccionDimenciones[i][j-1] = entrada;
+                    try {
+                        float resultadoInspeccion = Float.parseFloat(vista.getJtbInspeccion().getValueAt(i, j).toString());
+                        InspeccionDimencion entrada = new InspeccionDimencion();
+                        entrada.setNoEntradaMaterial(materialSeleccionado.getNoEntradaMaterial());
+                        entrada.setResultadoInspeccion(resultadoInspeccion);
+                        entrada.setDescTipoInspeccion(model.LISTA_TIPOS_INSPECCION_DIMENCIONES[i]);
+                        listaInspeccionDimenciones[i][j-1] = entrada;
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null, "LOS VALORES DE LA INSPECCION NO SON VALIDOS"
+                                ,"VALIDACION",JOptionPane.ERROR_MESSAGE);
+                        return false;
+                    }          
                 }
+            
+            return true;
         }
         
-    };
-    
-    private final KeyListener listenerTabla = new KeyAdapter() {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            super.keyPressed(e); 
-                
-        }
-        
-        
-        
-    
     };
 
     private void obtenerResultados() {
@@ -214,5 +213,8 @@ public final class PlanInspeccionMaterialesController implements Constructores{
             
         
     }
+    
+    
+    
     
 }

@@ -28,42 +28,41 @@ public final class CompletarRegistroProduccionController implements Constructore
     private ArrayList<TiempoMuertoLote> listaTiemposMuertos;
     
     CompletarRegistroProduccionController(CompletarRegistroProduccionView vista,
-            CompletarRegistroProduccionModel model,LoteProduccion loteProduccion) {
-        
+            CompletarRegistroProduccionModel model,LoteProduccion loteProduccion){
         this.vista = vista;
         this.model = model;
-        this.loteProduccion = loteProduccion;      
+        this.loteProduccion = loteProduccion;
         llenarComponentes();
         asignarEventos();
-        
     }
 
     @Override
     public void llenarComponentes() {
-        
-        llenarRegistros();
-        
-        listaDefectosLotes = model.listaDefectosLotes(loteProduccion.getDescLote());
-        llenarListaDefectos();
-        
-        listaTiemposMuertos = model.listaTiemposMuertosLote(loteProduccion.getDescLote());
-        llenarTablaTiemposMuertos();
+        if(loteProduccion != null){
+            llenarRegistros();
+
+            listaDefectosLotes = model.listaDefectosLotes(loteProduccion.getDescLote());
+            llenarListaDefectos();
+
+            listaTiemposMuertos = model.listaTiemposMuertosLote(loteProduccion.getDescLote());
+            llenarTablaTiemposMuertos();
+        }
     }
     
     private void llenarRegistros(){
-        vista.getSprCantidadAdministrador().setValue(loteProduccion.getCantidadAdmin());
-        vista.getSprCantidadOperador().setValue(loteProduccion.getCantidadOperados());
-        vista.getSprCantidadRechazadaLiberada().setValue(loteProduccion.getCantidadRechazoLiberado());
-        vista.getSprMerma().setText(loteProduccion.getMerma()+"");
-        vista.getSprScrapAjustado().setValue(loteProduccion.getScrapAjustable());
-        vista.getSprScrapOperador().setValue(loteProduccion.getScrapOperador());
-        vista.getSprScrapAdministrador().setValue(loteProduccion.getScrapAdmin());
-        vista.getSprRechazo().setValue(loteProduccion.getRechazo());
-        vista.getSprBarrasUtilizadas().setText(loteProduccion.getBarrasUtilizadas()+"");  
-        vista.setCbxDefectos(model.llenarCombo(vista.getCbxDefectos(), model.LISTA_DEFECTOS_PRODUCCION));
-        vista.setCbxTiempoMuerto(model.llenarCombo(vista.getCbxTiempoMuerto(), model.LISTA_TIEMPOS_MUERTOS));
-        vista.getLbCantidadCalculada().setText(loteProduccion.getCantidadProducidaR()+"");
-        vista.getLbObjetivoPlaneacion().setText(loteProduccion.getCantidadPlaneada()+"");
+            vista.getSprCantidadAdministrador().setValue(loteProduccion.getCantidadAdmin());
+            vista.getSprCantidadOperador().setValue(loteProduccion.getCantidadOperados());
+            vista.getSprCantidadRechazadaLiberada().setValue(loteProduccion.getCantidadRechazoLiberado());
+            vista.getSprMerma().setText(loteProduccion.getMerma()+"");
+            vista.getSprScrapAjustado().setValue(loteProduccion.getScrapAjustable());
+            vista.getSprScrapOperador().setValue(loteProduccion.getScrapOperador());
+            vista.getSprScrapAdministrador().setValue(loteProduccion.getScrapAdmin());
+            vista.getSprRechazo().setValue(loteProduccion.getRechazo());
+            vista.getSprBarrasUtilizadas().setText(loteProduccion.getBarrasUtilizadas()+"");  
+            vista.setCbxDefectos(model.llenarCombo(vista.getCbxDefectos(), model.LISTA_DEFECTOS_PRODUCCION));
+            vista.setCbxTiempoMuerto(model.llenarCombo(vista.getCbxTiempoMuerto(), model.LISTA_TIEMPOS_MUERTOS));
+            vista.getLbCantidadCalculada().setText(loteProduccion.getCantidadProducidaR()+"");
+            vista.getLbObjetivoPlaneacion().setText(loteProduccion.getCantidadPlaneada()+"");
     }
 
     @Override
@@ -146,8 +145,7 @@ public final class CompletarRegistroProduccionController implements Constructore
         @Override
         public void actionPerformed(ActionEvent e) {
             
-            DefectoLote loteBuscado;
-            
+            DefectoLote loteBuscado;   
             if(Integer.parseInt(vista.getSprCantidadDefectuosa().getValue().toString()) > 0
                     && !"".equals(vista.getCbxDefectos().getSelectedItem().toString())){
                     

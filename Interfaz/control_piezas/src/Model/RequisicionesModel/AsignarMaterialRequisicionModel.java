@@ -19,11 +19,10 @@ public class AsignarMaterialRequisicionModel {
     public ArrayList<AlmacenMateriaPrima> listaLotesMaterial(String descMaterial) {
         ArrayList<AlmacenMateriaPrima> listaLotes = new ArrayList<>();
         Connection c = Conexion.getInstance().getConexion();
-        String query = "SELECT vem.desc_"
-                + "lote,cantidad_total - (SELECT SUM(me.cantidad) "
-                + "FROM entradas_materiales AS em INNER JOIN materiales_entregados AS me ON " +
-                "em.id_entrada_material = me.id_entrada_material WHERE em.desc_lote = "
-                + "vem.desc_lote) AS cantidad,fecha_registro FROM ver_entradas_materiales AS vem " +
+        
+        String query = "SELECT vem.desc_lote,"
+                + "cantidad_total - obtener_cantidad_utilizada_material(vem.desc_lote) "
+                + "AS cantidad,fecha_registro FROM ver_entradas_materiales AS vem " +
                 "WHERE desc_material = '"+descMaterial+"' AND cantidad > 0;";
         
         if(c != null)
@@ -45,8 +44,6 @@ public class AsignarMaterialRequisicionModel {
         return listaLotes;
     }
 
-    
-    
     public void asignarMaterial(int noOrdenProduccion, String descLote, int cantidadGuardar) {
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
@@ -68,7 +65,6 @@ public class AsignarMaterialRequisicionModel {
         
         
     }
-    
     
     public ArrayList<MaterialEntregado> lotesMaterialesAsignados(int noOrdenPruduccion){
         ArrayList<MaterialEntregado> listaLotes = new ArrayList<>();

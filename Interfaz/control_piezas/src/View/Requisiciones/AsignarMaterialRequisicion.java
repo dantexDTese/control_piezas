@@ -164,9 +164,9 @@ public class AsignarMaterialRequisicion extends javax.swing.JDialog {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -295,7 +295,7 @@ public class AsignarMaterialRequisicion extends javax.swing.JDialog {
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("MATERIAL");
 
-        lbDescMaterial.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
+        lbDescMaterial.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbDescMaterial.setForeground(new java.awt.Color(255, 255, 255));
         lbDescMaterial.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbDescMaterial.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -304,7 +304,7 @@ public class AsignarMaterialRequisicion extends javax.swing.JDialog {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("ORDEN PRODUCCION");
 
-        lbOp.setFont(new java.awt.Font("Impact", 0, 14)); // NOI18N
+        lbOp.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbOp.setForeground(new java.awt.Color(255, 255, 255));
         lbOp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbOp.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -313,7 +313,7 @@ public class AsignarMaterialRequisicion extends javax.swing.JDialog {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("FALTANTES:");
 
-        lbFaltantes.setFont(new java.awt.Font("Impact", 1, 14)); // NOI18N
+        lbFaltantes.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         lbFaltantes.setForeground(new java.awt.Color(255, 255, 255));
         lbFaltantes.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbFaltantes.setBorder(javax.swing.BorderFactory.createTitledBorder(""));

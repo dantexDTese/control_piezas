@@ -29,13 +29,13 @@ public class AsignarDiasProduccionModel {
         
         Connection c = Conexion.getInstance().getConexion();
         
-        String query = "SELECT pd.id_pedido,pd.no_orden_compra,pd.fecha_entrega FROM todos_pedidos AS pd " +
-                "JOIN (SELECT op.id_orden_trabajo,op.id_orden_produccion,op.clave_producto,op.cantidad_cliente " +
-                "FROM  todas_ordenes_produccion AS op " +
-                "LEFT JOIN todos_lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion WHERE " +
-                "(todos_lotes_cerrados(op.id_orden_produccion) AND op.desc_estado = 'ABIERTO') OR obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) > 0) "
-                + "AS opp ON pd.id_orden_trabajo = opp.id_orden_trabajo " +
-                "WHERE pd.desc_estado = 'ABIERTO' GROUP BY pd.id_pedido;";
+        String query = " SELECT pd.id_pedido,pd.no_orden_compra,pd.fecha_entrega FROM todos_pedidos AS pd " +
+                " JOIN (SELECT op.id_orden_trabajo,op.id_orden_produccion,op.clave_producto,op.cantidad_cliente " +
+                " FROM  todas_ordenes_produccion AS op " +
+                " LEFT JOIN todos_lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion WHERE " +
+                " (todos_lotes_cerrados(op.id_orden_produccion) AND op.desc_estado = 'ABIERTO') OR obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) > 0) "
+                + " AS opp ON pd.id_orden_trabajo = opp.id_orden_trabajo " +
+                " WHERE pd.desc_estado = 'ABIERTO' GROUP BY pd.id_pedido; ";
         
             if(c!=null)
                 try {
@@ -68,12 +68,12 @@ public class AsignarDiasProduccionModel {
                 Statement st = c.createStatement();
                 
                 if(tipoSeleccion == SELECCION_FALTAMTES_PROCESAR){
-                    query = "SELECT op.id_orden_produccion,op.clave_producto,op.cantidad_total,obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) AS " +
-                            "piezas_faltantes,op.worker FROM (SELECT * FROM todos_pedidos WHERE desc_estado = 'ABIERTO' AND no_orden_compra = '"+ordenCompra+"') AS pd " +
-                            "INNER JOIN (SELECT * FROM todas_ordenes_produccion WHERE desc_estado = 'ABIERTO') AS op ON pd.id_orden_trabajo = op.id_orden_trabajo " +
-                            "INNER JOIN todos_lotes_planeados AS lp ON lp.id_orden_produccion = op.id_orden_produccion " +
-                            "WHERE obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) > 0 " +
-                            "GROUP BY op.id_orden_produccion;";
+                    query = " SELECT op.id_orden_produccion,op.clave_producto,op.cantidad_total,obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) AS " +
+                            " piezas_faltantes,op.worker FROM (SELECT * FROM todos_pedidos WHERE desc_estado = 'ABIERTO' AND no_orden_compra = '"+ordenCompra+"') AS pd " +
+                            " INNER JOIN (SELECT * FROM todas_ordenes_produccion WHERE desc_estado = 'ABIERTO') AS op ON pd.id_orden_trabajo = op.id_orden_trabajo " +
+                            " INNER JOIN todos_lotes_planeados AS lp ON lp.id_orden_produccion = op.id_orden_produccion " +
+                            " WHERE obtener_piezas_procesar(op.id_orden_produccion,lp.desc_tipo_proceso) > 0 " +
+                            " GROUP BY op.id_orden_produccion;";
                     ResultSet rs = st.executeQuery(query);
                     if(rs.first())
                     do {          

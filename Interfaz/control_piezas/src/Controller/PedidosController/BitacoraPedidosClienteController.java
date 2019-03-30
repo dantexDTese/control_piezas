@@ -1,12 +1,15 @@
-
 package Controller.PedidosController;
 
+import Model.Constructores;
 import Model.Estructuras;
+import Model.ImgTabla;
 import Model.PedidosModel.BitacoraPedidosClienteModel;
 import Model.PedidosModel.ParcialidadesPedidosModel;
 import Model.PedidosModel.Pedido;
 import Model.PedidosModel.nuevoPedidoClienteModel;
+import Model.ordenProduccion;
 import View.Pedidos.BitacoraPedidosClienteView;
+import View.Pedidos.ColorEstado;
 import View.Pedidos.NuevoPedidoCliente;
 import View.Pedidos.ParcialidadesPedidos;
 import java.awt.event.ActionEvent;
@@ -20,13 +23,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
-
-public final class BitacoraPedidosClienteController{
-
+public final class BitacoraPedidosClienteController implements Constructores{
     
-    /**
-     * Atributos
-     */
     private final BitacoraPedidosClienteView vista;
     private final BitacoraPedidosClienteModel model;
     
@@ -37,49 +35,57 @@ public final class BitacoraPedidosClienteController{
      */   
     public BitacoraPedidosClienteController(BitacoraPedidosClienteView vista, BitacoraPedidosClienteModel model) {
         this.vista = vista;
-        this.model = model;       
+        this.model = model;
+        llenarComponentes();
+        asignarEventos();
+    }
+    
+    @Override
+    public void llenarComponentes(){
         Estructuras.modificarAnchoTabla(vista.getTbPedidosClientes(), new Integer[]{80,90,120,100,95,135,160,120,120,140});
         llenarListaPedidos(this.vista.getTxtOrdenCompra().getText(),this.vista.getJycAnio().getValue(),this.vista.getJmcMes().getMonth()+1);
         this.vista.getLbAnio().setText(this.vista.getJycAnio().getValue()+"");
-        
-        
-        this.vista.getBtnNuevaOrden().addActionListener((ActionEvent e) -> {
-            if(e.getSource() == this.vista.getBtnNuevaOrden())
-                agregaNuevaOrden();
-        });
-        
-        
-        this.vista.getTbPedidosClientes().addMouseListener(verParcialiadesEntregadas); 
+        this.vista.getTbPedidosClientes().setDefaultRenderer(Object.class,new ImgTabla());
+    }
+
+    @Override
+    public void asignarEventos(){
+        this.vista.getTbPedidosClientes().addMouseListener(verParcialiadesEntregadas);
         this.vista.getJycAnio().addPropertyChangeListener(listenerAnioMes);
         this.vista.getJmcMes().addPropertyChangeListener(listenerAnioMes);
         this.vista.getBtnBuscarOrden().addActionListener(listenerBotones);
         this.vista.getBtnVertodo().addActionListener(listenerBotones);
-        
+        this.vista.getBtnNuevaOrden().addActionListener((ActionEvent e) -> {
+            if(e.getSource() == this.vista.getBtnNuevaOrden())
+                agregaNuevaOrden();
+        });
     }
-      
+          
     public void llenarListaPedidos(String noOrdenCompra,Integer anio,Integer mes){
         Estructuras.limpiarTabla((DefaultTableModel) vista.getTbPedidosClientes().getModel());
-        ArrayList<Pedido> pedidos = model.listaPedidos(noOrdenCompra,anio,mes);
+        ArrayList<ordenProduccion> pedidos = model.listaPedidos(noOrdenCompra,anio,mes);
         if(pedidos.size()>0){
-            DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();        
+            DefaultTableModel modelTabla = (DefaultTableModel) vista.getTbPedidosClientes().getModel();
             for(int i = 0;i<pedidos.size();i++){
-                Pedido unPedido = pedidos.get(i);
+                ordenProduccion unPedido = pedidos.get(i);
+                ColorEstado estado = Estructuras.obtenerColorEstado(unPedido.getDescEstadoOrdenProduccion());
+               
                 modelTabla.addRow(new Object[]{
-                    unPedido.getEstado(),
-                    unPedido.getNoOrdenTrabajo(),
+                    estado,
+                    unPedido.getOrdenTrabajo(),
                     unPedido.getNoOrdenCompra(),
-                    unPedido.getClaveProducto(),
+                    unPedido.getCodProducto(),
                     unPedido.getCantidadCliente(),
-                    unPedido.getFechaEntrega(),
+                    unPedido.getFechaentrega(),
                     unPedido.getFechaConfirmacionEntrega(),
                     unPedido.getFechaRecepcion(),
                     unPedido.getDescContacto(),
-                    unPedido.getNombreCliente()
-                });     
+                    unPedido.getDescCliente()
+                });
+                        
             }
-        }        
+        }
     }
-    
     
     private void agregaNuevaOrden(){
         nuevoPedidoClienteModel modelNuevoPedido = new nuevoPedidoClienteModel();
@@ -114,7 +120,6 @@ public final class BitacoraPedidosClienteController{
                 vistaParcialidades.setVisible(true);
             }
         }
-        
     };
     
     private final ActionListener listenerBotones = new ActionListener() {
@@ -138,4 +143,5 @@ public final class BitacoraPedidosClienteController{
             vista.getLbAnio().setText(vista.getJycAnio().getValue()+"");            
         }
     };
+
 }

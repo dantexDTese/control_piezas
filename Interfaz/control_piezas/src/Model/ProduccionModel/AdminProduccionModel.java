@@ -1,13 +1,10 @@
-
 package Model.ProduccionModel;
 
 import Model.Conexion;
-import Model.Estructuras;
 import Model.LotePlaneado;
 import Model.OrdenTrabajo;
 import Model.ordenProduccion;
 import java.awt.HeadlessException;
-import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -16,8 +13,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
-
 
 public class AdminProduccionModel {
                
@@ -143,7 +138,7 @@ public class AdminProduccionModel {
         return orden;
     }
 
-    public void cerrarOrdenProduccion(int noOrdenProduccion) {
+    public void cerrarOrdenProduccion(int noOrdenProduccion){
         Connection c = Conexion.getInstance().getConexion();
         if(c!= null)
             try {
@@ -159,7 +154,8 @@ public class AdminProduccionModel {
             }
     }
 
-    public void guardarModificaciones(LotePlaneado ordenSeleccionada) {
+    public void guardarModificaciones(LotePlaneado ordenSeleccionada){
+        
         Connection c = Conexion.getInstance().getConexion();
         if(c!=null)
             try {
@@ -180,6 +176,7 @@ public class AdminProduccionModel {
                 System.err.println("error: paquete:ProduccionModel class: AdminProduccionModel "
                         + "Method:guardarModificaciones "+e.getMessage());
             }
+        
     }
 
         

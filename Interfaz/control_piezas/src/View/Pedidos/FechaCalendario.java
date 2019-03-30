@@ -9,10 +9,8 @@ import java.awt.Component;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-/**
- *
- * @author cesar
- */
+
+
 public class FechaCalendario extends DefaultTableCellRenderer{
 
     @Override

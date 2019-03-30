@@ -29,7 +29,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         dcFechaEntrega = new com.toedter.calendar.JDateChooser();
-        txtContactoCliente = new javax.swing.JTextField();
+        cbxContacto = new javax.swing.JComboBox<>();
         btnGuardar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -84,8 +84,8 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
                         .addGap(42, 42, 42)))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtContactoCliente)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                    .addComponent(cbxContacto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -106,7 +106,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtNoOrdenCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(cbxDescCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtContactoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbxContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(dcFechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -289,10 +289,9 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
         return txtNoOrdenCompra;
     }
 
-    public JTextField getTxtContactoCliente() {
-        return txtContactoCliente;
+    public JComboBox<String> getCbxContacto() {
+        return cbxContacto;
     }
-
    
 
     public void setCbxDescCliente(JComboBox<String> cbxDescCliente) {
@@ -343,6 +342,7 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cbxContacto;
     private javax.swing.JComboBox<String> cbxDescCliente;
     private com.toedter.calendar.JDateChooser dcFechaEntrega;
     private javax.swing.JLabel jLabel1;
@@ -360,7 +360,6 @@ public class NuevoPedidoCliente extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tbListaPedido;
     private javax.swing.JTable tbListaProductos;
-    private javax.swing.JTextField txtContactoCliente;
     private javax.swing.JTextField txtNoOrdenCompra;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,16 +1,14 @@
-
 package Controller.ProduccionController;
 
 import Model.Constructores;
 import Model.Estructuras;
+import Model.ImgTabla;
 import Model.LotePlaneado;
 import Model.OrdenTrabajo;
 import Model.ProduccionModel.AdminProduccionModel;
-import Model.ProduccionModel.ControlProduccionModel;
 import Model.ProduccionModel.SeguimientoProduccionModel;
 import Model.ordenProduccion;
 import View.Produccion.AdminProduccionView;
-import View.Produccion.ControlProduccionDialogView;
 import View.Produccion.SeguimientoProduccionDialogView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -42,12 +40,16 @@ public final class AdminProduccionController implements Constructores{
         this.vista = vista;
         this.model = model;
         llenarComponentes();
-        asignarEventos();  
+        asignarEventos();
     }
     
     @Override
     public void llenarComponentes() {
         llenarTablaOrdenesTrabajo();
+        vista.getJtbOrdenesTrabajo().setDefaultRenderer(Object.class,new ImgTabla());
+        if(!vista.getPrincipal().getSesionIniciada().getDescUsuario().equals("PRODUCCION")){
+            vista.getBtnSeguimientoProduccion().setEnabled(false);
+        } 
     }
 
     @Override
@@ -57,7 +59,6 @@ public final class AdminProduccionController implements Constructores{
         this.vista.getBtnModificar().addActionListener(listenerBotones);
         this.vista.getBtnGuardarModificacion().addActionListener(listenerBotones);
         this.vista.getBtnSeguimientoProduccion().addActionListener(listenerBotones);
-        this.vista.getBtnControlProduccion().addActionListener(listenerBotones);
         PropertyChangeListener listenerFechas = (PropertyChangeEvent evt) -> {llenarTablaOrdenesTrabajo();};
         this.vista.getJdcMes().addPropertyChangeListener(listenerFechas);
         this.vista.getJdcAnio().addPropertyChangeListener(listenerFechas);
@@ -66,13 +67,11 @@ public final class AdminProduccionController implements Constructores{
         this.vista.getBtnCancelarModificaciones().addActionListener(listenerBotones);
         this.vista.getBtnCerrar().addActionListener(listenerBotones);
     }
-    
-    
+     
     /**
      * METODOS
      */
-    private void llenarTablaOrdenesTrabajo(){
-        
+    private void llenarTablaOrdenesTrabajo(){    
         ArrayList<OrdenTrabajo> listaOrdenesTrabajo =  model.listaOrdenesTrabajo(
                 vista.getTxtOrdenCompra().getText(),
                 vista.getJdcAnio().getValue(),vista.getJdcMes().getMonth()+1);
@@ -80,11 +79,10 @@ public final class AdminProduccionController implements Constructores{
         Estructuras.limpiarTabla((DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel());
         DefaultTableModel modelTabla = (DefaultTableModel) vista.getJtbOrdenesTrabajo().getModel();
         
-        for(int i = 0;i<listaOrdenesTrabajo.size();i++){
+        for(int i = 0;i<listaOrdenesTrabajo.size();i++){ 
             modelTabla.addRow(new Object[]{
                 listaOrdenesTrabajo.get(i).getNoPedido(),
-                listaOrdenesTrabajo.get(i).getNoOrdenCompra(),
-                listaOrdenesTrabajo.get(i).getDescEstadoPedido(),
+                listaOrdenesTrabajo.get(i).getNoOrdenCompra()
             });
         }
     }
@@ -97,8 +95,6 @@ public final class AdminProduccionController implements Constructores{
             if(e.getSource() == vista.getBtnSeguimientoProduccion())
                 mostrarSeguimientoProduccion();
             
-            else if(e.getSource() == vista.getBtnControlProduccion())
-                mostrarControlProduccion();
             else if(e.getSource() == vista.getBtnBuscar())
                 llenarTablaOrdenesTrabajo();
 
@@ -113,7 +109,6 @@ public final class AdminProduccionController implements Constructores{
                 else
                     JOptionPane.showMessageDialog(null, "POR FAVOR PRIMERO SELECCIONE UNA ORDEN","VALIDACION",JOptionPane.WARNING_MESSAGE);
             }
-            
             
             else if(e.getSource() == vista.getBtnGuardarModificacion())
                 guardarModificacion();
@@ -142,16 +137,7 @@ public final class AdminProduccionController implements Constructores{
                         new SeguimientoProduccionController(vistaSeguimiento,new SeguimientoProduccionModel(),ordenSeleccionada);
                 vistaSeguimiento.setVisible(true);
             
-            }else JOptionPane.showMessageDialog(null, "POR FAVOR PRIMER SELECCIONE UNA ORDEN","VALIDACION",JOptionPane.WARNING_MESSAGE);
-            
-                        
-        }
-        
-        private void mostrarControlProduccion(){
-            ControlProduccionDialogView viewControlProduccion = new ControlProduccionDialogView(vista.getPrincipal(), true);
-            ControlProduccionController controllerControlProduccion = new ControlProduccionController(viewControlProduccion
-                                        , new ControlProduccionModel(),ordenSeleccionada);
-            viewControlProduccion.setVisible(true);
+            }else JOptionPane.showMessageDialog(null, "POR FAVOR PRIMER SELECCIONE UNA ORDEN","VALIDACION",JOptionPane.WARNING_MESSAGE);                
         }
         
         
@@ -182,22 +168,17 @@ public final class AdminProduccionController implements Constructores{
                 vista.getBtnCerrar().setEnabled(valor);
                 
             }else
-                vista.getBtnModificar().setEnabled(false);
-            
-        }
-        
-        
-        
+                vista.getBtnModificar().setEnabled(false);   
+        }      
     };
     
     private final MouseListener listenerSeleccionOrdenTrabajo = new MouseAdapter() {
+        
         @Override
-        public void mousePressed(MouseEvent e) {
-            super.mousePressed(e); 
-          
+        public void mousePressed(MouseEvent e){
+            super.mousePressed(e);
                 int fila = vista.getJtbOrdenesTrabajo().rowAtPoint(e.getPoint());
                 llenarTablaOrdenesProduccion(Integer.parseInt(vista.getJtbOrdenesTrabajo().getValueAt(fila, 0).toString()));
-                
         }
     
         private void llenarTablaOrdenesProduccion(int ordenTrabajo){
@@ -215,12 +196,12 @@ public final class AdminProduccionController implements Constructores{
     };        
         
     private final MouseListener listenerSeleccionOrdenProduccion = new MouseAdapter() {
+
         @Override
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e);            
             int filaSeleccionada = vista.getJtbOrdenesProduccion().rowAtPoint(e.getPoint());
             llenarOrdenProduccion((Integer)vista.getJtbOrdenesProduccion().getValueAt(filaSeleccionada,0));
-            
         }
         
         private void llenarOrdenProduccion(Integer noOrdenProduccion){
@@ -258,8 +239,4 @@ public final class AdminProduccionController implements Constructores{
                 JOptionPane.showMessageDialog(null,"error");       
         }
     };
-    
-    
-    
-    
 }

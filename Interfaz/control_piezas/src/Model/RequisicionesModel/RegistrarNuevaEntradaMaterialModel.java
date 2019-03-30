@@ -12,8 +12,6 @@ import javax.swing.JOptionPane;
 
 
 public class RegistrarNuevaEntradaMaterialModel {
-    
-    
     public  final int LISTA_PROVEEDORES = 1;
     public  final int LISTA_MATERIALES = 2;
     
@@ -29,14 +27,12 @@ public class RegistrarNuevaEntradaMaterialModel {
                 break;
             default:
                 return combo;
-        }
-        
+        }   
         return Estructuras.llenaCombo(combo, query);
     }
     
     public void agregarEntradaMaterial(EntradaMaterial entradaMaterial){
         Connection c = Conexion.getInstance().getConexion();
-        
         String query = "{CALL agregar_entrada_material(?,?,?,?,?,?,?,?)}";
         if(c!=null)
             try {
@@ -51,11 +47,9 @@ public class RegistrarNuevaEntradaMaterialModel {
                 cs.registerOutParameter(8,Types.VARCHAR);
                 cs.execute();
                 JOptionPane.showMessageDialog(null, cs.getString(8));
-            } catch (SQLException e) {
+            } catch (SQLException e){
                 System.err.println("error: pacquete:RequisicionesController, class RegistrarNuevaEntradaMaterialModel, metodo: agregarEntradaMaterialModel "+e.getMessage());
             }        
     }
-    
-    
     
 }

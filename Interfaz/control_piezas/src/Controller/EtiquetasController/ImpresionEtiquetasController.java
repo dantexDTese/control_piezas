@@ -8,7 +8,6 @@ import Model.EtiquetasModel.ImpresionEtiquetasModel;
 import Model.Pedido;
 import Model.ProduccionModel.LoteProduccion;
 import View.Etiquetas.ImpresionEtiquetasView;
-import View.Etiquetas.MensajeImpresion;
 import com.itextpdf.text.DocumentException;
 import ds.desktop.notify.DesktopNotify;
 import java.awt.event.ActionEvent;
@@ -60,10 +59,12 @@ public final class ImpresionEtiquetasController  implements Constructores{
         vista.getJtbLotesListos().addMouseListener(listenerTablaSeleccionaLote);
         vista.getSprPiezasPorBolsa().addChangeListener(listenerCalcularNumBolsas);
         vista.getCbxProductos().addActionListener((ActionEvent e) -> {
-            llenarTablaLotes(codOrdenCompra, vista.getCbxProductos().getSelectedItem().toString());
+            if(vista.getCbxProductos().getItemCount()>0)
+                llenarTablaLotes(codOrdenCompra, vista.getCbxProductos().getSelectedItem().toString());
         });
         vista.getJtbLotesSeleccionados().addMouseListener(listenerQuitarLote);
         vista.getBtnGuardar().addActionListener(listenerImprimir);
+        
     }
     
     private void llenarTablaPedidosPendientes(){

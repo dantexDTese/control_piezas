@@ -88,6 +88,7 @@ public class BitacoraPedidosClienteView extends javax.swing.JInternalFrame {
         tbPedidosClientes = new javax.swing.JTable();
 
         setBorder(null);
+        setClosable(true);
         setVisible(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));

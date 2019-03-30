@@ -1,27 +1,30 @@
 package Model.RequisicionesModel;
 
-import Model.PedidosModel.ProductosPendientes;
 import Model.ordenProduccion;
 import java.util.ArrayList;
 
 
 public final class ParcialidadMaterial extends  MaterialesRequisicion{
         
-        private final int noPartida;
-        private final int noParcialidad;
+        private int noPartida;
+        private int noParcialidad;
         private String fechaSolicitadaParcialidadMaterial=null;
         private String cuentaCargo=null;
         private String unidad=null;
         private int cantidad;
-        private float precioUnitario;
-        private float precioTotal;
-        private String proveedor;
+        private int cantidadRestante;
+        private int noMaterialSolicitado;
+        private int cantidadSeleccionada;
+        
         private ArrayList<ordenProduccion> listaOrdenesProduccion;
         
-
     public ParcialidadMaterial(int noPartida,int noParcialidad) {
             this.noParcialidad = noParcialidad;
             this.noPartida = noPartida;
+    }
+
+    ParcialidadMaterial() {
+        
     }
 
     public ArrayList<ordenProduccion> getListaOrdenesProduccion() {
@@ -36,9 +39,20 @@ public final class ParcialidadMaterial extends  MaterialesRequisicion{
         this.fechaSolicitadaParcialidadMaterial = fechaSolicitadaParcialidadMaterial;
     }
 
+    public int getNoMaterialSolicitado() {
+        return noMaterialSolicitado;
+    }
+
+    public void setNoMaterialSolicitado(int noMaterialSolicitado) {
+        this.noMaterialSolicitado = noMaterialSolicitado;
+    }
     
-    public void setPrecioUnitario(float precioUnitario) {
-        this.precioUnitario = precioUnitario;
+    public int getCantidadSeleccionada() {
+        return cantidadSeleccionada;
+    }
+
+    public void setCantidadSeleccionada(int cantidadSeleccionada) {
+        this.cantidadSeleccionada = cantidadSeleccionada;
     }
     
     public void setCuentaCargo(String cuentaCargo) {
@@ -51,16 +65,17 @@ public final class ParcialidadMaterial extends  MaterialesRequisicion{
 
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }   
+
+    public void setNoPartida(int noPartida) {
+        this.noPartida = noPartida;
     }
 
-    public void setPrecioTotal(float precioTotal) {
-        this.precioTotal = precioTotal;
+    public void setNoParcialidad(int noParcialidad) {
+        this.noParcialidad = noParcialidad;
     }
-        
-    public String getProveedor() {
-        return proveedor;
-    }
-        
+    
+    
        
     public int getNoPartida() {
             return noPartida;
@@ -86,13 +101,14 @@ public final class ParcialidadMaterial extends  MaterialesRequisicion{
             return cantidad;
     }
 
-    public float getPrecioUnitario() {
-            return precioUnitario;
+    public int getCantidadRestante() {
+        return cantidadRestante;
     }
 
-    public float getPrecioTotal() {
-            return precioTotal;
+    public void setCantidadRestante(int cantidadRestante) {
+        this.cantidadRestante = cantidadRestante;
     }
+    
 }
     
     

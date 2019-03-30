@@ -54,6 +54,14 @@
             <Property name="text" type="java.lang.String" value="Archivo                    "/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemIniciarCerrarSesion">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Iniciar/cerrar sesi&#xf3;n"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemIniciarCerrarSesionActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Salir"/>
@@ -64,7 +72,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="menuItemControlProduccion">
+        <Menu class="javax.swing.JMenu" name="menuControlProduccion">
           <Properties>
             <Property name="text" type="java.lang.String" value="Producci&#xf2;n                             "/>
           </Properties>
@@ -87,7 +95,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu5">
+        <Menu class="javax.swing.JMenu" name="menuAlmacen">
           <Properties>
             <Property name="text" type="java.lang.String" value="Almacen                               "/>
           </Properties>
@@ -133,7 +141,7 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu10">
+        <Menu class="javax.swing.JMenu" name="menuRequisicionMateriales">
           <Properties>
             <Property name="text" type="java.lang.String" value="Requisicion de materiales            "/>
           </Properties>
@@ -146,24 +154,17 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemControlEntregaMPActionPerformed"/>
               </Events>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="jMenu4">
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemEntradasMateriales">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Recepcion de materiales"/>
+                <Property name="text" type="java.lang.String" value="Registro entrada materiales"/>
               </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="menuItemEntradasMateriales">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Registro entrada materiales"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemEntradasMaterialesActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemEntradasMaterialesActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu7">
+        <Menu class="javax.swing.JMenu" name="menuSeguimientoLotes">
           <Properties>
             <Property name="text" type="java.lang.String" value="Etiquetado               "/>
           </Properties>
@@ -176,9 +177,17 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemImprimirEtiquetasActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemSeguimientoLote">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Seguimiento de lotes"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemSeguimientoLoteActionPerformed"/>
+              </Events>
+            </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu11">
+        <Menu class="javax.swing.JMenu" name="menuCatalogos">
           <Properties>
             <Property name="text" type="java.lang.String" value="Catalogos                        "/>
           </Properties>
@@ -227,6 +236,24 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="MATERIALES"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemMaterialesActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="menuCompras">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Compras                  "/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="menuItemRecepcionRequisiciones">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Recepcion de requisiciones"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuItemRecepcionRequisicionesActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -234,7 +261,7 @@
     </Menu>
   </NonVisualComponents>
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="0"/>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
     </Property>

@@ -226,13 +226,17 @@ public final class AsignacionMaquinaAPedidoController implements Constructores{
                 
                 ArrayList<ProductoMaquina> maquinasProducto = pendiente.getProductosMaquina();
                 for(int i = 0;i<maquinasProducto.size();i++){
+                        
+                    if(maquinasProducto.get(i).getDescMaquina() != null){
+                        if(maquinasProducto.get(i).getDescMaquina().equals(vista.getCbxMaquina().getSelectedItem().toString())){
+
+                            vista.getSprPiecesByShift().setValue(maquinasProducto.get(i).getPiezasPorTurno());
+                            pendiente.setProductoMaquinaSeleccionado(maquinasProducto.get(i));
+
+                        }
+                    }
                    
-                   if(maquinasProducto.get(i).getDescMaquina().equals(vista.getCbxMaquina().getSelectedItem().toString())){
-                       vista.getSprPiecesByShift().setValue(maquinasProducto.get(i).getPiezasPorTurno());
-                       pendiente.setProductoMaquinaSeleccionado(maquinasProducto.get(i));
-                   }
                 }
-                
                 
             }
         }
@@ -353,12 +357,17 @@ public final class AsignacionMaquinaAPedidoController implements Constructores{
                 Date fechaI = dateFormat.parse(fechaInicio.replace('/', '-'));    
                 
                 if(fechaM.compareTo(fechaI) >= 0 || fechaI.compareTo(fechaE) >= 0){
-                    JOptionPane.showMessageDialog(null, "esta fecha no es valida");
-                    vista.getDcrFechaInicioProduccion().setCalendar(null);
+                    
+                    if(JOptionPane.showConfirmDialog(null, "LA FECHA PUEDE NO SER CORRECTA "
+                       + "¿CONTINUAR?","VALIDACION",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+                        vista.getDcrFechaInicioProduccion().setCalendar(null);
+                    
                 }else if(!validarFecha(Integer.parseInt(vista.getSprPiecesByShift().getValue().toString()),
                                 Integer.parseInt(vista.getSprCantidadProducir().getValue().toString()),fechaI,
                                 vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(noOrdenTrabajo), 2).toString(),
                                 Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString())))
+                    if(JOptionPane.showConfirmDialog(null, "LA FECHA PUEDE NO SER CORRECTA "
+                       + "¿CONTINUAR?","VALIDACION",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
                         vista.getDcrFechaInicioProduccion().setCalendar(null);
                            
             } catch (ParseException ex) {
@@ -376,8 +385,15 @@ public final class AsignacionMaquinaAPedidoController implements Constructores{
                                 vista.getJdcFechaMontajeMolde().getDate(),
                                 vista.getJtOrdenesPendientes().getValueAt(obtenerFilaOrdenTrabajo(noOrdenTrabajo), 2).toString(),
                                 Float.parseFloat(vista.getCbxWorker().getSelectedItem().toString()));  
-                    if(!validacion)
-                        vista.getJdcFechaMontajeMolde().setCalendar(null);
+                    
+                        if(!validacion){
+                        
+                            if(JOptionPane.showConfirmDialog(null, "LA FECHA PUEDE NO SER CORRECTA YA QUE SOBREPASA "
+                                    + "LA FECHA DE ENTREGA DEL PRODUCTO "                       
+                                    + "¿CONTINUAR?","VALIDACION",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE)==JOptionPane.NO_OPTION)
+
+                                vista.getJdcFechaMontajeMolde().setCalendar(null);
+                    }
                 }
                 
             } catch (NumberFormatException e) {
@@ -395,7 +411,6 @@ public final class AsignacionMaquinaAPedidoController implements Constructores{
                 
                 if(diasSeleccionado < 0 || diasSeleccionado+1 < diasNecesarios ||
                         Estructuras.convertirFechaGuardar(dateEntrega).equals(Estructuras.convertirFechaGuardar(fechaSeleccionada))){
-                     JOptionPane.showMessageDialog(null, "la fecha seleccionada no es valida","fecha no valida",JOptionPane.ERROR_MESSAGE);
                     return false;
                 }
                 
@@ -414,17 +429,22 @@ public final class AsignacionMaquinaAPedidoController implements Constructores{
     };
 
     private final ActionListener listenerTerminarPendientes = new ActionListener() {
+        
         @Override
         public void actionPerformed(ActionEvent e) {
+            
             if(pendientes != null){
-                for(int i = 0;i<pendientes.size();i++)
-                    if(model.agregarProductoPendiente(pendientes.get(i),i+1)==null) break;                
-              vista.dispose();
-            }
-                    
-            else
-                JOptionPane.showMessageDialog(null,"LE FALTA AGREGAR PRODUCTOS A LA PLANEACION");                       
+                for(int i = 0;i<pendientes.size();i++){
+                    if(pendientes.get(i).getDescMaquina() != null)
+                        model.agregarProductoPendiente(pendientes.get(i),pendientes.get(i).getOrdenTrabajo());                   
+                }
+                pendientes = null;
+                vista.dispose();
+                
+            } else JOptionPane.showMessageDialog(null,"LE FALTA AGREGAR PRODUCTOS A LA PLANEACION");  
+            
         }
+        
     };
     
 }

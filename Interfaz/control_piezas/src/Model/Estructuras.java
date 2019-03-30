@@ -2,15 +2,16 @@ package Model;
 
 import Controller.PedidosController.CalendarioController;
 import Model.PedidosModel.CalendarioModel;
-import Model.ProduccionModel.LoteProduccion;
 import View.Pedidos.Calendario;
+import View.Pedidos.ColorEstado;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Date;  
 import java.util.StringTokenizer;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -19,10 +20,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-/**
- *
- * @author cesar
- */
 public class Estructuras {
 
     public static String obtenerFechaActual(){
@@ -30,8 +27,6 @@ public class Estructuras {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
         return sdf.format(fecha);
     }
-    
-    
     
     public static JComboBox llenaCombo(JComboBox selector,String query){
         Connection conexion = Conexion.getInstance().getConexion();       
@@ -77,6 +72,7 @@ public class Estructuras {
     public static void obtenerCalendario(JPanel contenedor,String descMaquina){    
         Calendario calendarioView = new Calendario();
         CalendarioController calendarioController = new CalendarioController(calendarioView, new CalendarioModel(),descMaquina);        
+        
          calendarioView.setSize(contenedor.getWidth(),contenedor.getHeight());
          calendarioView.setLocation(0,0);
          contenedor.removeAll();
@@ -110,7 +106,7 @@ public class Estructuras {
                 ResultSet rs = st.executeQuery(query);
                 if(rs.first())
                     return true;
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("class:Estructuras,"
                                 + "method: existeEntidad,error:"+e.getMessage());
             }
@@ -182,4 +178,20 @@ public class Estructuras {
         
         return resultado;
     }
+
+    public static ColorEstado obtenerColorEstado(String descEstado) {
+        switch(descEstado){
+            case "RECHAZADA":
+                return new ColorEstado(Color.RED);
+            case "PROCESANDO":
+                return new ColorEstado(Color.ORANGE);
+            case "ABIERTO":
+                return new ColorEstado(Color.ORANGE);
+            default:
+                return new ColorEstado(Color.GREEN);    
+        }
+        
+        
+    }
+    
 }

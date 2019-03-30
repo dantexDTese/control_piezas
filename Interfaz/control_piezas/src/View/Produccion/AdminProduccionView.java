@@ -69,10 +69,6 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
     public JButton getBtnSeguimientoProduccion() {
         return btnSeguimientoProduccion;
     }
-
-    public JButton getBtnControlProduccion() {
-        return btnControlProduccion;
-    }
     
     public JTable getJtbOrdenesProduccion() {
         return jtbOrdenesProduccion;
@@ -247,7 +243,6 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         lbFechaCerrada = new javax.swing.JLabel();
         btnSeguimientoProduccion = new javax.swing.JButton();
-        btnControlProduccion = new javax.swing.JButton();
         btnCancelarModificaciones = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -267,6 +262,7 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
         jtbOrdenesProduccion = new javax.swing.JTable();
 
         setBorder(null);
+        setClosable(true);
 
         jPanel1.setBackground(new java.awt.Color(15, 144, 138));
 
@@ -782,9 +778,6 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
         btnSeguimientoProduccion.setBorder(null);
         btnSeguimientoProduccion.setBorderPainted(false);
 
-        btnControlProduccion.setText("CONTROL PRODUCCION");
-        btnControlProduccion.setBorder(null);
-
         btnCancelarModificaciones.setText("CALCELAR MODIFICACIONES");
         btnCancelarModificaciones.setEnabled(false);
 
@@ -803,13 +796,12 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
                         .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnControlProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSeguimientoProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE))
+                            .addComponent(btnSeguimientoProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                            .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                             .addComponent(btnGuardarModificacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelarModificaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnCancelarModificaciones, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -826,13 +818,12 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSeguimientoProduccion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnGuardarModificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnControlProduccion, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                            .addComponent(btnGuardarModificacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelarModificaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelarModificaciones, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
@@ -847,14 +838,14 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "NO. PEDIDO", "ORDEN COMPRA", "ESTADO"
+                "NO. PEDIDO", "ORDEN COMPRA"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -870,7 +861,6 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
         if (jtbOrdenesTrabajo.getColumnModel().getColumnCount() > 0) {
             jtbOrdenesTrabajo.getColumnModel().getColumn(0).setResizable(false);
             jtbOrdenesTrabajo.getColumnModel().getColumn(1).setResizable(false);
-            jtbOrdenesTrabajo.getColumnModel().getColumn(2).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -1061,7 +1051,6 @@ public class AdminProduccionView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelarModificaciones;
     private javax.swing.JButton btnCerrar;
-    private javax.swing.JButton btnControlProduccion;
     private javax.swing.JButton btnGuardarModificacion;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnSeguimientoProduccion;

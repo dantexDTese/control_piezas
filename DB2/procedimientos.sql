@@ -1,6 +1,5 @@
 use control_piezas;
 
-
 ################################################################################################################################################
 ################################################################################################################################################
 ################################################################################################################################################
@@ -16,31 +15,26 @@ IN desc_contacto		VARCHAR(50),
 IN fecha_entrega		DATETIME,
 INOUT resultado			VARCHAR(150),
 INOUT r_id_pedido		INT	
-)
-BEGIN
-	DECLARE id_cliente INT;
+) BEGIN
+
+	DECLARE id_contacto INT;
     DECLARE id_pedido INT;
     DECLARE id_estado INT;
     
-    IF NOT EXISTS (SELECT * FROM pedidos WHERE no_orden_compra = desc_orden_compra)
-    THEN
-		
-			SET id_cliente = (SELECT cl.id_cliente FROM clientes AS cl WHERE cl.nombre_cliente = desc_cliente);
-            SELECT @id_estado := es.id_estado FROM estados AS es WHERE  es.desc_estado = 'ABIERTO';
-            
-			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_cliente,desc_contacto,id_estado,fecha_entrega) 
-            VALUES (now(),desc_orden_compra,id_cliente,desc_contacto,@id_estado,fecha_entrega);
-            
+    IF NOT EXISTS (SELECT * FROM pedidos WHERE no_orden_compra = desc_orden_compra) THEN			
+            SET id_contacto = (SELECT cn.id_contacto FROM clientes AS cl INNER JOIN contactos cn ON
+				cl.id_cliente = cn.id_cliente  WHERE cl.nombre_cliente = desc_cliente AND cn.desc_contacto  = desc_contacto);
+            SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'ABIERTO');
+			INSERT INTO pedidos(fecha_recepcion,no_orden_compra,id_contacto,id_estado,fecha_entrega) 
+            VALUES (now(),desc_orden_compra,id_contacto,id_estado,fecha_entrega);
             SELECT @id_pedido := pedidos.id_pedido FROM pedidos WHERE pedidos.no_orden_compra = desc_orden_compra;            	
-				
-            INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,@id_estado);
-			
-            SET resultado = 'SE HA AGREGADO CORRECTAMENTE EL PEDIDO';					
+            INSERT INTO ordenes_trabajo(id_pedido,id_estado) VALUES(@id_pedido,id_estado);
+            SET resultado = 'SE HA AGREGADO CORRECTAMENTE EL PEDIDO';
 			SET r_id_pedido = @id_pedido;
-            
     ELSE
 		SET resultado = 'NO HA SIDO POSIBLE AGREGAR EL PEDIDO, ES POSIBLE QUE YA EXISTA UN PEDIDO CON ESTA DESCRIPCION';
 		SET r_id_pedido = 0;
+        
     END IF;
 
 END //
@@ -58,21 +52,15 @@ BEGIN
     DECLARE id_orden_p INT;
     DECLARE id_estado INT;  
 	DECLARE id_tipo_proceso INT;
-    
 	IF EXISTS(SELECT * FROM ordenes_trabajo WHERE ordenes_trabajo.id_pedido = id_pedido)
     THEN
 		SELECT @id_orden_trabajo := ordenes_trabajo.id_orden_trabajo FROM ordenes_trabajo WHERE ordenes_trabajo.id_pedido = id_pedido;
 		SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = clave_producto;
-		
         IF @id_producto IS NOT NULL THEN		
-			
             SELECT @id_estado := es.id_estado FROM estados AS es WHERE  es.desc_estado = 'ABIERTO';
-            
             INSERT INTO ordenes_produccion(id_orden_trabajo,id_producto,id_estado,cantidad_cliente,fecha_registro)
             VALUES(@id_orden_trabajo,@id_producto,@id_estado,cantidad_cliente,now());        
-			
         END IF;
-	
 	END IF;	
 END //
 DELIMITER ;
@@ -106,21 +94,14 @@ BEGIN
     DECLARE id_producto INT;
     
 	IF EXISTS(SELECT * FROM ordenes_produccion WHERE id_orden_produccion = id_orden_produccion) THEN
-	
         SELECT @id_producto := productos.id_producto FROM productos WHERE productos.clave_producto = desc_producto;	
 		SET id_maquina = (SELECT mq.id_maquina FROM maquinas AS mq WHERE mq.desc_maquina = desc_maquina);
 		CALL actualizar_orden_produccion(nuevo_worker,nueva_cantidad_total,fecha_montaje_molde,fecha_inicio_produccion,nuevo_piezas_por_turno,id_orden_produccion,@id_producto);
-			
 		CALL agregar_lotes_planeados(id_orden_produccion,nueva_cantidad_total,nuevo_piezas_por_turno,fecha_inicio_produccion,nuevo_worker,id_maquina,dias_trabajo);
-						
 		CALL agregar_material_requerido(id_orden_produccion,desc_maquina,id_material);
-			
 		SET resultado = 'TODO SE REALIZO CORRECTAMENTE';					
-    
     ELSE
-    
 		SET resultado = 'NO FUE POSIBLE COMPLETAR LA OPERACION';					
-        
     END IF;
 
 END //
@@ -153,7 +134,6 @@ END //
 DELIMITER ;
 
 DELIMITER //
-
 CREATE PROCEDURE agregar_lotes_planeados(
 IN id_orden_produccion 			INT,
 IN nueva_cantidad_total 		INT,
@@ -166,43 +146,30 @@ IN dias_trabajo					INT
 BEGIN
 	DECLARE id_estado INT;
     DECLARE id_tipo_proceso INT;
-    
     SET id_tipo_proceso = (SELECT tp.id_tipo_proceso  FROM tipos_proceso  AS tp WHERE tp.desc_tipo_proceso = 'MAQUINADO');
     SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'ABIERTO');
-	
     IF fecha_inicio_produccion IS NOT NULL THEN      
-        
      my_loop: LOOP
-		
         IF nueva_cantidad_total = 0 OR dias_trabajo = 0 THEN
 			LEAVE my_loop;
 		END IF;
-		
 		IF nueva_cantidad_total >= nuevo_piezas_por_turno THEN
 			SET nueva_cantidad_total = nueva_cantidad_total - nuevo_piezas_por_turno;  
 		ELSE
 			SET nuevo_piezas_por_turno = nueva_cantidad_total;
 			SET nueva_cantidad_total = 0;
 		END IF;
-			            
 		INSERT INTO lotes_planeados(id_orden_produccion,id_tipo_proceso,cantidad_planeada,fecha_planeada,id_maquina,id_estado)
         VALUES(id_orden_produccion,id_tipo_proceso,nuevo_piezas_por_turno,fecha_inicio_produccion,id_maquina,id_estado);        		            
-			
 		#parte para obtener los dias de la semana que no sean domingos.
 		dias_semana_loop: LOOP
-            
 			SET fecha_inicio_produccion = ADDDATE(fecha_inicio_produccion,INTERVAL 1 DAY);
-				
 			IF WEEKDAY(fecha_inicio_produccion) < 6 THEN
 				LEAVE dias_semana_loop;
 			END IF;
-            
 		END LOOP dias_semana_loop;
-			
         SET dias_trabajo = dias_trabajo - 1;        			
-        
       END LOOP my_loop;
-      
     END IF;    
 END //
 DELIMITER ;
@@ -309,6 +276,54 @@ IN id_material					INT
     
 END	//
 DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE modificar_lote(
+IN id_orden_produccion		INT,
+IN cantidad_planeada		INT,
+IN fecha_planeada			DATE,
+INOUT respuesta				VARCHAR(255)
+)BEGIN
+    DECLARE id_lote_planeado INT;
+    
+    SET id_lote_planeado = (SELECT lp.id_lote_planeado FROM lotes_planeados AS lp WHERE lp.id_orden_produccion = id_orden_produccion AND lp.fecha_planeada = fecha_planeada);
+    
+    IF id_lote_planeado IS NOT NULL THEN
+		
+        UPDATE lotes_planeados AS lp SET lp.cantidad_planeada =  cantidad_planeada WHERE lp.id_lote_planeado = id_lote_planeado;
+		SET respuesta = 'LA ORDEN SE HA MODIFICADO CORRECTAMENTE';
+	
+    ELSE 
+		SET respuesta = 'LA ORDEN NO SE HA PODIDO MODIFICAR';
+    END IF;
+    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE eliminar_lote(
+IN id_orden_produccion		INT,
+IN fecha_planeada			DATE,
+INOUT respuesta				VARCHAR(255)
+)BEGIN
+	
+    DECLARE id_lote INT;
+    SET id_lote = (SELECT lp.id_lote_planeado FROM lotes_planeados AS lp WHERE lp.id_orden_produccion = id_orden_produccion AND lp.fecha_planeada = fecha_planeada);
+    
+    IF id_lote IS NOT NULL THEN
+		
+        SET SQL_SAFE_UPDATES=0;	
+		DELETE FROM lotes_planeados WHERE id_lote_planeado = id_lote;
+        SET SQL_SAFE_UPDATES=1;	
+        SET respuesta = 'ESTA PLANEACION SE HA BORRADA EXITOSAMENTE';
+        
+    ELSE SET respuesta = 'NO SE HA PODIDO BORRAR DE FORMA EXITOSA ESTA PLANEACION';
+    
+    END IF;
+END //
+DELIMITER ;
+
 ################################################################################################################################################
 ################################################################################################################################################
 ################################################################################################################################################
@@ -345,24 +360,39 @@ INOUT respuesta				VARCHAR(255)
 	DECLARE id_estado_cerrado INT;
     
     SET id_estado_cerrado = (SELECT id_estado FROM estados WHERE desc_estado = 'CERRADO');
-    
 	IF EXISTS(SELECT * FROM ordenes_produccion AS op WHERE op.id_orden_produccion = id_orden_produccion)THEN
 		SET SQL_SAFE_UPDATES=0;		
         UPDATE ordenes_produccion AS op SET op.id_estado = id_estado_cerrado,
         op.fecha_fin = NOW()
         WHERE op.id_orden_produccion = id_orden_produccion;
         SET SQL_SAFE_UPDATES=1;
-		
+        CALL cerrar_pedido(id_orden_produccion);
         SET respuesta = 'LA ORDEN HA SIDO CERRADA';
-        
 	ELSE SET respuesta = 'LA ORDEN NO HA SIDO CERRADA';
-    
     END IF;
-
 END //
 DELIMITER ;
 
-select * from ordenes_produccion;
+SELECT * FROM pedidos;
+
+DELIMITER //
+CREATE PROCEDURE cerrar_pedido(
+IN id_orden_produccion	 INT
+)BEGIN
+    DECLARE id_cerrado INT;
+    DECLARE id_ped INT;
+    SET id_ped = (SELECT pd.id_pedido FROM todos_pedidos AS pd INNER JOIN todas_ordenes_produccion AS op ON pd.id_orden_trabajo = op.id_orden_trabajo WHERE op.id_orden_produccion = id_orden_produccion);
+    IF id_ped IS NOT NULL THEN
+        IF NOT EXISTS(SELECT * FROM todos_pedidos AS pd INNER JOIN todas_ordenes_produccion AS op ON pd.id_orden_trabajo = op.id_orden_trabajo WHERE pd.id_pedido = id_ped AND op.desc_estado = 'ABIERTO') THEN
+			SET id_cerrado = (SELECT id_estado FROM estados WHERE desc_estado = 'CERRADO');
+            SET SQL_SAFE_UPDATES=0;		
+            UPDATE pedidos SET id_estado = id_cerrado WHERE id_pedido = id_ped;
+			SET SQL_SAFE_UPDATES=1;		
+        END IF;
+    END IF;
+END //
+DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE hacer_modificaciones_op(
@@ -388,7 +418,6 @@ INOUT respuesta					VARCHAR(255)
 END //
 DELIMITER ;
 
-
 DELIMITER //
 CREATE PROCEDURE terminar_lote_produccion(
 IN id_lote_planeado			INT,
@@ -406,36 +435,28 @@ INOUT respuesta				VARCHAR(255)
     DECLARE num_lote 			INT;
     DECLARE id_orden_trabajo	INT;
     
-    
     SET id_turno = (SELECT tr.id_turno FROM turnos AS tr WHERE tr.desc_turno = desc_turno);
     SET id_operador = (SELECT opr.id_operador FROM operadores AS opr WHERE opr.no_operador = cod_operador);
-    SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'CERRADO');
 	SET id_orden_trabajo = (SELECT ot.id_orden_trabajo FROM lotes_planeados AS lp 
 							INNER JOIN ordenes_produccion AS op ON lp.id_orden_produccion = op.id_orden_produccion
 							INNER JOIN ordenes_trabajo AS ot ON ot.id_orden_trabajo = op.id_orden_trabajo
 							INNER JOIN pedidos	AS pd ON ot.id_pedido = pd.id_pedido
 							WHERE lp.id_lote_planeado = id_lote_planeado GROUP BY ot.id_orden_trabajo);
-                            
+	
+    SET id_estado = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'PROCESANDO');
+    
 	SET num_lote = (SELECT COUNT(*) AS num_lote FROM (
 					SELECT op.id_orden_trabajo,op.id_orden_produccion FROM todas_ordenes_produccion AS op WHERE op.id_orden_trabajo = 1) AS op
 					INNER JOIN lotes_planeados AS lp ON op.id_orden_produccion = lp.id_orden_produccion
 					INNER JOIN lotes_produccion AS lpr ON lp.id_lote_planeado = lpr.id_lote_planeado) + 1;
 	
-        
-    IF EXISTS(SELECT * FROM lotes_planeados AS lp WHERE lp.id_lote_planeado = id_lote_planeado) THEN 
-		UPDATE lotes_planeados AS lp SET lp.id_estado = id_estado WHERE lp.id_lote_planeado = id_lote_planeado;
-    END IF;
+    INSERT INTO lotes_produccion(id_lote_planeado,desc_lote,fecha_trabajo,tiempo_muerto,turno,cantidad_registrada,id_operador,num_lote,id_estado)
+    VALUES(id_lote_planeado,desc_lote,NOW(),tiempo_muerto,id_turno,cantidad_registrada,id_operador,num_lote,id_estado);
     
-    
-    
-    INSERT INTO lotes_produccion(id_lote_planeado,desc_lote,fecha_trabajo,tiempo_muerto,turno,cantidad_registrada,id_operador,num_lote)	
-    VALUES(id_lote_planeado,desc_lote,NOW(),tiempo_muerto,id_turno,cantidad_registrada,id_operador,num_lote);
-    
-    SET respuesta = 'EL LOTE SE HA GUARDADO EXITOSAMENTE, CUANDO NECESITA COMPLETAR LOS REGISTROS SELECCIONE LA OPCION DE CONTROL DE PRODUCCION';
+    SET respuesta = 'EL LOTE SE HA GUARDADO EXITOSAMENTE';
 
 END //
 DELIMITER ;
-
 
 DELIMITER //
 CREATE PROCEDURE modificar_lote_produccion(
@@ -465,7 +486,6 @@ INOUT respuesta					VARCHAR(255)
 END //
 DELIMITER ;
 
-SELECT * FROM defectos_lotes;
 
 DELIMITER //
 CREATE PROCEDURE agregar_defecto_produccion(
@@ -541,9 +561,6 @@ INOUT respuesta					VARCHAR(100)
 END //
 DELIMITER ;
 
-
-SELECT * FROM defectos_lotes;
-
 DELIMITER //
 CREATE PROCEDURE eliminar_defecto_lote(
 IN desc_lote				VARCHAR(50),
@@ -581,6 +598,47 @@ INOUT respuesta				VARCHAR(200)
     
     SET respuesta = 'EL REGISTRO SE HA BORRADO DE FORMA CORRECTA';
 
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE evaluacion_lote(
+IN desc_lote		VARCHAR(30),
+IN desc_estado		VARCHAR(20),
+INOUT respuesta 	VARCHAR(255)
+)BEGIN
+	
+    DECLARE id_es INT;
+    
+    SET id_es = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = desc_estado);
+    
+    IF id_es IS NOT NULL THEN 
+    
+		SET SQL_SAFE_UPDATES=0;	
+		UPDATE lotes_produccion SET lotes_produccion.id_estado = id_es WHERE lotes_produccion.desc_lote = desc_lote;
+        SET SQL_SAFE_UPDATES = 1;
+        SET respuesta = 'SE HA MODIFICADO LA EVALUACION DE FORMA CORRECTA';
+        
+	ELSE 
+		SET respuesta = 'NO SE HA PODIDO MODIFICADO LA EVALUACION DE FORMA CORRECTA';
+    END IF;
+
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE cerrar_lote_planeado(
+IN id_lote				INT,
+INOUT respuesta			VARCHAR(255)
+)BEGIN
+    DECLARE id_es INT;
+    SET id_es = (SELECT es.id_estado FROM estados AS es WHERE es.desc_estado = 'CERRADO');
+    IF id_es IS NOT NULL AND id_lote > 0 THEN
+        UPDATE lotes_planeados SET id_estado = id_es WHERE id_lote_planeado = id_lote;
+        SET respuesta = 'EL LOTE HA SIDO CERRADO DE FORMA CORRECTA';
+	ELSE
+		SET respuesta = 'EL LOTE NO SE PUEDE CERRAR';
+    END IF;
 END //
 DELIMITER ;
 
@@ -672,8 +730,6 @@ INOUT respuesta				VARCHAR(150)
 END //
 DELIMITER ;
 
-
-
 DELIMITER //
 CREATE PROCEDURE asignar_material_requisicion(
 IN id_orden_produccion 			INT,
@@ -719,9 +775,7 @@ INOUT respuesta					VARCHAR(150)
         ELSE SET respuesta = 'ID NULO';
         
     END IF;
-    
-		
-
+    	
 END //
 DELIMITER ;
 
@@ -802,7 +856,6 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE actualizar_entrada_material(
 IN id_entrada_material		INT,
-IN noParte					VARCHAR(150),
 IN factura					VARCHAR(150),
 IN comentarios				VARCHAR(300),
 IN desc_estado				VARCHAR(100),
@@ -817,25 +870,18 @@ INOUT respuesta 			VARCHAR(255)
 			
         SET SQL_SAFE_UPDATES = 0;
 			
-			UPDATE entradas_materiales AS em SET em.factura = factura, em.no_parte=noParte,em.comentarios = comentarios, em.id_estado = id_estado,
+			UPDATE entradas_materiales AS em SET em.factura = factura,em.comentarios = comentarios ,em.id_estado = id_estado ,
             em.desc_lote = desc_lote WHERE em.id_entrada_material = id_entrada_material;
             
         SET SQL_SAFE_UPDATES = 1;
-        
         IF desc_estado = 'APROBADA' THEN
-        
 			SET cantidad_almacen = (SELECT em.cantidad FROM entradas_materiales AS em WHERE em.id_entrada_material = id_entrada_material);
             INSERT INTO almacen_materias_primas(id_entrada_material,cantidad_total)  VALUES(id_entrada_material,cantidad_almacen);
-            
         END IF;
-        
         SET respuesta = 'SE HA REGISTRADO CORRECTAMENTE';
-        
     ELSE      
 		SET respuesta = 'NO SE HA PODIDO REGISTRAR CORRECTAMENTE';
-        
     END IF;
-	
 END //
 DELIMITER ;
 
@@ -1109,7 +1155,6 @@ DELIMITER ;
 ###################################################################################################################################################
 ###################################################################################################################################################
 
-
 DELIMITER //
 CREATE PROCEDURE agregar_modificar_cliente(
 IN nombre_cliente				VARCHAR(100),
@@ -1150,7 +1195,6 @@ INOUT respuesta					VARCHAR(155)
 END // 
 DELIMITER ;
 
-
 DELIMITER //
 CREATE PROCEDURE agregar_maquina(
 IN desc_maquina					VARCHAR(100),
@@ -1168,8 +1212,6 @@ INOUT respuesta					VARCHAR(155)
     
 END // 
 DELIMITER ;
-
-
 
 DELIMITER //
 CREATE PROCEDURE agregar_modificar_operador(
@@ -1189,4 +1231,193 @@ INOUT respuesta						VARCHAR(155)
     END IF;
     
 END // 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE modificar_material(
+IN id_material			INT,
+IN desc_material		VARCHAR(50),
+IN dimencion			VARCHAR(20),
+IN forma				VARCHAR(50),
+IN longitud_barra		FLOAT,
+INOUT respuesta			VARCHAR(255)
+)BEGIN
+	
+    DECLARE id_tipo_material INT;
+	DECLARE id_dimencion	INT;
+    DECLARE id_forma		INT;
+    
+    IF NOT EXISTS(SELECT * FROM ver_materiales AS vm WHERE CONCAT(vm.desc_tipo_material," ",vm.desc_dimencion," ",vm.desc_forma) = CONCAT(desc_material," ",dimencion," ",forma))  THEN
+    
+		IF EXISTS(SELECT * FROM materiales AS mt WHERE mt.id_material = id_material) THEN
+			
+				SET id_tipo_material = ( SELECT tm.id_tipo_material FROM tipos_material AS tm WHERE tm.desc_tipo_material = desc_material);
+				SET id_dimencion = (SELECT dm.id_dimencion FROM dimenciones AS dm WHERE dm.desc_dimencion = dimencion);
+				SET id_forma = (SELECT fm.id_forma FROM formas AS fm WHERE fm.desc_forma = forma);
+				
+                UPDATE materiales AS mt SET mt.id_dimencion=id_dimencion,id_tipo_material=id_tipo_material,id_forma=id_forma,longitud_barra=longitud_barra WHERE mt.id_material = id_material;
+			
+				SET respuesta = 'EL MATERIAL SE HA MODIFICADO CORRECTAMENTE';
+				
+		ELSE SET respuesta = 'NO SE HA PODIDIO MODIFICAR EL MATERIAL DE FORMA CORRECTA';
+			
+		END IF;
+        
+        ELSE SET respuesta = 'ESTE MATERIAL YA EXISTE';
+    
+    END IF;
+    
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_nueva_dimencion(
+IN desc_dimencion 			VARCHAR(20),
+INOUT respuesta				VARCHAR(255)
+)BEGIN
+
+	IF NOT EXISTS (SELECT * FROM dimenciones AS dm WHERE dm.desc_dimencion = desc_dimencion) THEN 
+		
+        INSERT INTO dimenciones(desc_dimencion) VALUES(desc_dimencion);
+        
+        SET respuesta = 'SE HA REGISTRADO DE FORMA CORRECTA';
+        
+	ELSE 
+		
+        SET respuesta = 'NO SE HA REGISTRADO DE FORMA CORRECTA PORQUE LA DIMENCION YA EXISTE';    
+    
+    END IF;
+
+END // 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_nuevo_tipo_material(
+IN desc_tipo_material 			VARCHAR(20),
+INOUT respuesta					VARCHAR(255)
+)BEGIN
+
+	IF NOT EXISTS (SELECT * FROM tipos_material AS tm WHERE tm.desc_tipo_material = desc_tipo_material) THEN 
+		
+        INSERT INTO tipos_material(desc_tipo_material) VALUES(desc_tipo_material);
+        
+        SET respuesta = 'SE HA REGISTRADO DE FORMA CORRECTA';
+        
+	ELSE 
+		
+        SET respuesta = 'NO SE HA REGISTRADO DE FORMA CORRECTA PORQUE EL TIPO DE MATERIAL YA EXISTE';    
+    
+    END IF;
+
+END // 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_nueva_forma(
+IN clave_forma					VARCHAR(20),
+IN desc_forma					VARCHAR(150),
+INOUT respuesta					VARCHAR(255)
+)BEGIN
+
+	IF NOT EXISTS (SELECT * FROM formas AS fm WHERE fm.desc_forma = desc_forma OR fm.clave_forma = clave_forma) THEN 
+		
+        INSERT INTO formas(clave_forma,desc_forma) VALUES(clave_forma,desc_forma);
+        
+        SET respuesta = 'SE HA REGISTRADO DE FORMA CORRECTA';
+        
+	ELSE 
+		
+        SET respuesta = 'NO SE HA REGISTRADO DE FORMA CORRECTA PORQUE EL LA FORMA DEL MATERIAL YA EXISTE';
+    
+    END IF;
+
+END // 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE agregar_nuevo_producto(
+IN clave_producto		VARCHAR(50),
+IN desc_producto   		VARCHAR(150),
+IN desc_material		VARCHAR(250),
+INOUT respuesta			VARCHAR(250)
+)BEGIN
+    DECLARE id_material INT;
+    SET id_material = (SELECT vm.id_material FROM ver_materiales AS vm WHERE CONCAT(vm.desc_tipo_material," ",vm.desc_dimencion," ",vm.clave_forma) = desc_material);
+    IF NOT EXISTS(SELECT * FROM productos AS pr WHERE pr.desc_producto = desc_producto OR pr.clave_producto = clave_producto) THEN
+        INSERT INTO productos(clave_producto,desc_producto,id_material) VALUES(clave_producto,desc_producto,id_material);
+        SET respuesta = 'PRODUCTO AGREGADO';
+	ELSE 
+        SET respuesta = 'NO SE PUDO AGREGAR ESTE PRODUCTO';
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE modificar_producto(
+IN id_producto			INT,
+IN clave_producto		VARCHAR(50),
+IN desc_producto   		VARCHAR(150),
+IN desc_material		VARCHAR(250),
+INOUT respuesta			VARCHAR(250)
+)BEGIN
+	DECLARE id_material INT;
+    SET id_material = (SELECT vm.id_material FROM ver_materiales AS vm WHERE CONCAT(vm.desc_tipo_material," ",vm.desc_dimencion," ",vm.clave_forma) = desc_material);
+    IF NOT EXISTS(SELECT * FROM productos AS pr WHERE pr.desc_producto = desc_producto OR pr.clave_producto = clave_producto) THEN		
+        UPDATE productos AS pr SET pr.clave_producto = clave_producto, pr.desc_producto = desc_producto,pr.id_material = id_material WHERE 
+        pr.id_producto = id_producto;
+        SET respuesta = 'EL PRODUCTO SE ACTUALIZO CORRECTAMENTE';
+    ELSE 
+		SET respuesta = 'EL PRODUCTO ';
+    END IF;
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE guardar_contacto(
+IN id_cliente 			INT,
+IN desc_contacto		VARCHAR(100),
+IN departamento		 	VARCHAR(100),
+IN telefono				VARCHAR(100),
+IN extencion			VARCHAR(100),
+IN celular				VARCHAR(100),
+IN correo				VARCHAR(100),
+INOUT respuesta			VARCHAR(250)
+)BEGIN
+	
+    IF NOT EXISTS (SELECT * FROM contactos AS cn WHERE cn.desc_contacto = desc_contacto OR cn.correo = correo) THEN
+    
+		INSERT INTO contactos(id_cliente,desc_contacto,departamento,telefono,extencion,celular,correo)
+		VALUES(id_cliente,desc_contacto,departamento,telefono,extencion,celular,correo);
+		SET respuesta = 'EL CONTACTO SE HA AGREGADO CORRECTAMENTE';
+    
+    ELSE SET respuesta = 'EL CONTACTO YA EXISTE POR FAVOR INTENTE CON OTRO';
+	
+    END IF;
+    
+END //
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE modificar_contacto(
+IN id_contactom 			INT,
+IN desc_contactom		VARCHAR(100),
+IN departamentom		 	VARCHAR(100),
+IN telefonom				VARCHAR(100),
+IN extencionm			VARCHAR(100),
+IN celularm				VARCHAR(100),
+IN correom				VARCHAR(100),
+INOUT respuesta			VARCHAR(250)
+)BEGIN
+    IF NOT EXISTS (SELECT * FROM contactos AS cn WHERE cn.desc_contacto = desc_contactom OR cn.correo = correom) THEN
+		SET SQL_SAFE_UPDATES = 0;
+		UPDATE contactos SET
+		desc_contacto=desc_contactom,departamento=departamentom,
+		telefono=telefonom,extencion=extencionm,celular=celularm,correo=correom WHERE id_contacto = id_contactom;
+		SET respuesta = 'EL CONTACTO SE HA MODIFICADO CORRECTAMENTE';
+		SET SQL_SAFE_UPDATES = 1;
+	ELSE SET respuesta = 'EL CONTACTO YA EXISTE POR FAVOR INTENTE CON OTRO';
+    END IF;
+END //
 DELIMITER ;

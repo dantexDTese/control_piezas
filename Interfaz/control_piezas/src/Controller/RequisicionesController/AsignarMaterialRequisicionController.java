@@ -24,7 +24,7 @@ public final class AsignarMaterialRequisicionController implements Constructores
     private AlmacenMateriaPrima loteSeleccionado;
     
     AsignarMaterialRequisicionController(AsignarMaterialRequisicion vista, AsignarMaterialRequisicionModel modelo,
-            ParcialidadesRequisicion parcialidad) {
+            ParcialidadesRequisicion parcialidad){
         this.vista = vista;
         this.modelo = modelo;
         this.parcialidad = parcialidad;
@@ -84,7 +84,7 @@ public final class AsignarMaterialRequisicionController implements Constructores
         
     }
     
-    private MouseListener listenerTablaLotes = new MouseAdapter() {
+    private final MouseListener listenerTablaLotes = new MouseAdapter() {
         
         @Override
         public void mousePressed(MouseEvent e) {

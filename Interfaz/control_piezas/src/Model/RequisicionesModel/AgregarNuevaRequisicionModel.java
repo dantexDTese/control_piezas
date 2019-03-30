@@ -12,10 +12,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 
-/**
- *
- * @author cesar
- */
 public class AgregarNuevaRequisicionModel {
     
     public ArrayList<Pedido> listaOrdenesPendientes(){

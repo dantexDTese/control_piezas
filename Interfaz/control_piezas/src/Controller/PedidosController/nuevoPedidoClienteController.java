@@ -1,6 +1,5 @@
 package Controller.PedidosController;
 
-//ULTIMA MODIFICACION 10/01/2019
 
 import Model.Constructores;
 import Model.Estructuras;
@@ -38,6 +37,7 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
     public void llenarComponentes() {
         llenarListaClientes();
         llenarListaProductos();
+        Estructuras.modificarAnchoTabla(vistaNuevoPedido.getTbListaProductos(),new Integer[]{90,155});
     }
 
     @Override
@@ -49,7 +49,9 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
             if(!Estructuras.validarFecha(vistaNuevoPedido.getDcFechaEntrega().getDate()))
                 vistaNuevoPedido.getDcFechaEntrega().setCalendar(null);
         });
-        this.vistaNuevoPedido.getTbListaPedido().addMouseListener(listenerQuitar);        
+        this.vistaNuevoPedido.getTbListaPedido().addMouseListener(listenerQuitar);  
+        this.vistaNuevoPedido.getCbxDescCliente().addActionListener(listenerSeleccionarCliente);
+        
     }
     
     private void llenarListaClientes(){
@@ -72,6 +74,9 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
         
     }
 
+    
+    
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         
@@ -84,7 +89,6 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
             
     }
     
-    
     private void guardarListaProductos(){
         
         
@@ -94,7 +98,7 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
             int idPedidoAgregado = this.modelNuevoPedido.agregarPedido(
                     this.vistaNuevoPedido.getTxtNoOrdenCompra().getText()
                     ,this.vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString()
-                    ,this.vistaNuevoPedido.getTxtContactoCliente().getText()
+                    ,this.vistaNuevoPedido.getCbxContacto().getSelectedItem().toString()
                     ,Estructuras.convertirFechaGuardar(vistaNuevoPedido.getDcFechaEntrega().getDate()));
 
             if(idPedidoAgregado > 0){
@@ -148,7 +152,7 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
         public void mousePressed(MouseEvent e) {
             super.mousePressed(e); 
             if(!"".equals(vistaNuevoPedido.getTxtNoOrdenCompra().getText()) && vistaNuevoPedido.getDcFechaEntrega().getDate() != null
-                    && !"".equals(vistaNuevoPedido.getTxtContactoCliente().getText())){
+                    && !"".equals(vistaNuevoPedido.getCbxContacto().getSelectedItem().toString())){
             int seleccionado = vistaNuevoPedido.getTbListaProductos().rowAtPoint(e.getPoint());
                  
             String cantidad = JOptionPane.showInputDialog(new JFrame(), "INCRESA LA CANTIDAD NECESARIA");
@@ -172,5 +176,25 @@ public final class nuevoPedidoClienteController implements ActionListener,Constr
         }
     };
     
+    private final ActionListener listenerSeleccionarCliente = new ActionListener() {
+        
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+            if(vistaNuevoPedido.getCbxDescCliente().getItemCount() > 0){
+                
+                ArrayList<String> listaContactos = modelNuevoPedido.listaContactosCliente(
+                        vistaNuevoPedido.getCbxDescCliente().getSelectedItem().toString());  
+                
+                if(vistaNuevoPedido.getCbxContacto().getItemCount() > 0)
+                    vistaNuevoPedido.getCbxContacto().removeAllItems();
+                
+                for(int i = 0;i<listaContactos.size();i++)
+                        vistaNuevoPedido.getCbxContacto().addItem(listaContactos.get(i));
+                        
+            }
+        }
+        
+    };
     
 }

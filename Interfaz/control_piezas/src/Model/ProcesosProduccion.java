@@ -13,7 +13,7 @@ public class ProcesosProduccion extends Thread{
     
    public static LoteProduccion loteMostrado;
    
-    public int procesoActual;
+   public int procesoActual;
 
     public ProcesosProduccion(int procesoActual) {
         
@@ -34,15 +34,10 @@ public class ProcesosProduccion extends Thread{
         while(true){
             try {
                 if(listaProcesando.size()>0){
-                    
                     if(loteMostrado != null){
                         if(loteMostrado.getNoOrdenProduccion() != listaProcesando.get(procesoActual).getNoOrdenProduccion())
                             avanzar();                        
-                        
                     }else avanzar();
-                    
-                    
-                    
                     if(procesoActual == listaProcesando.size())
                         procesoActual=0;
                 }

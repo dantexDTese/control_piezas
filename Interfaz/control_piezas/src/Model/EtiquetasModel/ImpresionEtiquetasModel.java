@@ -52,33 +52,35 @@ public class ImpresionEtiquetasModel {
         
         if(c!=null)
             try {
-                String query = " SELECT num_lote,desc_lote,cantidad_administrador,lp.desc_maquina,op.desc_producto,"
-                                + "pd.nombre_cliente,op.clave_producto " +
-                                " FROM todos_lotes_planeados AS lp " +
-                                " INNER JOIN lotes_produccion AS lpr ON lp.id_lote_planeado = lpr.id_lote_planeado " +
-                                " INNER JOIN todas_ordenes_produccion AS op ON op.id_orden_produccion = lp.id_orden_produccion " +
-                                " INNER JOIN todos_pedidos AS pd ON pd.id_orden_trabajo = op.id_orden_trabajo " +
-                                " WHERE lp.desc_tipo_proceso = 'Maquinado' AND lp.desc_estado = 'CERRADO' " +
-                                " AND pd.no_orden_compra = '"+noOrdenCompra+"' AND op.clave_producto = '"+claveProducto+"' " +
-                                " AND cantidad_administrador IS NOT NULL;";
+                String query =  " SELECT lp.desc_lote, " +
+                        " (SELECT SUM(cantidad_administrador) FROM lotes_produccion " +
+                        " WHERE id_lote_planeado = tlp.id_lote_planeado) AS cantidad_producida " +
+                        " ,tlp.desc_maquina,op.desc_producto,pd.nombre_cliente,op.clave_producto,pd.no_orden_compra " +
+                        " FROM lotes_produccion AS lp " +
+                        " INNER JOIN todos_lotes_planeados AS tlp ON tlp.id_lote_planeado = lp.id_lote_planeado " +
+                        " INNER JOIN todas_ordenes_produccion AS op ON op.id_orden_produccion = tlp.id_orden_produccion " +
+                        " INNER JOIN todos_pedidos AS pd ON pd.id_orden_trabajo = op.id_orden_trabajo " +
+                        " WHERE tlp.desc_tipo_proceso = 'Maquinado' AND tlp.desc_estado = 'CERRADO'" +
+                        " AND pd.no_orden_compra = '"+noOrdenCompra+"' AND op.clave_producto = '"+claveProducto+"' "+ 
+                        " AND cantidad_administrador IS NOT NULL " +
+                        " GROUP BY tlp.id_lote_planeado; ";
                 
                 Statement st = c.createStatement();
                 ResultSet rs = st.executeQuery(query);
-                
+                int numLote = 1;
                 if(rs.first())
                     do {
-                        
                         LoteProduccion lote = new LoteProduccion();
-                        lote.setNumLote(rs.getInt(1));
-                        lote.setDescLote(rs.getString(2));
-                        lote.setCantidadAdmin(rs.getInt(3));
-                        lote.setDescMaquina(rs.getString(4));
-                        lote.setDescProducto(rs.getString(5));
-                        lote.setDescCliente(rs.getString(6));
-                        lote.setCodProducto(rs.getString(7));
+                        lote.setNumLote(numLote);
+                        lote.setDescLote(rs.getString(1));
+                        lote.setCantidadAdmin(rs.getInt(2));
+                        lote.setDescMaquina(rs.getString(3));
+                        lote.setDescProducto(rs.getString(4));
+                        lote.setDescCliente(rs.getString(5));
+                        lote.setCodProducto(rs.getString(6));
                         lote.setNoOrdenCompra(noOrdenCompra);
                         listaLotes.add(lote);
-                        
+                        numLote++;
                     } while (rs.next());
                         
             } catch (SQLException e) {

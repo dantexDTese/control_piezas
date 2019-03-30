@@ -40,25 +40,21 @@ public class PlanInspeccionMaterialesModel {
      */
     
     public void actualizarInformacion(EntradaMaterial materialSeleccionado) {
-          
         Connection c = Conexion.getInstance().getConexion();
-        String query = "{CALL actualizar_entrada_material(?,?,?,?,?,?,?)}";
+        String query = "{CALL actualizar_entrada_material(?,?,?,?,?,?)}";
         try {
-            
             CallableStatement cs = c.prepareCall(query);
-            
             cs.setInt(1, materialSeleccionado.getNoEntradaMaterial());
-            cs.setString(2, materialSeleccionado.getNoParte());
-            cs.setString(3, materialSeleccionado.getFactura());
-            cs.setString(4, materialSeleccionado.getComentarios());
-            cs.setString(5, materialSeleccionado.getDescEstado());
-            cs.setString(6, materialSeleccionado.getDescLote());
-            cs.registerOutParameter(7, Types.VARCHAR);
+            cs.setString(2, materialSeleccionado.getFactura());
+            cs.setString(3, materialSeleccionado.getComentarios());
+            cs.setString(4, materialSeleccionado.getDescEstado());
+            cs.setString(5, materialSeleccionado.getDescLote());
+            cs.registerOutParameter(6, Types.VARCHAR);
             cs.execute();
-            JOptionPane.showMessageDialog(null, cs.getString(7));
-            
+            JOptionPane.showMessageDialog(null, cs.getString(6));
         } catch (HeadlessException | SQLException e) {
-            System.err.println("error: paquete: RequisicionModel, Class: PlanInspeccionModel Metodo:ActualizarInformacion " + e.getMessage());
+            System.err.println("error: paquete: RequisicionModel, Class: PlanInspeccionModel Metodo:ActualizarInformacion " 
+                    + e.getMessage());
         }
           
     }

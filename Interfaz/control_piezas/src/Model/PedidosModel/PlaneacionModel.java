@@ -77,7 +77,7 @@ public class PlaneacionModel {
                     principal = new ProcesoPrincipal(rs.getInt(2),rs.getString(3),
                             rs.getString(7),rs.getString(9));
                 c.close();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.err.println("error: class: PlaneacionModel method: obtenerProcesosPrincipal");
             }
         return principal;
